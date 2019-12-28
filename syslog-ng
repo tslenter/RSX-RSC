@@ -1,7 +1,7 @@
 options {
         use_dns (yes);
         use_fqdn (yes);
-#        keep_hostname (yes);
+#       keep_hostname (yes);
         };
 
 #Filter all traffic:		

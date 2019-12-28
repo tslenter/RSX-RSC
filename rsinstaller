@@ -848,6 +848,31 @@ function quit() {
     echo "Thank you for using Remote Syslog ..."
 }
 
+function fwenable() {
+    echo "Install package ufw ..."
+    apt install -y ufw
+    echo "Activation of ufw rules ..."
+    check_package "ufw"
+    echo "Setting firewall rules ..."
+    ufw allow 22/tcp
+    ufw allow 8080/tcp
+    ufw allow 80/tcp
+    ufw allow 443/tcp
+    ufw allow 514/udp
+    ufw allow 514/udp
+    ufw --force enable
+    ufw status
+    echo "Done ..."
+}
+
+function fwdisable() {
+    check_package "ufw"
+    echo "Disable firewall rules ..."
+    ufw disable
+    ufw status
+    echo "Done ..."
+}
+
 #Variables
 clear
 echo "Setting up environment ..."
@@ -881,7 +906,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Quit")
+options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -969,6 +994,18 @@ do
            clear
            banner
            rsxremove
+           exit
+    ;;
+        "Enable firewall")
+           clear
+           banner
+           fwenable
+           exit
+    ;;
+        "Disable firewall")
+           clear
+           banner
+           fwdisable
            exit
     ;;
         "Quit")
