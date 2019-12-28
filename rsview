@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+echo ""
+echo "#################################################"
+echo "#Remote Syslog X/C                              #"
+echo "#More information: remotesyslog.com             #"
+echo "#Remote Syslog viewer                           #"
+echo "#Version: RSX 0.1                               #"
+echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
+echo "#################################################"
+echo ""
+
+RSV=/var/log/remote_syslog/remote_syslog.log
+
+function show_options() {
+        echo "Usage rsview:"
+        echo ""
+        echo "-h,--help                          Display help"
+        echo "-s,--search <search string>        Search through logging"
+        echo "-v,--view                          View logging"
+        echo "-l,--live                          View live logging"
+        echo "-ls,--livesearch <search string>   Search through live logging"
+        echo "-t,--testmessage                   Send a test message"
+        echo "-c,--clearlog                      Clear total log archive"
+        echo ""
+}
+
+case $1 in
+-h|--help)
+	show_options
+	;;
+-s|--search)
+	cat $RSV | grep --color=always $2
+	;;
+-v|--view)
+	colortail -n 3000 $RSV
+	;;
+-l|--live)
+	colortail -n 30 -f $RSV
+	;;
+-ls|--livesearch)
+	tail -n 30 -f $RSV | grep --color=always $2
+	;;
+-t|--testmessage)
+	logger -n 127.0.0.1 -d 'This is a UDP test message!'; logger -T -P 514 -n 127.0.0.1 'This is a TCP test message!'
+	echo "Sending UDP and TCP test message! Check logging!"
+	;;
+-c|--clearlog)
+	rm -rf $RSV.*
+	echo "Total logging archive cleared!"
+	echo ""
+	;;
+	*)
+	show_options
+esac

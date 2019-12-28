@@ -1,0 +1,973 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+#Banner
+function banner() {
+    echo ""
+    echo "#################################################"
+    echo "#Remote Syslog X/C                              #"
+    echo "#More information: remotesyslog.com             #"
+    echo "#Remote Syslog installation                     #"
+    echo "#Version: RSX 0.1                               #"
+    echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
+    echo "#################################################"
+    echo ""
+}
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    clear
+    banner
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+#Functions to check files, packages ...
+function check_package() {
+echo "Check package $1"
+dpkg-query -l $1 > /dev/null 2>&1
+if [ $? = 0 ]
+then
+    echo "Installation found ..."
+else
+    echo "Installation failed, abort (Hint: Did you install the core? ..."
+    exit
+fi
+}
+
+#Check if file exist
+function check_file() {
+file=$1
+if [ -e "$file" ]; then
+    echo "File: $1 exists, continue installation ..."
+else
+    echo "File: $1 does not exist, exit ..."
+    exit
+fi
+}
+
+#Check if debug module is activated
+function mod_activ() {
+file=$1
+if [ -e "$file" ]; then
+    echo "Module activated ..."
+else
+    echo "Module not activated ..."
+fi
+}
+
+#Add new config RSX syslog-ng
+function guirestorechange() {
+file=$1
+if [ -e "$file" ]; then
+    echo "GUI found ..."
+    cp -rf $RSCONF/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+else
+    echo "GUI not activated ..."
+fi
+}
+
+#Set default GUI RSX syslog-ng
+function guirestoredefault() {
+file=$1
+if [ -e "$file" ]; then
+    echo "GUI found ..."
+    cp -rf $RSCONF/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+else
+    echo "GUI not activated ..."
+fi
+}
+
+#Check files in reverse
+function check_file_reverse() {
+file=$1
+if [ -e "$file" ]; then
+    echo "File: $1 exists, module already installed? Exiting ..."
+	exit
+else
+    echo "File: $1 does not exist, continue installation ..."
+fi
+}
+
+#Check file for GUI based functions
+function check_file_gui() {
+file=$1
+if [ -e "$file" ]; then
+    echo "File: $1 exists, other GUI installed? Exiting ..."
+        exit
+else
+    echo "File: $1 does not exist, continue installation ..."
+fi
+}
+
+#Enroll functions
+function rscinstall() {
+#Check installation conflics ...
+    echo "Check if RSX is installed ..."
+    check_file_gui $SYSLOGCONF/99RSX-rs.conf
+    echo "Check if RSC is installed ..."
+    check_file_reverse $APACHCONF/rs/loaddata.php
+#Install packages
+    echo "Starting RSC installation ..."
+    apt -y install apache2 apache2-utils php libapache2-mod-php libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential
+    check_package "apache2"
+    check_package "apache2-utils"
+    check_package "php"
+    check_package "libapache2-mod-php"
+    check_package "libapache2-mod-authnz-external"
+    check_package "libapache2-mod-authz-unixgroup"
+    check_package "php-cli"
+    check_package "libapache2-mod-php"
+    check_package "libpam0g-dev"
+    check_package "php-pear"
+    check_package "php-dev"
+    check_package "build-essential"
+#Load apache modules
+    echo "Load modules ..."
+    a2enmod proxy
+    a2enmod proxy_http
+    a2enmod headers
+    a2enmod authnz_external
+    a2enmod authz_unixgroup
+    a2enmod rewrite
+    a2enmod ssl
+    a2enmod mod_proxy
+    a2enmod session
+    a2enmod auth_form
+    a2enmod request
+    a2enmod session_cookie
+    a2enmod session_crypto
+#Remove default webpage
+    echo "Remove default GUI website ..."
+	if [ -e "$APACHCONF/index.html" ]; then
+		echo "File: $APACHCONF/index.html exists, remove file ..."
+        rm -rf $APACHCONF/index.html
+	else
+		echo "File: $APACHCONF/index.html does not exist, continue installation ..."
+	fi
+#Create RSC directory
+    echo "Add RSC website ..."
+    echo "Create directory ..."
+    mkdir $APACHCONF/rs
+#Copy RSC files
+    echo "Copy files ..."
+    cp -rf $RSDEST/favicon.ico $APACHCONF/rs/
+    cp -rf $RSDEST/index.php $APACHCONF/rs/
+    cp -rf $RSDEST/indexs.php $APACHCONF/rs/
+    cp -rf $RSDEST/jquery-latest.js $APACHCONF/rs/
+    cp -rf $RSDEST/loaddata.php $APACHCONF/rs/
+    cp -rf $RSDEST/login.php $APACHCONF/login.php
+    cp -rf $RSDEST/rscforwarder.php $APACHCONF/index.php
+    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
+    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+    cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
+    cp -rf $RSDEST/style.css $APACHCONF/style.css
+    rm -rf $APACHCONF/index.html
+    check_file_reverse $APACHCONF/index.html
+    check_file $APACHCONF/login.php
+    check_file $APACHCONF/index.php
+    check_file $APACHCONF/logo.png
+    check_file $APACHCONF/favicon.ico
+    check_file $APACHCONF/style.css
+    check_file $APACHCONF/fontawesome/css/all.css
+    check_file $APACHCONF/rs/favicon.ico
+    check_file $APACHCONF/rs/index.php
+    check_file $APACHCONF/rs/indexs.php
+    check_file $APACHCONF/rs/jquery-latest.js
+    check_file $APACHCONF/rs/loaddata.php
+    echo "Set archive symlink ..."
+    ln -s $VLOG/remote_syslog $APACHCONF/rs/
+#Load apache2 configuration and create SSL with authentication
+   echo "Load apache2 configuration ..."
+#Activate SSL
+   echo "Activate SSL ..."
+#Setup variables:
+   varfullservername=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}')
+   certpath=/etc/cert/
+   echo "Create .rnd file ..."
+   touch $HOME/.rnd
+   echo "Certificate auto request for linux webservers!"
+   echo "Powered by RSX ..."
+   echo "Generate Certificate ..."
+   if [ -f $HOME/.rnd ]; then
+      echo "File $HOME/.rnd exists ..."
+      openssl req -new -x509 -days 3650 -sha256 -newkey rsa:2048 -subj "/C=NL/ST=Limburg/L=Maastricht/O=IT/CN=$varfullservername" -nodes -keyout $HOME/$varfullservername.key -out $HOME/$varfullservername.crt
+      echo "Copy SSL certificates ..."
+      if [ -d $certpath ]; then
+           echo "Directory already exist ..."
+      else
+           mkdir $certpath
+           echo "Directory created ..."
+      fi
+      cp $HOME/$varfullservername.key $certpath/rs.key
+      cp $HOME/$varfullservername.crt $certpath/rs.crt
+      echo "Setup permissions ..."
+      chmod 600 $certpath/rs.key
+      echo "Clean up ..."
+      rm -rf $HOME/$varfullservername.key
+      rm -rf $HOME/$varfullservername.crt
+      echo "Generated key file: $certpath/rs.key"
+      echo "Generated cert file: $certpath/rs.crt"
+	  check_file $certpath/rs.key
+	  check_file $certpath/rs.crt
+   else
+      echo "No .rnd found ..."
+   fi
+#Proxy settings and webserver configuration
+   echo "Activate proxy ..."
+   echo "Disable default config ..."
+   cp -rf $RSDEST/rsc-apache.conf $APACONFIG/rsc-apache.conf
+   check_file $APACONFIG/rsc-apache.conf
+   a2ensite rsc-apache
+   a2dissite 000-default
+   service apache2 restart
+   echo "Done ..."
+}
+
+function rscremove() {
+#Check removal steps ...
+    echo "Check if RSX is installed ..."
+    check_file_gui $SYSLOGCONF/991-remote-mysql.conf
+    echo "Check if RSC is installed"
+    check_file $APACHCONF/rs/loaddata.php
+#Remove Apache files
+    echo "Removing RSC website ..."
+    rm -rf $APACHCONF/remote_syslog
+    rm -rf $APACHCONF/login.php
+    rm -rf $APACHCONF/index.php
+    rm -rf $APACHCONF/logo.png
+    rm -rf $APACHCONF/favicon.ico
+    rm -rf $APACHCONF/style.css
+    rm -rf $APACHCONF/fontawesome/css/all.css
+    rm -rf $APACHCONF/rs/favicon.ico
+    rm -rf $APACHCONF/rs/index.php
+    rm -rf $APACHCONF/rs/indexs.php
+    rm -rf $APACHCONF/rs/jquery-latest.js
+    rm -rf $APACHCONF/rs/loaddata.php
+#Check core install
+    echo "Removing installation RSC ..."
+    if [ -e "$RSBIN/rsinstaller" ]; then
+        echo "Core still installed ..."
+	apt -y purge apache2 apache2-utils php libapache2-mod-php libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential
+	apt -y install syslog-ng
+	apt -y autoremove
+    else
+	echo "No core found ..."
+	apt -y purge apache2 apache2-utils php libapache2-mod-php libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential
+	apt -y install rsyslog
+	apt -y autoremove
+    fi
+#Remove Apache config and cleanup mess
+   rm -rf $certpath/rs.key
+   rm -rf $certpath/rs.crt
+   rm -rf $APACONFIG/rsx-apache.conf
+   rm -rf $APACHPHP/conf.d/20-pam.ini
+   rm -rf $APACHCONF/*
+   echo "Done ..."
+}
+
+#Setup environment for installation
+function debpackage() {
+    echo "Check if Remote Syslog is installed ..."
+    check_file_reverse $RSBIN/rsinstaller
+    echo "Notice: This installation is tested for Ubuntu Server 18.04 LTS and Debian 9.x ..."
+    echo "Starting installation ..."
+    echo "Update installer cache ..."
+    if apt-add-repository multiverse > /dev/null 2>&1 ; then
+         printf 'Multiverse command succeeded\n'
+         apt-add-repository multiverse
+    else
+         printf 'Multiverse not found ...\n'
+    fi
+    apt update
+#Install syslog-ng
+    echo "Checking dependencies ..."
+    apt -y purge rsyslog
+    apt -y install syslog-ng colortail wget logrotate grep tar
+}
+
+#Check if core is correctly installed
+function checkinstallationcore() {
+    echo "Check CLI application 1X ..."
+    check_file $RSBIN/rsview
+    echo "Check installer 1X ..."
+    check_file $RSBIN/rsinstaller
+    echo "Check logrotate 1X ..."
+    check_file /etc/logrotate.d/remotelog
+    echo "Check colortail 1X ..."
+    check_file /etc/colortail/conf.colortail
+    echo "Check syslog-ng 1X ..."
+    check_file $SYSLOGCONF/99-remote.conf
+    echo "Check remote_log dummy file 1X ..."
+    check_file $VLOG/remote_syslog/remote_syslog.log
+    echo "Check reconfiguration files 7X ..."
+    check_file $RSCONF/syslog-ng
+    check_file $RSCONF/logrotate
+    check_file $RSCONF/colortail
+    check_file $RSCONF/syslog-ngdefault
+    check_file $RSCONF/logrotatedefault
+    check_file $RSCONF/colortaildefault
+    check_file $RSCONF/syslog-ng-localdefault
+    echo "Optional: check if debug module is activated:"
+    mod_activ $SYSLOGCONF/99-remote-local.conf
+    exit
+}
+
+#Check minimum requirements
+function pre_install() {
+    echo "Check packages installations  ..."
+    check_package "syslog-ng"
+    check_package "colortail"
+    check_package "wget"
+    check_package "logrotate"
+    check_package "grep"
+    check_package "tar"
+}
+
+#Setup core install with textbased viewer
+function coreinstall() {
+    echo "Starting core installation ..."
+    echo "Creating dummy remote_syslog file ..."
+    mkdir $VLOG/remote_syslog/
+    touch $VLOG/remote_syslog/remote_syslog.log
+    echo "Set dummy remote_syslog file permissions ..."
+    chown www-data:www-data $VLOG/remote_syslog/
+    chown www-data:www-data $VLOG/remote_syslog/remote_syslog.log
+    echo "Configuring syslog-ng ..."
+    cp -rf $RSDEST/syslog-ng $SYSLOGCONF/99-remote.conf
+    echo "Restart syslog-ng ..."
+    service syslog-ng restart
+    echo "Set logrotation ..."
+    cp -rf $RSDEST/logrotate /etc/logrotate.d/remotelog
+    echo "Activate colortail regex ..."
+    cp -rf $RSDEST/colortail /etc/colortail/conf.colortail
+    echo "Deploying application for CLI logging ..."
+    cp -rf $RSDEST/rsview $RSBIN/rsview
+    echo "Set permissions for CLI application ..."
+    chmod +x $RSBIN/rsview
+    echo "Deploying installer ..."
+    cp -rf $RSDEST/rsinstaller $RSBIN/rsinstaller
+    echo "Deploy config to $RSCONF/ ..."
+    mkdir $RSCONF/
+    cp -rf $RSDEST/syslog-ng $RSCONF/
+    cp -rf $RSDEST/syslog-ng $RSCONF/syslog-ngdefault
+    cp -rf $RSDEST/logrotate $RSCONF/
+    cp -rf $RSDEST/logrotate $RSCONF/logrotatedefault
+    cp -rf $RSDEST/colortail $RSCONF/
+    cp -rf $RSDEST/colortail $RSCONF/colortaildefault
+    cp -rf $RSDEST/syslog-ng-local $RSCONF/syslog-ng-localdefault
+}
+
+#Remove core and RSX or RSC (Complete deinstall)
+function coreremove() {
+    echo "Check if Remote Syslog is installed ..."
+    check_file "$RSBIN/rsinstaller"
+    echo "Starting core removal ..."
+    echo "Configuring syslog-ng ..."
+    rm -rf $SYSLOGCONF/99-remote.conf
+    if [ -e "$SYSLOGCONF/99-remote-local.conf" ]; then
+        rm -rf $SYSLOGCONF/99-remote-local.conf
+    else
+        echo "No local debug found ..."
+    fi
+    echo "Removing packages syslog-ng ..."
+    apt -y purge syslog-ng colortail
+    apt -y autoremove
+    apt -y install rsyslog
+    echo "Set logrotation ..."
+    rm -rf /etc/logrotate.d/remotelog
+    echo "Remove colortail regex ..."
+    rm -rf /etc/colortail/conf.colortail
+    echo "Remove application for CLI logging ..."
+    rm -rf $RSBIN/rsview
+    echo "Remove config to $RSCONF/ ..."
+    rm -rf $RSCONF
+    echo "Remove $RSDEST"
+    rm -rf $RSDEST
+    echo "Remove installer ..."
+    rm -rf $RSBIN/rsinstaller
+	echo "Move log files ..."
+	cp -rf $VLOG/remote_syslog $VLOG/remote_syslog_uninstall && rm -rf $VLOG/remote_syslog
+	echo "Moved files to $VLOG/remote_syslog_uninstall .."
+    if [ -e "$APACHCONF/rs/loaddata.php" ]; then
+        rscremove
+    elif [ -e $SYSLOGCONF/99RSX-rs.conf ]; then
+        rsxremove
+    else
+        echo "No GUI found, remove done ..."
+        exit
+    fi
+}
+
+#Upgrade function
+function guiupgrade() {
+    echo "Check if Remote Syslog is installed ..."
+    check_file "$RSBIN/rsinstaller"
+#Check packages
+if [ -e "$APACHCONF/rs/loaddata.php" ]; then
+    check_file $APACHCONF/rs/loaddata.php
+    echo "Starting installation legacy GUI ..."
+    check_package "apache2"
+    check_package "apache2-utils"
+    check_package "php"
+    check_package "libapache2-mod-php"
+    check_package "apache2"
+    check_package "apache2-utils"
+    check_package "php"
+    check_package "libapache2-mod-php"
+    check_package "libapache2-mod-authnz-external"
+    check_package "libapache2-mod-authz-unixgroup"
+    check_package "php-cli"
+    check_package "libapache2-mod-php"
+    check_package "libpam0g-dev"
+    check_package "php-pear"
+    check_package "php-dev"
+    check_package "build-essential"
+#Update Webpage
+	echo "Update webpage code ..."
+    cp -rf $RSDEST/favicon.ico $APACHCONF/rs/
+    cp -rf $RSDEST/index.php $APACHCONF/rs/
+    cp -rf $RSDEST/indexs.php $APACHCONF/rs/
+    cp -rf $RSDEST/jquery-latest.js $APACHCONF/rs/
+    cp -rf $RSDEST/loaddata.php $APACHCONF/rs/
+    cp -rf $RSDEST/login.php $APACHCONF/login.php
+    cp -rf $RSDEST/rscforwarder.php $APACHCONF/index.php
+    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
+    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+    cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
+    cp -rf $RSDEST/style.css $APACHCONF/style.css
+    check_file_reverse $APACHCONF/index.html
+    check_file $APACHCONF/login.php
+    check_file $APACHCONF/index.php
+    check_file $APACHCONF/logo.png
+    check_file $APACHCONF/favicon.ico
+    check_file $APACHCONF/style.css
+    check_file $APACHCONF/fontawesome/css/all.css
+    check_file $APACHCONF/rs/favicon.ico
+    check_file $APACHCONF/rs/index.php
+    check_file $APACHCONF/rs/indexs.php
+    check_file $APACHCONF/rs/jquery-latest.js
+    check_file $APACHCONF/rs/loaddata.php
+    echo "Done ..."
+	echo "Restarting Apache ..."
+    service apache2 restart
+    echo "Restarting Syslog-NG ..."
+    service syslog-ng restart
+    echo "Upgrade GUI done ..."
+elif [ -e $SYSLOGCONF/99RSX-rs.conf ]; then
+    echo "Check packages ..."
+    check_package "apache2"
+    check_package "apache2-utils"
+    check_package "php"
+    check_package "libapache2-mod-php"
+    check_package "apache2"
+    check_package "apache2-utils"
+    check_package "php"
+    check_package "libapache2-mod-php"
+    check_package "libapache2-mod-authnz-external"
+    check_package "libapache2-mod-authz-unixgroup"
+    check_package "php-cli"
+    check_package "libapache2-mod-php"
+    check_package "libpam0g-dev"
+    check_package "php-pear"
+    check_package "php-dev"
+    check_package "build-essential"
+    echo "Copy new apache config ..."
+    cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
+    check_file $APACONFIG/rsx-apache.conf
+    echo "Update syslog-ng with RSX config ..."
+    cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+    check_file $SYSLOGCONF/99RSX-rs.conf
+    cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
+    cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
+    cp -rf $RSDEST/login.html $APACHCONF/login.html
+    cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
+    cp -rf $RSDEST/logo.php $APACHCONF/logo.php
+    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+    cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
+    check_file_reverse $APACHCONF/index.html
+    check_file $APACHCONF/administrator/index.php
+    check_file $APACHCONF/login.html
+    check_file $APACHCONF/index.php
+    check_file $APACHCONF/logo.php
+    check_file $APACHCONF/favicon.ico
+    check_file $APACHCONF/fontawesome/css/all.css
+    echo "Restarting Apache ..."
+    service apache2 restart
+    echo "Restarting Syslog-NG ..."
+    service syslog-ng restart
+    echo "Upgrade GUI done ..."
+else
+    echo "No GUI found, upgrade done ..."
+    exit
+fi
+}
+
+#Upgrade online
+function upgrade() {
+   echo "Check if Remote Syslog is installed ..."
+   check_file $RSBIN/rsinstaller
+   echo "Starting upgrade ..."
+   echo "Download installation ..."
+   git clone --branch master https://github.com/tslenter/RSX-RSC.git $RSTMP/rs
+   echo "Check if download is successfull"
+   if [ -d "$RSTMP/rs" ]; then
+      echo "Continue installation ..."
+   else
+      echo "Clone not successfull ..."
+      exit
+   fi
+   cp -rf $RSTMP/rs/* $RSDEST
+   rm -rf $RSTMP/rs
+   echo "Start update ..."
+   echo "Deploying application for CLI logging ..."
+   cp -rf $RSDEST/rsview $RSBIN/rsview
+   echo "Set permissions for CLI application ..."
+   chmod +x $RSBIN/rsview
+   echo "Deploying installer ..."
+   cp -rf $RSDEST/rsinstaller $RSBIN/rsinstaller
+   echo "Set permissions for installer ..."
+   chmod +x $RSBIN/rsinstaller
+   echo "Set new default core configuration in $RSCONF/ ..."
+   cp -rf $RSDEST/syslog-ng $RSCONF/syslog-ngdefault
+   cp -rf $RSDEST/logrotate $RSCONF/logrotatedefault
+   cp -rf $RSDEST/colortail $RSCONF/colortaildefault
+   echo "Copy upgrade file to $RSTMP/ ..."
+   cp -rf $RSDEST/extraupgrade $RSTMP/extraupgrade
+   chmod +x $RSTMP/extraupgrade
+   $RSTMP/extraupgrade
+   echo "Remove update file ..."
+   rm -rf $RSTMP/extraupgrade
+   echo "Remove upgrade folder ..."
+   rm -rf $RSTMP/rs
+   echo "Restart syslog-ng ..."
+   service syslog-ng restart
+   guiupgrade
+}
+
+function osupdate() {
+   echo "Start OS update ..."
+   apt update && apt upgrade -y
+   apt autoremove -y
+}
+
+function changedefault() {
+   echo "Reconfigure default values ..."
+   cp -rf $RSCONF/syslog-ng $SYSLOGCONF/99-remote.conf
+   echo "Check if mysql for GUI is deployed ..."
+   guirestorechange $SYSLOGCONF/99RSX-rs.conf
+   echo "Restart syslog-ng ..."
+   service syslog-ng restart
+   echo "Set logrotation ..."
+   cp -rf $RSCONF/logrotate /etc/logrotate.d/remotelog
+   echo "Activate colortail regex ..."
+   cp -rf $RSCONF/colortail /etc/colortail/conf.colortail
+}
+
+function restoredefault() {
+   echo "Restore default syslog-ng values..."
+   cp -rf $RSCONF/syslog-ngdefault $SYSLOGCONF/99-remote.conf
+   echo "Restore SQL for default GUI if deployed ..."
+   guirestoredefault $SYSLOGCONF/99RSX-rs.conf
+   echo "Restart syslog-ng ..."
+   service syslog-ng restart
+   echo "Restore default logrotation ..."
+   cp -rf $RSCONF/logrotatedefault /etc/logrotate.d/remotelog
+   echo "Restore default colortail regex ..."
+   cp -rf $RSCONF/colortaildefault /etc/colortail/conf.colortail
+}
+
+#Activate debug for rsview
+function startdebug() {
+   echo "Activate local syslog for debug ..."
+   cp -rf $RSCONF/syslog-ng-localdefault $SYSLOGCONF/99-remote-local.conf
+   echo "Restart syslog-ng ..."
+   service syslog-ng restart
+}
+
+#Stop debug for rsview
+function stopdebug() {
+   echo "Deactivate local syslog for debug ..."
+   rm -rf $SYSLOGCONF/99-remote-local.conf
+   echo "Restart syslog-ng ..."
+   service syslog-ng restart
+}
+
+#FIX for larger RSC searches
+function extentphplimit() {
+   echo "Extent PHP limit to 512M ..."
+   check_file $APACHPHP/php.ini
+   echo "Setting PHP limit to 512M ..."
+   sed -i '/memory_limit/c\\memory_limit = 512M' $APACHPHP/php.ini
+   echo "Restarting webservices ..."
+   service apache2 restart
+}
+
+#Restore FIX for larger RSC searches
+function restorephplimit() {
+   echo "Restoring PHP limit to default values 128M ..."
+   check_file $APACHPHP/php.ini
+   echo "Setting PHP limit to 128M ..."
+   sed -i '/memory_limit/c\\memory_limit = 128M' $APACHPHP/php.ini
+   echo "Restarting webservices ..."
+   service apache2 restart
+}
+
+#Installation RSX
+function rsxinstall() {
+#Check installation
+   echo "Check GUI ..."
+   check_file_gui $APACHCONF/rs/loaddata.php
+   check_file_reverse $SYSLOGCONF/99RSX-rs.conf
+   echo "Check if Remote Syslog is installed ..."
+   check_file "$RSBIN/rsinstaller"
+#Install packages
+   echo "Install required packages ..."
+   apt install libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential -y
+   check_package "libapache2-mod-authnz-external"
+   check_package "apache2"
+   check_package "php"
+   check_package "libapache2-mod-authz-unixgroup"
+   check_package "php-cli"
+   check_package "libapache2-mod-php"
+   check_package "libpam0g-dev"
+   check_package "php-pear"
+   check_package "php-dev"
+   check_package "build-essential"
+#Load apache modules
+   echo "Load modules ..."
+   a2enmod proxy
+   a2enmod proxy_http
+   a2enmod headers
+   a2enmod authnz_external
+   a2enmod authz_unixgroup
+   a2enmod rewrite
+   a2enmod ssl
+   a2enmod mod_proxy
+   a2enmod session
+   a2enmod auth_form
+   a2enmod request
+   a2enmod session_cookie
+   a2enmod session_crypto
+#Configure/install packages
+#Syslog-ng
+   echo "Update repository's ..."
+   echo "Load syslog-ng ..."
+   if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
+       echo "Nothing to do ..."
+   else
+       wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
+       echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+   fi
+   apt update && apt install syslog-ng-mod-java syslog-ng-mod-elastic -y -o Dpkg::Options::=--force-confdef
+   check_package "syslog-ng-mod-java"
+   check_package "syslog-ng-mod-elastic"
+#Elastic
+   echo "Load Elastic ..."
+   if [ -e "/etc/apt/sources.list.d/elastic-7.x.list" ]; then
+       echo "Nothing to do ..."
+   else
+       wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+       apt-get install apt-transport-https
+       echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
+       echo "deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
+   fi
+   apt update && apt install elasticsearch liblog4j2-java -y
+   check_package "elasticsearch"
+   check_package "liblog4j2-java"
+#Java
+   echo "Deploy JAVA 8 fix ..."
+   apt install openjdk-8-jdk -y
+   check_package "openjdk-8-jdk"
+#Update LIB_PATH for JAVA
+   echo "Update LD_LIBRARY_PATH ..."
+   export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/:$LD_LIBRARY_PATH
+   echo /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/ | tee -a /etc/ld.so.conf.d/java.conf
+   ldconfig
+#Install Kibana
+   echo "Install Kibana ..."
+   apt update && apt install kibana -y
+#Writing config
+#RSX Syslog-ng config
+   echo "Update syslog-ng with RSX config ..."
+   cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+#RSX elastic config
+   echo "Write elastic config ..."
+   echo "cluster.name: syslog" >> /etc/elasticsearch/elasticsearch.yml
+   echo "node.name: syslog01" >> /etc/elasticsearch/elasticsearch.yml
+#RSX kibana config
+   echo "Write kibana config ..."
+   echo 'server.rewriteBasePath: true' >> /etc/kibana/kibana.yml
+   echo 'server.basePath: "/kibana"' >> /etc/kibana/kibana.yml
+#Activate service on boot
+   echo "Activate startup log configuration ..."
+   systemctl enable kibana
+   systemctl enable elasticsearch
+#Reload services
+   echo "Activate start/reload configuration ..."
+   service elasticsearch start
+   service kibana start
+   service syslog-ng restart
+#Activate SSL
+   echo "Activate SSL ..."
+#Setup variables:
+   varfullservername=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}')
+   certpath=/etc/cert/
+   echo "Create .rnd file ..."
+   touch $HOME/.rnd
+   echo "Certificate auto request for linux webservers!"
+   echo "Powered by RSX ..."
+   echo "Generate Certificate ..."
+   if [ -f $HOME/.rnd ]; then
+      echo "File $HOME/.rnd exists ..."
+      openssl req -new -x509 -days 3650 -sha256 -newkey rsa:2048 -subj "/C=NL/ST=Limburg/L=Maastricht/O=IT/CN=$varfullservername" -nodes -keyout $HOME/$varfullservername.key -out $HOME/$varfullservername.crt
+      echo "Copy SSL certificates ..."
+      if [ -d $certpath ]; then
+           echo "Directory already exist ..."
+      else
+           mkdir $certpath
+           echo "Directory created ..."
+      fi
+      cp $HOME/$varfullservername.key $certpath/rs.key
+      cp $HOME/$varfullservername.crt $certpath/rs.crt
+      echo "Setup permissions ..."
+      chmod 600 $certpath/rs.key
+      echo "Clean up ..."
+      rm -rf $HOME/$varfullservername.key
+      rm -rf $HOME/$varfullservername.crt
+      echo "Generated key file: $certpath/rs.key"
+      echo "Generated cert file: $certpath/rs.crt"
+	  check_file $certpath/rs.key
+	  check_file $certpath/rs.crt
+   else
+      echo "No .rnd found ..."
+   fi
+#Proxy setup
+   echo "Activate proxy ..."
+   echo "Disable default config ..."
+   cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
+   check_file $APACONFIG/rsx-apache.conf
+   a2ensite rsx-apache
+   a2dissite 000-default
+#Load PHP authentication module
+   echo "Activate PHP PAM ..."
+   echo "Compile ..."
+   currentpath=$(pwd)
+   cd $RSDEST/php-pam
+   phpize
+   ./configure --prefix=/usr
+   make
+   make install
+   cd $currentpath
+   ldconfig
+#Setup php login experimental
+   echo "Write php config ..."
+   cp -rf $RSDEST/20-pam.ini $APACHPHP/conf.d/
+   check_file $APACHPHP/conf.d/20-pam.ini
+#Setup permissions on shadow file (Dangerous)
+   echo "!Setup permissions /etc/shadow ...!"
+   chmod o+r /etc/shadow
+#Create login website
+   echo "Create login for webpages ..."
+   mkdir $APACHCONF/administrator/
+   cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
+   cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
+   cp -rf $RSDEST/login.php $APACHCONF/login.php
+   cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
+   cp -rf $RSDEST/logo.png $APACHCONF/logo.png
+   cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+   cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
+   cp -rf $RSDEST/style.css $APACHCONF/style.css
+   rm -rf $APACHCONF/index.html
+   check_file_reverse $APACHCONF/index.html
+   check_file $APACHCONF/administrator/index.php
+   check_file $APACHCONF/login.php
+   check_file $APACHCONF/index.php
+   check_file $APACHCONF/logo.png
+   check_file $APACHCONF/favicon.ico
+   check_file $APACHCONF/style.css
+   check_file $APACHCONF/fontawesome/css/all.css
+   echo "Reload apache services ..."
+   service apache2 restart
+#Final message
+   echo "RSX installation done ..."
+}
+
+#RSX removal
+function rsxremove() {
+#Basic check
+   check_file_gui $APACHCONF/rs/loaddata.php
+   check_file $SYSLOGCONF/99RSX-rs.conf
+#Remove java lib
+   rm -rf /etc/ld.so.conf.d/java.conf
+   ldconfig
+#Remove Syslog-NG RSX config
+   rm -rf $SYSLOGCONF/99RSX-rs.conf
+   echo "Restart Syslog-NG ..."
+   service syslog-ng restart
+#Remove Apache config
+   rm -rf $certpath/rs.key
+   rm -rf $certpath/rs.crt
+   rm -rf $APACONFIG/rsx-apache.conf
+   rm -rf $APACHPHP/conf.d/20-pam.ini
+   rm -rf $APACHCONF/*
+#Remove packages
+   echo "Remove config ..."
+   rm -rf /etc/apt/sources.list.d/elastic-7.x.list
+   rm -rf /etc/elasticsearch/elasticsearch.yml
+   rm -rf /etc/kibana/kibana.yml
+   echo "Remove packages ..."
+   apt -y purge kibana openjdk-8-jdk elasticsearch liblog4j2-java libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential -y
+   apt -y install syslog-ng
+   apt -y autoremove
+   echo "RSX removed ..."
+}
+
+#Thank you message
+function quit() {
+   echo "Thank you for using Remote Syslog ..."
+}
+
+#Variables
+clear
+echo "Setting up environment ..."
+RSCONF=/opt/remotesyslog
+RSPATH=$(pwd)
+RSDEST=/opt/RS
+SYSLOGCONF=/etc/syslog-ng/conf.d
+APACHCONF=/var/www/html
+APACONFIG=/etc/apache2/sites-available
+VLOG=/var/log
+RSBIN=/usr/bin
+RSTMP=/tmp
+APACHPHP=/etc/php/7.[0-9]/apache2
+#Environment setup
+echo "Check 1 ..."
+if [ -e $RSPATH/rsinstaller ]; then
+   echo "rsinstaller found in local directory, copy to $RSDEST started ..."
+   cp -rf $RSPATH/* $RSDEST
+elif [ -e $RSBIN/rsinstaller ]; then
+   echo "rsinstaller run from $RSBIN, going for $RSDEST environment ..."
+else
+   echo "Did you run the installer from the right directory? ..."
+fi
+clear
+banner
+#Menu
+PS3='Please enter your choice: '
+options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Core installation")
+		clear
+		banner
+        	debpackage
+		pre_install
+		coreinstall
+		checkinstallationcore
+		exit
+		;;
+	"Core removal")
+		clear
+		banner
+		coreremove
+		exit
+		;;
+        "Upgrade")
+		clear
+		banner
+		pre_install
+		upgrade
+		osupdate
+		checkinstallationcore
+		exit
+		;;
+        "Reconfigure services")
+		clear
+		banner
+		changedefault
+		exit
+		;;
+        "Restore default configuration")
+		clear
+		banner
+		restoredefault
+		exit
+		;;
+        "Add local syslog to Remote Syslog")
+		clear
+		banner
+		startdebug
+		exit
+		;;
+        "Remove local syslog to Remote Syslog")
+		clear
+		banner
+		stopdebug
+		exit
+		;;
+        "Set new memory PHP limit of 512M")
+		clear
+		banner
+		extentphplimit
+		exit
+		;;
+        "Set default PHP memory limit of 128M")
+               clear
+               banner
+               restorephplimit
+               exit
+               ;;
+        "Install RSC")
+               clear
+               banner
+               pre_install
+               rscinstall
+               exit
+               ;;
+        "Remove RSC")
+               clear
+               banner
+               rscremove
+               exit
+               ;;
+	"Install RSX")
+              clear
+              banner
+              pre_install
+              rsxinstall
+              exit
+              ;;
+        "Remove RSX")
+              clear
+              banner
+              rsxremove
+              exit
+              ;;
+        "Quit")
+		break
+		;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done
