@@ -906,7 +906,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "Quit")
+options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "OS Upgrade" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1006,6 +1006,12 @@ do
            clear
            banner
            fwdisable
+           exit
+    ;;
+        "OS Upgrade")
+           clear
+           banner
+           osupdate
            exit
     ;;
         "Quit")
