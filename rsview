@@ -33,43 +33,43 @@ echo ""
 RSV=/var/log/remote_syslog/remote_syslog.log
 
 function show_options() {
-        echo "Usage rsview:"
-        echo ""
-        echo "-h,--help                          Display help"
-        echo "-s,--search <search string>        Search through logging"
-        echo "-v,--view                          View logging"
-        echo "-l,--live                          View live logging"
-        echo "-ls,--livesearch <search string>   Search through live logging"
-        echo "-t,--testmessage                   Send a test message"
-        echo "-c,--clearlog                      Clear total log archive"
-        echo ""
+   echo "Usage rsview:"
+   echo ""
+   echo "-h,--help                          Display help"
+   echo "-s,--search <search string>        Search through logging"
+   echo "-v,--view                          View logging"
+   echo "-l,--live                          View live logging"
+   echo "-ls,--livesearch <search string>   Search through live logging"
+   echo "-t,--testmessage                   Send a test message"
+   echo "-c,--clearlog                      Clear total log archive"
+   echo ""
 }
 
 case $1 in
 -h|--help)
-	show_options
-	;;
+        show_options
+        ;;
 -s|--search)
-	cat $RSV | grep --color=always $2
-	;;
+        cat $RSV | grep --color=always $2
+        ;;
 -v|--view)
-	colortail -n 3000 $RSV
-	;;
+        colortail -n 3000 $RSV
+        ;;
 -l|--live)
-	colortail -n 30 -f $RSV
-	;;
+        colortail -n 30 -f $RSV
+        ;;
 -ls|--livesearch)
-	tail -n 30 -f $RSV | grep --color=always $2
-	;;
+        tail -n 30 -f $RSV | grep --color=always $2
+        ;;
 -t|--testmessage)
-	logger -n 127.0.0.1 -d 'This is a UDP test message!'; logger -T -P 514 -n 127.0.0.1 'This is a TCP test message!'
-	echo "Sending UDP and TCP test message! Check logging!"
-	;;
+        logger -n 127.0.0.1 -d 'This is a UDP test message!'; logger -T -P 514 -n 127.0.0.1 'This is a TCP test message!'
+        echo "Sending UDP and TCP test message! Check logging!"
+        ;;
 -c|--clearlog)
-	rm -rf $RSV.*
-	echo "Total logging archive cleared!"
-	echo ""
-	;;
-	*)
-	show_options
+        rm -rf $RSV.*
+        echo "Total logging archive cleared!"
+        echo ""
+        ;;
+        *)
+        show_options
 esac
