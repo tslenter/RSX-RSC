@@ -444,7 +444,7 @@ if [ -e "$APACHCONF/rs/loaddata.php" ]; then
     check_package "php-dev"
     check_package "build-essential"
 #Update Webpage
-	echo "Update webpage code ..."
+    echo "Update webpage code ..."
     cp -rf $RSDEST/favicon.ico $APACHCONF/rs/
     cp -rf $RSDEST/index.php $APACHCONF/rs/
     cp -rf $RSDEST/indexs.php $APACHCONF/rs/
@@ -500,16 +500,16 @@ elif [ -e $SYSLOGCONF/99RSX-rs.conf ]; then
     check_file $SYSLOGCONF/99RSX-rs.conf
     cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
     cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
-    cp -rf $RSDEST/login.html $APACHCONF/login.html
+    cp -rf $RSDEST/login.php $APACHCONF/login.php
     cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
-    cp -rf $RSDEST/logo.php $APACHCONF/logo.php
+    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
     cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
     cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
     check_file_reverse $APACHCONF/index.html
     check_file $APACHCONF/administrator/index.php
-    check_file $APACHCONF/login.html
+    check_file $APACHCONF/login.php
     check_file $APACHCONF/index.php
-    check_file $APACHCONF/logo.php
+    check_file $APACHCONF/logo.png
     check_file $APACHCONF/favicon.ico
     check_file $APACHCONF/fontawesome/css/all.css
     echo "Restarting Apache ..."
@@ -865,6 +865,7 @@ APACHPHP=/etc/php/7.[0-9]/apache2
 echo "Check 1 ..."
 if [ -e $RSPATH/rsinstaller ]; then
    echo "rsinstaller found in local directory, copy to $RSDEST started ..."
+   mkdir $RSDEST
    cp -rf $RSPATH/* $RSDEST
 elif [ -e $RSBIN/rsinstaller ]; then
    echo "rsinstaller run from $RSBIN, going for $RSDEST environment ..."
