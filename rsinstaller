@@ -890,7 +890,7 @@ function fwenable() {
     ufw allow 8080/tcp
     ufw allow 80/tcp
     ufw allow 443/tcp
-    ufw allow 514/udp
+    ufw allow 514/tcp
     ufw allow 514/udp
     ufw --force enable
     ufw status
