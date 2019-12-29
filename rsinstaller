@@ -32,7 +32,7 @@ RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
 bid=00000001
-fbid="$(sed -n -e '/bid/ s/.*\= *//p' $RSBIN/rsinstaller)"
+fbid="$(sed -n -e '/bid/ s/.*\= *//p' /opt/RS/rsinstaller)"
 
 #Banner
 function banner() {
@@ -58,12 +58,13 @@ fi
 
 #Check build
 function version() {
-    if [ -z "$fbid" ];
+    if [ -z ${fbid} ];
     then
         echo "Upgrade variable not found ..."
+	echo "${fbid}"
     else
         echo "Build ${fbid} found ..."
-        if [ ${fbid} -ge $bid ];
+        if [ ${fbid} -le $bid ];
         then
             echo "This upgrade is not allowed ..."
             exit
@@ -571,6 +572,7 @@ function upgrade() {
     fi
     cp -rf $RSTMP/rs/* $RSDEST
     rm -rf $RSTMP/rs
+    version
     echo "Start update ..."
     echo "Deploying application for CLI logging ..."
     cp -rf $RSDEST/rsview $RSBIN/rsview
@@ -993,7 +995,6 @@ do
         "Upgrade")
             clear
             banner
-            version
             pre_install
             upgrade
             osupdate
