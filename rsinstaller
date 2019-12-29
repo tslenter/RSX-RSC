@@ -905,6 +905,50 @@ function fwdisable() {
     echo "Done ..."
 }
 
+function status() {
+    dpkg-query -l syslog-ng > /dev/null 2>&1
+    if [ $? = 0 ]
+    then
+        echo "Installation found ..."
+        service syslog-ng status | cat
+    else
+        echo "Installation not found, skipped ..."
+    fi
+    dpkg-query -l apache2 > /dev/null 2>&1
+    if [ $? = 0 ]
+    then
+        echo "Installation found ..."
+        service apache2 status | cat
+    else
+        echo "Installation not found, skipped ..."
+    fi
+    dpkg-query -l elasticsearch > /dev/null 2>&1
+    if [ $? = 0 ]
+    then
+        echo "Installation found ..."
+        service elasticsearch status | cat
+    else
+        echo "Installation not found, skipped ..."
+    fi
+    dpkg-query -l kibana > /dev/null 2>&1
+    if [ $? = 0 ]
+    then
+        echo "Installation found ..."
+        service kibana status | cat
+    else
+        echo "Installation not found, skipped ..."
+    fi
+    dpkg-query -l ufw > /dev/null 2>&1
+    if [ $? = 0 ]
+    then
+        echo "Installation found ..."
+        ufw status
+    else
+        echo "Installation not found, skipped ..."
+    fi
+    echo "Done ..."
+}
+
 #Environment setup
 clear
 echo "Setting up environment ..."
@@ -927,7 +971,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "OS Upgrade" "Quit")
+options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "OS Upgrade" "Status RS" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1034,6 +1078,12 @@ do
            clear
            banner
            osupdate
+           exit
+    ;;
+        "Status RS")
+           clear
+           banner
+           status
            exit
     ;;
         "Quit")
