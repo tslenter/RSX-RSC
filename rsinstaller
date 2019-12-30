@@ -64,7 +64,7 @@ function version() {
 	echo "${fbid}"
     else
         echo "Build ${fbid} found ..."
-        if [ ${fbid} -le $bid ];
+        if [ ${fbid} -ge $bid ];
         then
             echo "This upgrade is not allowed ..."
             exit
