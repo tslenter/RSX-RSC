@@ -31,8 +31,8 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000001
-fbid="$(sed -n -e '/bid/ s/.*\= *//p' /opt/RS/rsinstaller)"
+bid=00000002
+fbid="$(sed -n -e '/bid/ s/.*\= *//p' $RSDEST/rsinstaller | head -n 1)"
 
 #Banner
 function banner() {
@@ -106,28 +106,6 @@ function mod_activ() {
         echo "Module activated ..."
     else
         echo "Module not activated ..."
-    fi
-}
-
-#Add new config RSX syslog-ng
-function guirestorechange() {
-    file=$1
-    if [ -e "$file" ]; then
-        echo "GUI found ..."
-        cp -rf $RSCONF/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
-    else
-        echo "GUI not activated ..."
-    fi
-}
-
-#Set default GUI RSX syslog-ng
-function guirestoredefault() {
-    file=$1
-    if [ -e "$file" ]; then
-        echo "GUI found ..."
-        cp -rf $RSCONF/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
-    else
-        echo "GUI not activated ..."
     fi
 }
 
@@ -608,8 +586,6 @@ function osupdate() {
 function changedefault() {
     echo "Reconfigure default values ..."
     cp -rf $RSCONF/syslog-ng $SYSLOGCONF/99-remote.conf
-    echo "Check if mysql for GUI is deployed ..."
-    guirestorechange $SYSLOGCONF/99RSX-rs.conf
     echo "Restart syslog-ng ..."
     service syslog-ng restart
     echo "Set logrotation ..."
@@ -621,8 +597,6 @@ function changedefault() {
 function restoredefault() {
     echo "Restore default syslog-ng values..."
     cp -rf $RSCONF/syslog-ngdefault $SYSLOGCONF/99-remote.conf
-    echo "Restore SQL for default GUI if deployed ..."
-    guirestoredefault $SYSLOGCONF/99RSX-rs.conf
     echo "Restart syslog-ng ..."
     service syslog-ng restart
     echo "Restore default logrotation ..."
