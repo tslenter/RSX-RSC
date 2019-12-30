@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000002
+bid=00000001
 fbid="$(sed -n -e '/bid/ s/.*\= *//p' $RSDEST/rsinstaller | head -n 1)"
 
 #Banner
@@ -946,7 +946,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade" "Reconfigure services" "Restore default configuration" "Add local syslog to Remote Syslog" "Remove local syslog to Remote Syslog" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "OS Upgrade" "Status RS" "Quit")
+options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "OS Upgrade" "Status RS" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -965,7 +965,7 @@ do
             coreremove
             exit
     ;;
-        "Upgrade")
+        "Upgrade RSX/RSC")
             clear
             banner
             pre_install
@@ -974,25 +974,25 @@ do
             checkinstallationcore
             exit
     ;;
-        "Reconfigure services")
+        "Reconfigure core services")
             clear
             banner
             changedefault
             exit
     ;;
-        "Restore default configuration")
+        "Restore default core configuration")
             clear
             banner
             restoredefault
             exit
     ;;
-        "Add local syslog to Remote Syslog")
+        "Add local syslog to Remote Syslog core")
             clear
             banner
             startdebug
             exit
     ;;
-        "Remove local syslog to Remote Syslog")
+        "Remove local syslog to Remote Syslog core")
             clear
             banner
             stopdebug
