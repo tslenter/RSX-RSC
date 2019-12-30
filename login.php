@@ -54,7 +54,10 @@ E-mail: info@remotesyslog.com
         <input type="password" name="httpd_password" value="" placeholder="Password" required/>
         <input type="submit" name="login" value="Login" />
 </form>
-
 </div>
+<center>
+echo "RSX 0.1 - T.Slenter - https://www.remotesyslog.com/";
+echo "Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B";
+</center>
 </body>
 </html>
