@@ -89,6 +89,7 @@ EOT;
 <center>
 <?php
 echo "RSX 0.1 - T.Slenter - https://www.remotesyslog.com/";
+<br></br>
 echo "Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B";
 ?>
 </center>
