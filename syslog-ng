@@ -14,5 +14,20 @@ log { source(udp_514); source(tcp_514); destination(Y); };
 destination X { file("/var/log/remote_syslog/per_host/$HOST/$HOST-$YEAR-$MONTH-$DAY.log" owner(www-data) group(www-data) perm(0644) dir_perm(0744) dir_owner(www-data) dir_group(www-data) create_dirs(yes)); };
 log { source(udp_514); source(tcp_514); destination(X); };
 
-#filter myfilter { ( level(notice) ); };
-#log { source(mysource); filter(myfilter); destination(dest); };
+#Example Splunk forwarder 
+#destination loghost { udp("10.0.98.253" port(5000) spoof_source(yes)); };
+#log { source(single); source(t); destination(loghost); };
+
+#Example message filter 
+#filter messages { not match("PARSER-5-CFGLOG_LOGGEDCMD") };
+#filter wifi2_messages { not match("PACKET_WQE_DIFF"); };
+#filter wifi_messages { not match("Alert: Non-802.11"); };
+#filter multicast_messages { not match("MROUTE-4-ROUTELIMIT"); };
+#filter dhcp_snooping { not match("DHCP_SNOOPING-5-DHCP_SNOOPING_UNTRUSTED_PORT"); };
+#filter calendar_sync { not match("C4K_REDUNDANCY-5-CALENDAR_RATELIMIT"); };
+#destination Y { file("/var/log/remote_syslog/remote_syslog.log" suppress(30) owner(www-data) group(www-data) perm(0644) dir_perm(0644) dir_owner(www-data) dir_group(www-data) create_dirs(yes)); };
+#log { source(udp_514); source(tcp_514); filter(messages); filter(wifi_messages); filter(wifi2_messages); filter(multicast_messages); filter(dhcp_snooping); filter(calendar_sync); destination(Y); };
+
+#Example redirect all local syslog to /var/log/all_syslog.log
+#destination all_log { file("/var/log/all_syslog.log"); };
+#log { source("s_src"); destination("all_log"); };
