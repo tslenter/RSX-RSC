@@ -974,6 +974,14 @@ function distocheck() {
         echo "Debian found ..."
         echo "Update debian path ..."
         PATH="/usr/sbin:$PATH"
+        echo "Install ufw ..."
+        fwcheck=$(dpkg-query -l ufw)
+        if [[ $fwcheck =~ "ufw" ]]; then
+            echo "Installation found ..."
+        else
+            echo "ufw missing ..."
+            apt install ufw
+        fi
         if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
             echo "Nothing to do ..."
         else
@@ -1018,6 +1026,7 @@ do
         "Core installation")
             clear
             banner
+            distocheck
             debpackage
             pre_install
             coreinstall
