@@ -304,7 +304,7 @@ function rscremove() {
 function debpackage() {
     echo "Check if Remote Syslog is installed ..."
     check_file_reverse $RSBIN/rsinstaller
-    echo "Notice: This installation is tested for Ubuntu Server 18.04 LTS and Debian 9.x ..."
+    echo "Notice: This installation is tested for Ubuntu Server 18.04 LTS and Debian 10.x ..."
     echo "Starting installation ..."
     echo "Update installer cache ..."
     if apt-add-repository multiverse > /dev/null 2>&1 ; then
