@@ -1036,6 +1036,7 @@ do
         "Core removal")
             clear
             banner
+            distocheck
             coreremove
             exit
     ;;
@@ -1052,36 +1053,42 @@ do
         "Reconfigure core services")
             clear
             banner
+            distocheck
             changedefault
             exit
     ;;
         "Restore default core configuration")
             clear
             banner
+            distocheck
             restoredefault
             exit
     ;;
         "Add local syslog to Remote Syslog core")
             clear
             banner
+            distocheck
             startdebug
             exit
     ;;
         "Remove local syslog to Remote Syslog core")
             clear
             banner
+            distocheck
             stopdebug
             exit
     ;;
         "Set new memory PHP limit of 512M")
             clear
             banner
+            distocheck
             extentphplimit
             exit
     ;;
         "Set default PHP memory limit of 128M")
             clear
             banner
+            distocheck
             restorephplimit
             exit
     ;;
@@ -1096,6 +1103,7 @@ do
         "Remove RSC")
             clear
             banner
+            distocheck
             rscremove
             exit
     ;;
@@ -1110,6 +1118,7 @@ do
         "Remove RSX")
             clear
             banner
+            distocheck
             rsxremove
             exit
     ;;
@@ -1123,30 +1132,35 @@ do
         "Remove PHP profile auhentication - Info: Do not use ...")
             clear
             banner
+            distocheck
             phpauthremove
             exit
     ;;
         "Enable firewall")
             clear
             banner
+            distocheck
             fwenable
             exit
     ;;
         "Disable firewall")
             clear
             banner
+            distocheck
             fwdisable
             exit
     ;;
         "OS Upgrade")
             clear
             banner
+            distocheck
             osupdate
             exit
     ;;
         "Status RS")
             clear
             banner
+            distocheck
             status
             exit
     ;;
