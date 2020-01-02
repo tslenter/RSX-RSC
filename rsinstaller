@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000012
+bid=00000013
 
 #Banner
 function banner() {
@@ -166,7 +166,6 @@ function rscinstall() {
     a2enmod authz_unixgroup
     a2enmod rewrite
     a2enmod ssl
-    a2enmod mod_proxy
     a2enmod session
     a2enmod auth_form
     a2enmod request
@@ -674,7 +673,6 @@ function rsxinstall() {
     a2enmod authz_unixgroup
     a2enmod rewrite
     a2enmod ssl
-    a2enmod mod_proxy
     a2enmod session
     a2enmod auth_form
     a2enmod request
