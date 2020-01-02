@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000007
+bid=00000009
 
 #Banner
 function banner() {
@@ -74,7 +74,8 @@ function version() {
             fi
         fi
     else
-        echo "File: rsinstaller not found, no build check needed ..."
+        echo "File: rsinstaller not found, is rsx/rsc installed ..."
+        exit
     fi
 }
 
@@ -723,13 +724,23 @@ function rsxinstall() {
     echo "Update syslog-ng with RSX config ..."
     cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
 #RSX elastic config
-    echo "Write elastic config ..."
-    echo "cluster.name: syslog" >> /etc/elasticsearch/elasticsearch.yml
-    echo "node.name: syslog01" >> /etc/elasticsearch/elasticsearch.yml
+    elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.syslog | head -n 1)"
+    if [[ $elc == *"cluster.name: syslog"* ]]; then
+        echo "Config already written ..."
+    else
+        echo "Write elastic config ..."
+        echo "cluster.name: syslog" >> /etc/elasticsearch/elasticsearch.yml
+        echo "node.name: syslog01" >> /etc/elasticsearch/elasticsearch.yml
+    fi
 #RSX kibana config
-    echo "Write kibana config ..."
-    echo 'server.rewriteBasePath: true' >> /etc/kibana/kibana.yml
-    echo 'server.basePath: "/kibana"' >> /etc/kibana/kibana.yml
+    kic="$(cat /etc/kibana/kibana.yml | grep server.rewriteBasePath:.true | head -n 1)"
+    if [[ $kic == *"server.rewriteBasePath: true"* ]]; then
+        echo "Config already written ..."
+    else
+        echo "Write kibana config ..."
+        echo 'server.rewriteBasePath: true' >> /etc/kibana/kibana.yml
+        echo 'server.basePath: "/kibana"' >> /etc/kibana/kibana.yml
+    fi
 #Activate service on boot
     echo "Activate startup log configuration ..."
     systemctl enable kibana
