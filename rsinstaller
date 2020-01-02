@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000011
+bid=00000012
 
 #Banner
 function banner() {
@@ -800,7 +800,6 @@ function rsxinstall() {
     cp -rf $RSDEST/style.css $APACHCONF/style.css
     rm -rf $APACHCONF/index.html
     check_file_reverse $APACHCONF/index.html
-    check_file $APACHCONF/administrator/index.php
     check_file $APACHCONF/login.php
     check_file $APACHCONF/index.php
     check_file $APACHCONF/logo.png
@@ -837,6 +836,8 @@ function phpauthinstall() {
     mkdir $APACHCONF/administrator/
     cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
     cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
+    check_file $APACHCONF/administrator/index.php
+    check_file $APACHCONF/administrator/profile.php
     echo "Restart apache2 ..."
     service apache2 restart
 }
@@ -856,6 +857,8 @@ function phpauthupgrade() {
         echo "Copy PHP authentication files ..."
         cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
         cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
+        check_file $APACHCONF/administrator/index.php
+        check_file $APACHCONF/administrator/profile.php
     else
         echo "No PHP Authentication found, skipped ..."
     fi
