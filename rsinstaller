@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000017
+bid=00000019
 
 #Banner
 function banner() {
@@ -965,6 +965,30 @@ function status() {
     echo "Done ..."
 }
 
+#Release check
+function distocheck() {
+    echo "Check release ..."
+    drel="$(lsb_release -a | egrep 'Codename:')"
+    echo "$drel found ..."
+    if [[ $drel =~ "buster" ]]; then
+        echo "Debian found ..."
+        echo "Update debian path ..."
+        PATH="/usr/sbin:$PATH"
+        if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
+            echo "Nothing to do ..."
+        else
+            echo "deb http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
+            echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
+        fi
+    elif [[ $drel =~ "bionic" ]]; then
+        echo "Ubuntu found ..."
+        echo "Nothing to do ..."
+    else
+        echo "No distro detected ..."
+        exit
+    fi
+}
+
 #Environment setup
 clear
 echo "Setting up environment ..."
@@ -1009,6 +1033,7 @@ do
         "Upgrade RSX/RSC")
             clear
             banner
+            distocheck
             pre_install
             upgrade
             osupdate
@@ -1054,67 +1079,70 @@ do
         "Install RSC")
             clear
             banner
+            distocheck
             pre_install
             rscinstall
             exit
     ;;
         "Remove RSC")
-           clear
-           banner
-           rscremove
-           exit
+            clear
+            banner
+            rscremove
+            exit
     ;;
         "Install RSX")
-           clear
-           banner
-           pre_install
-           rsxinstall
-           exit
+            clear
+            banner
+            distocheck
+            pre_install
+            rsxinstall
+            exit
     ;;
         "Remove RSX")
-           clear
-           banner
-           rsxremove
-           exit
+            clear
+            banner
+            rsxremove
+            exit
     ;;
         "Install PHP profile authentication - Info: Do not use ...")
-           clear
-           banner
-           phpauthinstall
-           exit
+            clear
+            banner
+            distocheck
+            phpauthinstall
+            exit
     ;;
         "Remove PHP profile auhentication - Info: Do not use ...")
-           clear
-           banner
-           phpauthremove
-           exit
+            clear
+            banner
+            phpauthremove
+            exit
     ;;
         "Enable firewall")
-           clear
-           banner
-           fwenable
-           exit
+            clear
+            banner
+            fwenable
+            exit
     ;;
         "Disable firewall")
-           clear
-           banner
-           fwdisable
-           exit
+            clear
+            banner
+            fwdisable
+            exit
     ;;
         "OS Upgrade")
-           clear
-           banner
-           osupdate
-           exit
+            clear
+            banner
+            osupdate
+            exit
     ;;
         "Status RS")
-           clear
-           banner
-           status
-           exit
+            clear
+            banner
+            status
+            exit
     ;;
         "Quit")
-           break
+            break
     ;;
         *) echo "Invalid option $REPLY ..." ;;
     esac
