@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000009
+bid=00000011
 
 #Banner
 function banner() {
@@ -513,8 +513,6 @@ function guiupgrade() {
         echo "Update syslog-ng with RSX config ..."
         cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
         check_file $SYSLOGCONF/99RSX-rs.conf
-        cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
-        cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
         cp -rf $RSDEST/login.php $APACHCONF/login.php
         cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
         cp -rf $RSDEST/logo.png $APACHCONF/logo.png
@@ -527,6 +525,7 @@ function guiupgrade() {
         check_file $APACHCONF/logo.png
         check_file $APACHCONF/favicon.ico
         check_file $APACHCONF/fontawesome/css/all.css
+        phpauthupgrade
         echo "Restarting Apache ..."
         service apache2 restart
         echo "Restarting Syslog-NG ..."
@@ -791,6 +790,30 @@ function rsxinstall() {
     check_file $APACONFIG/rsx-apache.conf
     a2ensite rsx-apache
     a2dissite 000-default
+#Create login website
+    echo "Create login for webpages ..."
+    cp -rf $RSDEST/login.php $APACHCONF/login.php
+    cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
+    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
+    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+    cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
+    cp -rf $RSDEST/style.css $APACHCONF/style.css
+    rm -rf $APACHCONF/index.html
+    check_file_reverse $APACHCONF/index.html
+    check_file $APACHCONF/administrator/index.php
+    check_file $APACHCONF/login.php
+    check_file $APACHCONF/index.php
+    check_file $APACHCONF/logo.png
+    check_file $APACHCONF/favicon.ico
+    check_file $APACHCONF/style.css
+    check_file $APACHCONF/fontawesome/css/all.css
+    echo "Reload apache services ..."
+    service apache2 restart
+#Final message
+    echo "RSX installation done ..."
+}
+
+function phpauthinstall() {
 #Load PHP authentication module
     echo "Activate PHP PAM ..."
     echo "Compile ..."
@@ -814,25 +837,28 @@ function rsxinstall() {
     mkdir $APACHCONF/administrator/
     cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
     cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
-    cp -rf $RSDEST/login.php $APACHCONF/login.php
-    cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
-    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
-    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
-    cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
-    cp -rf $RSDEST/style.css $APACHCONF/style.css
-    rm -rf $APACHCONF/index.html
-    check_file_reverse $APACHCONF/index.html
-    check_file $APACHCONF/administrator/index.php
-    check_file $APACHCONF/login.php
-    check_file $APACHCONF/index.php
-    check_file $APACHCONF/logo.png
-    check_file $APACHCONF/favicon.ico
-    check_file $APACHCONF/style.css
-    check_file $APACHCONF/fontawesome/css/all.css
-    echo "Reload apache services ..."
+    echo "Restart apache2 ..."
     service apache2 restart
-#Final message
-    echo "RSX installation done ..."
+}
+
+#PHP authentication remove
+function phpauthremove() {
+    echo "Remove PHP Authentication ..."
+    chmod o-r /etc/shadow
+    rm -rf $APACHCONF/administrator/
+    rm -rf $APACHPHP/conf.d/20-pam.ini
+}
+
+#PHP authentication upgrade
+function phpauthupgrade() {
+    echo "Upgrade PHP authentication ..."
+    if [ -e "$APACHCONF/administrator/index.php" ]; then
+        echo "Copy PHP authentication files ..."
+        cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
+        cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
+    else
+        echo "No PHP Authentication found, skipped ..."
+    fi
 }
 
 #RSX removal
@@ -961,7 +987,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Enable firewall" "Disable firewall" "OS Upgrade" "Status RS" "Quit")
+options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Install PHP profile authentication - Info: Do not use ..." "Remove PHP profile auhentication - Info: Do not use ..." "Enable firewall" "Disable firewall" "OS Upgrade" "Status RS" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1049,6 +1075,18 @@ do
            clear
            banner
            rsxremove
+           exit
+    ;;
+        "Install PHP profile authentication - Info: Do not use ...")
+           clear
+           banner
+           phpauthinstall
+           exit
+    ;;
+        "Remove PHP profile auhentication - Info: Do not use ...")
+           clear
+           banner
+           phpauthremove
            exit
     ;;
         "Enable firewall")
