@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000006
+bid=00000007
 
 #Banner
 function banner() {
@@ -57,20 +57,24 @@ fi
 
 #Check build
 function version() {
-    fbid="$(sed -n -e '/bid/ s/.*\= *//p' $RSDEST/rsinstaller | head -n 1)"
-    if [ -z ${fbid} ];
-    then
-        echo "Upgrade variable not found ..."
-	echo "${fbid}"
-    else
-        echo "Build ${fbid} found ..."
-        if [ ${fbid} -le $bid ];
+    if [ -e "$RSBIN/rsinstaller" ]; then
+        fbid="$(sed -n -e '/bid/ s/.*\= *//p' $RSDEST/rsinstaller | head -n 1)"
+        if [ -z ${fbid} ];
         then
-            echo "This upgrade is not allowed ..."
-            exit
+            echo "Upgrade variable not found ..."
+	    echo "${fbid}"
         else
-            echo "Upgrade detected ..."
+            echo "Build ${fbid} found ..."
+            if [ ${fbid} -le $bid ];
+            then
+                echo "This upgrade is not allowed ..."
+                exit
+            else
+                echo "Upgrade detected ..."
+            fi
         fi
+    else
+        echo "File: rsinstaller not found, no build check needed ..."
     fi
 }
 
