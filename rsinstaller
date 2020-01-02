@@ -690,6 +690,16 @@ function rsxinstall() {
     apt update && apt install syslog-ng-mod-java syslog-ng-mod-elastic -y -o Dpkg::Options::=--force-confdef
     check_package "syslog-ng-mod-java"
     check_package "syslog-ng-mod-elastic"
+#JAVA module fix
+    echo "Check fix java modules ..."
+    fixscl="$(cat /etc/syslog-ng/scl.conf | grep java-modules)"
+    echo "$fixscl found ..."
+    if [[ $fixscl =~ "java-modules" ]]; then
+        echo "No fix needed ..."
+    else
+        echo "fix debian java ..."
+        echo '@define java-module-dir "`module-install-dir`/java-modules"' | tee -a /etc/syslog-ng/scl.conf
+    fi
 #Elastic
     echo "Load Elastic ..."
     if [ -e "/etc/apt/sources.list.d/elastic-7.x.list" ]; then
