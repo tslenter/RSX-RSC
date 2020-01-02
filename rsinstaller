@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000013
+bid=00000015
 
 #Banner
 function banner() {
@@ -518,7 +518,6 @@ function guiupgrade() {
         cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
         cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
         check_file_reverse $APACHCONF/index.html
-        check_file $APACHCONF/administrator/index.php
         check_file $APACHCONF/login.php
         check_file $APACHCONF/index.php
         check_file $APACHCONF/logo.png
