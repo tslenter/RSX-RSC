@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000019
+bid=00000020
 
 #Banner
 function banner() {
@@ -1018,6 +1018,12 @@ function kibdef() {
         apt install curl
     fi
     check_package "curl"
+    echo "Wait 30 sec for API activation ..."
+    for i in {30..01};
+        do $l;
+        echo -n "$i ";
+        sleep 1;
+    done
     echo "Trying to setup kibana for first use ..."
     echo "Send test message ..."
     rsview -t
