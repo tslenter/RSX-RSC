@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000020
+bid=00000021
 
 #Banner
 function banner() {
@@ -1024,22 +1024,28 @@ function kibdef() {
         echo -n "$i ";
         sleep 1;
     done
-    echo "Trying to setup kibana for first use ..."
-    echo "Send test message ..."
-    rsview -t
-    echo "Activate darkmodes ..."
-    curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: true" localhost:5601/kibana/api/kibana/settings/theme:darkMode -d '{"value": "true"}'
-    echo "Set index for Kibana ..."
-    curl -X POST "http://localhost:5601/kibana/api/saved_objects/index-pattern/sys*" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
-    {
-        "attributes": {
-        "title": "sys*",
-        "timeFieldName": "ISODATE"
+    urlstatus="$(curl -XGET http://localhost:5601/kibana/status -I | head 1)"
+    if [[ $urlstatus =~ "200" ]]; then
+        echo "Kibana 200 code found ..."
+        echo "Trying to setup kibana for first use ..."
+        echo "Send test message ..."
+        rsview -t
+        echo "Activate darkmodes ..."
+        curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: true" localhost:5601/kibana/api/kibana/settings/theme:darkMode -d '{"value": "true"}'
+        echo "Set index for Kibana ..."
+        curl -X POST "http://localhost:5601/kibana/api/saved_objects/index-pattern/sys*" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
+        {
+            "attributes": {
+            "title": "sys*",
+            "timeFieldName": "ISODATE"
+            }
         }
-    }
-    '
-    echo ""
-    echo "Done ..."
+        '
+        echo ""
+        echo "Done ..."
+    else
+        echo "Kibana not in time activated? Use GUI to setup kibana ..."
+    fi
 }
 
 #Environment setup
@@ -1060,6 +1066,7 @@ elif [ -e $RSBIN/rsinstaller ]; then
 else
     echo "Did you run the installer from the right directory? ..."
 fi
+
 clear
 banner
 #Menu
