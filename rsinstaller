@@ -967,8 +967,13 @@ function status() {
     dpkg-query -l ufw > /dev/null 2>&1
     if [ $? = 0 ]
     then
-        echo "Installation found ..."
-        ufw status
+        ufwcheck2="$(dpkg-query -l ufw | egrep '<none>')"
+        if [[ $ufwcheck2 =~ "<none>" ]]; then
+            echo "ufw missing ..."
+        else
+            echo "Installation found ..."
+            ufw status
+        fi
     else
         echo "Installation not found, skipped ..."
     fi
@@ -1000,7 +1005,16 @@ function debvarcheck() {
     echo "Install ufw ..."
     fwcheck=$(dpkg-query -l ufw)
     if [[ $fwcheck =~ "ufw" ]]; then
-        echo "Installation found ..."
+        echo "Going for check 2 ..."
+        ufwcheck2="$(dpkg-query -l ufw | egrep '<none>')"
+        if [[ $ufwcheck2 =~ "<none>" ]]; then
+            echo "ufw missing ..."
+            apt install ufw -y
+            ufw status
+        else
+            echo "Installation found ..."
+            ufw status
+        fi
     else
         echo "ufw missing ..."
         apt install ufw -y
@@ -1019,7 +1033,7 @@ function kibdef() {
     curlcheck="$(dpkg-query -l curl | egrep '<none>')"
     if [[ $curlcheck =~ "<none>" ]]; then
         echo "curl missing ..."
-        apt install curl
+        apt install curl -y
     else
         echo "Installation found ..."
     fi
