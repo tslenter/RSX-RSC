@@ -645,6 +645,17 @@ function restorephplimit() {
 #Installation RSX
 function rsxinstall() {
 #Check installation
+    echo "Check if Raspberry Pi ..."
+    drel="$(lsb_release -a | egrep 'Description:')"
+    echo "$drel found ..."
+    if [[ $drel =~ "Raspbian" ]]; then
+        echo "Raspberry Pi detected, RSX unsupported ..."
+        echo "It is to slow and is missing some packages ..."
+        echo "Abort ..."
+        exit
+    else
+        echo "Continue ..."
+    fi
     echo "Check GUI ..."
     check_file_gui $APACHCONF/rs/loaddata.php
     check_file_reverse $SYSLOGCONF/99RSX-rs.conf
@@ -1010,10 +1021,8 @@ function debvarcheck() {
         if [[ $ufwcheck2 =~ "<none>" ]]; then
             echo "ufw missing ..."
             apt install ufw -y
-            ufw status
         else
             echo "Installation found ..."
-            ufw status
         fi
     else
         echo "ufw missing ..."
@@ -1022,6 +1031,8 @@ function debvarcheck() {
     if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
         echo "Nothing to do ..."
     else
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
         echo "deb http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
         echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
     fi
