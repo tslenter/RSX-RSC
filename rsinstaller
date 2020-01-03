@@ -1007,6 +1007,35 @@ function distocheck() {
     fi
 }
 
+#Setup kibana for first use
+function kibdef() {
+    check_package "kibana"
+    curlcheck=$(dpkg-query -l curl)
+    if [[ $curlcheck =~ "curl" ]]; then
+        echo "Installation found ..."
+    else
+        echo "curl missing ..."
+        apt install curl
+    fi
+    check_package "curl"
+    echo "Trying to setup kibana for first use ..."
+    echo "Send test message ..."
+    rsview -t
+    echo "Activate darkmodes ..."
+    curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: true" localhost:5601/kibana/api/kibana/settings/theme:darkMode -d '{"value": "true"}'
+    echo "Set index for Kibana ..."
+    curl -X POST "http://localhost:5601/kibana/api/saved_objects/index-pattern/sys*" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
+    {
+        "attributes": {
+        "title": "sys*",
+        "timeFieldName": "ISODATE"
+        }
+    }
+    '
+    echo ""
+    echo "Done ..."
+}
+
 #Environment setup
 clear
 echo "Setting up environment ..."
@@ -1123,6 +1152,7 @@ do
             distocheck
             pre_install
             rsxinstall
+            kibdef
             exit
     ;;
         "Remove RSX")
