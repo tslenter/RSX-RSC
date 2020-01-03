@@ -1038,8 +1038,8 @@ function kibdef() {
         echo "Installation found ..."
     fi
     check_package "curl"
-    echo "Wait 30 sec for API activation ..."
-    for i in {30..01};
+    echo "Wait 45 sec for API activation ..."
+    for i in {45..01};
         do $l;
         echo -n "$i ";
         sleep 1;
