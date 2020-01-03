@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000022
+bid=00000023
 
 #Banner
 function banner() {
@@ -990,7 +990,7 @@ function distocheck() {
             echo "Installation found ..."
         else
             echo "ufw missing ..."
-            apt install ufw
+            apt install ufw -y
         fi
         if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
             echo "Nothing to do ..."
@@ -1010,12 +1010,12 @@ function distocheck() {
 #Setup kibana for first use
 function kibdef() {
     check_package "kibana"
-    curlcheck=$(dpkg-query -l curl)
-    if [[ $curlcheck =~ "curl" ]]; then
-        echo "Installation found ..."
-    else
+    curlcheck="$(dpkg-query -l curl | egrep '<none>')"
+    if [[ $curlcheck =~ "<none>" ]]; then
         echo "curl missing ..."
         apt install curl
+    else
+        echo "Installation found ..."
     fi
     check_package "curl"
     echo "Wait 30 sec for API activation ..."
