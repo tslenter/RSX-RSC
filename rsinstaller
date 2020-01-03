@@ -981,29 +981,35 @@ function distocheck() {
     drel="$(lsb_release -a | egrep 'Codename:')"
     echo "$drel found ..."
     if [[ $drel =~ "buster" ]]; then
-        echo "Debian found ..."
-        echo "Update debian path ..."
-        PATH="/usr/sbin:$PATH"
-        echo "Install ufw ..."
-        fwcheck=$(dpkg-query -l ufw)
-        if [[ $fwcheck =~ "ufw" ]]; then
-            echo "Installation found ..."
-        else
-            echo "ufw missing ..."
-            apt install ufw -y
-        fi
-        if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
-            echo "Nothing to do ..."
-        else
-            echo "deb http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
-            echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
-        fi
+        debvarcheck
+    elif [[ $drel =~ "sid" ]]; then
+        debvarcheck
     elif [[ $drel =~ "bionic" ]]; then
         echo "Ubuntu found ..."
         echo "Nothing to do ..."
     else
         echo "No distro detected ..."
         exit
+    fi
+}
+
+function debvarcheck() {
+    echo "Debian found ..."
+    echo "Update debian path ..."
+    PATH="/usr/sbin:$PATH"
+    echo "Install ufw ..."
+    fwcheck=$(dpkg-query -l ufw)
+    if [[ $fwcheck =~ "ufw" ]]; then
+        echo "Installation found ..."
+    else
+        echo "ufw missing ..."
+        apt install ufw -y
+    fi
+    if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
+        echo "Nothing to do ..."
+    else
+        echo "deb http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
+        echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
     fi
 }
 
