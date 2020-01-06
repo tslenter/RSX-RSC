@@ -47,7 +47,7 @@ E-mail: info@remotesyslog.com
                                 	<?php if (isset($_POST['button4'])) { header('Location: remote_syslog'); } ?>
                                 	<?php if (isset($_POST['button1'])) { exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); } ?>
                                 	<?php if (isset($_POST['button2'])) { exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); } ?>
-                                	<?php if (isset($_POST['button3'])) { header('Location: https://www.remotesyslog.com/License'); } ?>
+                                	<?php if (isset($_POST['button3'])) { header('Location: https://github.com/tslenter/RSX-RSC/blob/master/LICENSE'); } ?>
 					<?php if (isset($_POST['button10'])) { header('Location: index.php'); } ?>
                                         	<form action="index.php" method="post">
 							Search live logging: <input type="text" style="width:150px; height:24px; margin-right:5;" name="data" />
