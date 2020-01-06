@@ -38,7 +38,7 @@ E-mail: info@remotesyslog.com
                                         <?php if (isset($_POST['button2'])) { exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); } ?>
                                         <?php if (isset($_POST['button3'])) { header('Location: https://github.com/tslenter/RSX-RSC/blob/master/LICENSE'); } ?>
                                         <?php if (isset($_POST['button10'])) { header('Location: index.php'); } ?>
-                                                <form action="/index.php" method="post">
+                                                <form action="index.php" method="post">
 							Search live logging: <input type="text" style="width:150px; height:24px; margin-right:5;" name="data" />
                                                 	<input type="submit" name="submit" formaction="/rs/indexs.php" style="width:150px; height:24px; margin-right:5;" value="Search" />
                                                         <button type="submit" name="button10" style="width:150px; height:24px; margin-right:5;">Live logging</button>
