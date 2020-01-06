@@ -517,12 +517,14 @@ function guiupgrade() {
         cp -rf $RSDEST/logo.png $APACHCONF/logo.png
         cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
         cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
+        cp -rf $RSDEST/style.css $APACHCONF/style.css
         check_file_reverse $APACHCONF/index.html
         check_file $APACHCONF/login.php
         check_file $APACHCONF/index.php
         check_file $APACHCONF/logo.png
         check_file $APACHCONF/favicon.ico
         check_file $APACHCONF/fontawesome/css/all.css
+        check_file $APACHCONF/style.css
         phpauthupgrade
         echo "Restarting Apache ..."
         service apache2 restart
