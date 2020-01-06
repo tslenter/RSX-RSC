@@ -53,7 +53,7 @@ b. Run the following commands:
     - Choose option 1 to install the core
     - Choose option 10 to install the RSC version (Remote Syslog Classic)
     - Choose option 12 to install the RSX version
-c.  RSX is only supported on Ubuntu 18.04.2 or higher
+c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x adn higher
 
 8. Optional configuration
 8.1 Integrate Active Directory LDAP authentication for Apache 2:
