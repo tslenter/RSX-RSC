@@ -958,6 +958,21 @@ function status() {
     echo "Done ..."
 }
 
+function ubntrepofix() {
+#Syslog-ng
+    echo "Update repository's ..."
+    echo "Load syslog-ng ..."
+    if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
+        echo "Nothing to do ..."
+    else
+        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
+        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+        apt update && apt -y upgrade
+        apt auto-remove
+        apt install syslog-ng
+    fi
+}
+
 #Release check
 function distocheck() {
     echo "Check release ..."
@@ -969,7 +984,8 @@ function distocheck() {
         debvarcheck
     elif [[ $drel =~ "bionic" ]]; then
         echo "Ubuntu found ..."
-        echo "Nothing to do ..."
+        ubntrepofix
+        echo "Done ..."
     else
         echo "No distro detected ..."
         exit
