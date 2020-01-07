@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000026
+bid=00000027
 
 #Banner
 function banner() {
@@ -690,29 +690,39 @@ function rsxinstall() {
     a2enmod request
     a2enmod session_cookie
     a2enmod session_crypto
+#Removed for old configuration
 #Configure/install packages
 #Syslog-ng
-    echo "Update repository's ..."
-    echo "Load syslog-ng ..."
-    if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
-        echo "Nothing to do ..."
-    else
-        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
-        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
-    fi
-    apt update && apt install syslog-ng-mod-java syslog-ng-mod-elastic -y -o Dpkg::Options::=--force-confdef
-    check_package "syslog-ng-mod-java"
-    check_package "syslog-ng-mod-elastic"
+#    echo "Update repository's ..."
+#    echo "Load syslog-ng ..."
+#    if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
+#        echo "Nothing to do ..."
+#    else
+#        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
+#        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+#    fi
+#    apt update && apt install syslog-ng-mod-java syslog-ng-mod-elastic -y -o Dpkg::Options::=--force-confdef
+#    check_package "syslog-ng-mod-java"
+#    check_package "syslog-ng-mod-elastic"
 #JAVA module fix
-    echo "Check fix java modules ..."
-    fixscl="$(cat /etc/syslog-ng/scl.conf | grep java-modules)"
-    echo "$fixscl found ..."
-    if [[ $fixscl =~ "java-modules" ]]; then
-        echo "No fix needed ..."
-    else
-        echo "fix debian java ..."
-        echo '@define java-module-dir "`module-install-dir`/java-modules"' | tee -a /etc/syslog-ng/scl.conf
-    fi
+#    echo "Check fix java modules ..."
+#    fixscl="$(cat /etc/syslog-ng/scl.conf | grep java-modules)"
+#    echo "$fixscl found ..."
+#    if [[ $fixscl =~ "java-modules" ]]; then
+#        echo "No fix needed ..."
+#    else
+#        echo "fix debian java ..."
+#        echo '@define java-module-dir "`module-install-dir`/java-modules"' | tee -a /etc/syslog-ng/scl.conf
+#    fi
+#Java
+#    echo "Deploy JAVA 8 fix ..."
+#    apt install openjdk-8-jdk -y
+#    check_package "openjdk-8-jdk"
+#Update LIB_PATH for JAVA
+#    echo "Update LD_LIBRARY_PATH ..."
+#    export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/:$LD_LIBRARY_PATH
+#    echo /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/ | tee -a /etc/ld.so.conf.d/java.conf
+#    ldconfig
 #Elastic
     echo "Load Elastic ..."
     if [ -e "/etc/apt/sources.list.d/elastic-7.x.list" ]; then
@@ -726,15 +736,6 @@ function rsxinstall() {
     apt update && apt install elasticsearch liblog4j2-java -y
     check_package "elasticsearch"
     check_package "liblog4j2-java"
-#Java
-    echo "Deploy JAVA 8 fix ..."
-    apt install openjdk-8-jdk -y
-    check_package "openjdk-8-jdk"
-#Update LIB_PATH for JAVA
-    echo "Update LD_LIBRARY_PATH ..."
-    export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/:$LD_LIBRARY_PATH
-    echo /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/ | tee -a /etc/ld.so.conf.d/java.conf
-    ldconfig
 #Install Kibana
     echo "Install Kibana ..."
     apt update && apt install kibana -y
