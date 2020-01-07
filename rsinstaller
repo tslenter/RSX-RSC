@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000029
+bid=00000030
 
 #Banner
 function banner() {
@@ -969,6 +969,7 @@ function ubntrepofix() {
         echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
         apt update
         apt auto-remove
+#If upgrade is triggered
         apt install syslog-ng -y
         check_package "syslog-ng"
     fi
