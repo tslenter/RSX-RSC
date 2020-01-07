@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000027
+bid=00000028
 
 #Banner
 function banner() {
@@ -217,7 +217,7 @@ function rscinstall() {
     echo "Activate SSL ..."
 #Setup variables:
     varfullservername=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}')
-    certpath=/etc/cert/
+    certpath=/etc/cert
     echo "Create .rnd file ..."
     touch $HOME/.rnd
     echo "Certificate auto request for linux webservers!"
@@ -690,39 +690,6 @@ function rsxinstall() {
     a2enmod request
     a2enmod session_cookie
     a2enmod session_crypto
-#Removed for old configuration
-#Configure/install packages
-#Syslog-ng
-#    echo "Update repository's ..."
-#    echo "Load syslog-ng ..."
-#    if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
-#        echo "Nothing to do ..."
-#    else
-#        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
-#        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
-#    fi
-#    apt update && apt install syslog-ng-mod-java syslog-ng-mod-elastic -y -o Dpkg::Options::=--force-confdef
-#    check_package "syslog-ng-mod-java"
-#    check_package "syslog-ng-mod-elastic"
-#JAVA module fix
-#    echo "Check fix java modules ..."
-#    fixscl="$(cat /etc/syslog-ng/scl.conf | grep java-modules)"
-#    echo "$fixscl found ..."
-#    if [[ $fixscl =~ "java-modules" ]]; then
-#        echo "No fix needed ..."
-#    else
-#        echo "fix debian java ..."
-#        echo '@define java-module-dir "`module-install-dir`/java-modules"' | tee -a /etc/syslog-ng/scl.conf
-#    fi
-#Java
-#    echo "Deploy JAVA 8 fix ..."
-#    apt install openjdk-8-jdk -y
-#    check_package "openjdk-8-jdk"
-#Update LIB_PATH for JAVA
-#    echo "Update LD_LIBRARY_PATH ..."
-#    export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/:$LD_LIBRARY_PATH
-#    echo /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/ | tee -a /etc/ld.so.conf.d/java.conf
-#    ldconfig
 #Elastic
     echo "Load Elastic ..."
     if [ -e "/etc/apt/sources.list.d/elastic-7.x.list" ]; then
@@ -890,9 +857,6 @@ function rsxremove() {
 #Basic check
     check_file_gui $APACHCONF/rs/loaddata.php
     check_file $SYSLOGCONF/99RSX-rs.conf
-#Remove java lib
-    rm -rf /etc/ld.so.conf.d/java.conf
-    ldconfig
 #Remove Syslog-NG RSX config
     rm -rf $SYSLOGCONF/99RSX-rs.conf
     echo "Restart Syslog-NG ..."
@@ -909,7 +873,7 @@ function rsxremove() {
     rm -rf /etc/elasticsearch/elasticsearch.yml
     rm -rf /etc/kibana/kibana.yml
     echo "Remove packages ..."
-    apt -y purge kibana openjdk-8-jdk elasticsearch liblog4j2-java libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential -y
+    apt -y purge kibana elasticsearch liblog4j2-java libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential -y
     apt -y install syslog-ng
     apt -y autoremove
     echo "RSX removed ..."
