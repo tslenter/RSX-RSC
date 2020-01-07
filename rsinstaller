@@ -967,9 +967,10 @@ function ubntrepofix() {
     else
         wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
         echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
-        apt update && apt -y upgrade
+        apt update
         apt auto-remove
-        apt install syslog-ng
+        apt install syslog-ng -y
+        check_package "syslog-ng"
     fi
 }
 
