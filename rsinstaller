@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000030
+bid=00000032
 
 #Banner
 function banner() {
@@ -801,6 +801,12 @@ function rsxinstall() {
 }
 
 function phpauthinstall() {
+#Checks
+    echo "Check packages ..."
+    check_package "apache2"
+    check_package "build-essential"
+    check_file $APACHCONF/logo.png
+    check_file $APACHCONF/style.css
 #Load PHP authentication module
     echo "Activate PHP PAM ..."
     echo "Compile ..."
