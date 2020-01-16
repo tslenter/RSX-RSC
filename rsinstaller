@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000032
+bid=00000033
 
 #Banner
 function banner() {
@@ -506,9 +506,10 @@ function guiupgrade() {
         check_package "php-pear"
         check_package "php-dev"
         check_package "build-essential"
-        echo "Copy new apache config ..."
-        cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
-        check_file $APACONFIG/rsx-apache.conf
+        #Enable if required, but access control user is running through apache2
+        #echo "Copy new apache config ..."
+        #cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
+        #check_file $APACONFIG/rsx-apache.conf
         echo "Update syslog-ng with RSX config ..."
         cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
         check_file $SYSLOGCONF/99RSX-rs.conf
@@ -696,7 +697,7 @@ function rsxinstall() {
         echo "Nothing to do ..."
     else
         wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-        apt-get install apt-transport-https
+        apt-get install apt-transport-https -y
         echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
         echo "deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
     fi
@@ -974,7 +975,7 @@ function ubntrepofix() {
         wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
         echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
         apt update
-        apt auto-remove
+        apt auto-remove -y
 #If upgrade is triggered
         apt install syslog-ng -y
         check_package "syslog-ng"
