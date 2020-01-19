@@ -618,6 +618,7 @@ function restoredefault() {
         cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
     else
         echo "Done ..."
+    fi
 }
 
 #Activate debug for rsview
