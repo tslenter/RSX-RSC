@@ -58,9 +58,9 @@ function geo_check() {
 #Function for geo data
 function geo() {
     echo "Install geo data module ..."
-    sudo add-apt-repository ppa:maxmind/ppa
+    sudo add-apt-repository ppa:maxmind/ppa -y
     apt update
-    apt install geoipupdate mmdb-bin syslog-ng-mod-geoip2
+    apt install geoipupdate mmdb-bin syslog-ng-mod-geoip2 -y
     echo "Update the /etc/GeoIP.conf for database download ..."
     echo "Request license @ https://dev.maxmind.com/geoip/geoipupdate/ ..."
     echo "Change: 'AccountID 0' and 'LicenseKey 000000000000' ..."
