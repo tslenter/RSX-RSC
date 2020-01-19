@@ -61,10 +61,15 @@ function geo() {
     sudo add-apt-repository ppa:maxmind/ppa -y
     apt update
     apt install geoipupdate mmdb-bin syslog-ng-mod-geoip2 -y
-    echo "Update the /etc/GeoIP.conf for database download ..."
-    echo "Request license @ https://dev.maxmind.com/geoip/geoipupdate/ ..."
-    echo "Change: 'AccountID 0' and 'LicenseKey 000000000000' ..."
-    echo "After you setup the license key and account run 'geoipupdate'"
+    echo ""
+    echo ""
+    echo "Instuction ...."
+    echo "Do the following with the root user:"
+    echo "Update/edit the /etc/GeoIP.conf for database download","
+    echo "Request license @ https://dev.maxmind.com/geoip/geoipupdate/,"
+    echo "Change: 'AccountID 0' and 'LicenseKey 000000000000',"
+    echo "After you setup the license key and account run 'geoipupdate',"
+    echo "Check the database with the plugin menu and select a configuration with geo location based fields."
     echo ""
 }
 
@@ -91,7 +96,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Check Geo2 database" "Install ubiquiti/unifi config with Geo2" "Quit")
+options=("Install Geo2 location data" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -107,7 +112,7 @@ do
             geo_check
             exit
     ;;
-        "View ubiquiti/unifi config with optional Geo2")
+        "Install/view ubiquiti/unifi config with optional Geo2")
             clear
             banner
             ubiquiti_parser
