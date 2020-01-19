@@ -86,8 +86,8 @@ function geo() {
             exit 1;
         fi
         echo "Update configuration ..."
-        sed -i "s|\AccountID 0|AccountID $accountid|" $GEOCONF
-        sed -i "s|\LicenseKey 000000000000|LicenseKey $licensekey|" $GEOCONF
+        sed -i "s|\AccountID.*|AccountID $accountid|" $GEOCONF
+        sed -i "s|\LicenseKey.*|LicenseKey $licensekey|" $GEOCONF
         echo "Update database..."
         geoipupdate
         echo "Geo configuration updated with:"
