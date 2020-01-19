@@ -6,5 +6,8 @@ To activate Geo2 for unifi or ubiquiti do the following:
      parser(edgemax_unifi);
 ...
 
-1) The only thing left is to update the kibana index after the index recieved the data. 
+2) The only thing left is to update the kibana index after the index recieved the data. 
 Check settings within Kibana select the correct index. Click on the update index button. 
+
+Info: if you chnage a configuration file don't forget to restart the service. Example:
+service syslog-ng restart

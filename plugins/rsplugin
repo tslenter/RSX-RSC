@@ -186,7 +186,7 @@ function ubiquiti_parser() {
         echo "Print config ..."
 	cat $RSDESTP/99RSX-uni-ubi.conf
 	echo ""
-	read -p "Do you want to update the default RSX configuration with this one? y/n" -n 1 -r
+	read -p "Do you want to update the default RSX configuration with this one? y/n " -n 1 -r
 	echo ""
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then

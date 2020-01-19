@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000039
+bid=00000040
 
 #Banner
 function banner() {
@@ -510,8 +510,8 @@ function guiupgrade() {
         #echo "Copy new apache config ..."
         #cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
         #check_file $APACONFIG/rsx-apache.conf
-        echo "Update syslog-ng with RSX config ..."
-        cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+        #echo "Update syslog-ng with RSX config ..."
+        #cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
         check_file $SYSLOGCONF/99RSX-rs.conf
         cp -rf $RSDEST/login.php $APACHCONF/login.php
         cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
@@ -531,6 +531,8 @@ function guiupgrade() {
         service apache2 restart
         echo "Restarting Syslog-NG ..."
         service syslog-ng restart
+        echo "To upgrade the default config run the 'Restore default core configuration' option ..."
+        echo "Warning this will override the plugin and custom configuration files ..."
         echo "Upgrade GUI done ..."
     else
         echo "No GUI found, upgrade done ..."
@@ -607,6 +609,15 @@ function restoredefault() {
     cp -rf $RSCONF/logrotatedefault /etc/logrotate.d/remotelog
     echo "Restore default colortail regex ..."
     cp -rf $RSCONF/colortaildefault /etc/colortail/conf.colortail
+    read -p "Do you want to reset RSX configuration? y/n " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "Restore default RSX configuration ..."
+        cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
+        cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+    else
+        echo "Done ..."
 }
 
 #Activate debug for rsview
