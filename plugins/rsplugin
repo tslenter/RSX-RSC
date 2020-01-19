@@ -20,7 +20,7 @@
 #Name author: Tom Slenter
 #E-mail: info@remotesyslog.com
 
-RSDEST=/opt/RS/plugin
+RSDEST=/opt/RS/plugins
 SYSLOGCONF=/etc/syslog-ng/conf.d
 
 #Banner
