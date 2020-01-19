@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000035
+bid=00000036
 
 #Banner
 function banner() {
@@ -1042,8 +1042,8 @@ function kibdef() {
         echo "Installation found ..."
     fi
     check_package "curl"
-    echo "Wait 45 sec for API activation ..."
-    for i in {45..01};
+    echo "Wait 60 sec for API activation ..."
+    for i in {60..01};
         do $l;
         echo -n "$i ";
         sleep 1;
