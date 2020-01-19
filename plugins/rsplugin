@@ -65,7 +65,7 @@ function geo() {
     echo ""
     echo "Instuction ...."
     echo "Do the following with the root user:"
-    echo "Update/edit the /etc/GeoIP.conf for database download","
+    echo "Update/edit the /etc/GeoIP.conf for database download,"
     echo "Request license @ https://dev.maxmind.com/geoip/geoipupdate/,"
     echo "Change: 'AccountID 0' and 'LicenseKey 000000000000',"
     echo "After you setup the license key and account run 'geoipupdate',"
@@ -112,7 +112,7 @@ do
             geo_check
             exit
     ;;
-        "Install/view ubiquiti/unifi config with optional Geo2")
+        "Install/view ubiquiti/unifi config with Geo2")
             clear
             banner
             ubiquiti_parser
