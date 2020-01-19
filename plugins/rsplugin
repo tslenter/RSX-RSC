@@ -20,9 +20,12 @@
 #Name author: Tom Slenter
 #E-mail: info@remotesyslog.com
 
-RSDEST=/opt/RS/plugins
+RSDESTP=/opt/RS/plugins
 SYSLOGCONF=/etc/syslog-ng/conf.d
 GEOCONF=/etc/GeoIP.conf
+APACHCONF=/var/www/html
+RSDEST=/opt/RS
+APACHPHP=/etc/php/7.[0-9]/apache2
 
 #Banner
 function banner() {
@@ -48,6 +51,74 @@ if ! [ $(id -u) = 0 ]; then
     echo ""
     exit 1
 fi
+
+#Functions to check files, packages ...
+function check_package() {
+echo "Check package $1"
+dpkg-query -l $1 > /dev/null 2>&1
+if [ $? = 0 ]
+then
+    echo "Installation found ..."
+else
+    echo "Installation failed, abort (Hint: Did you install the core? ..."
+    exit
+fi
+}
+
+#Check if file exist
+function check_file() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, continue installation ..."
+    else
+        echo "File: $1 does not exist, exit ..."
+        exit
+    fi
+}
+
+#PHP authentication remove
+function phpauthremove() {
+    echo "Remove PHP Authentication ..."
+    chmod o-r /etc/shadow
+    rm -rf $APACHCONF/administrator/
+    rm -rf $APACHPHP/conf.d/20-pam.ini
+}
+
+function phpauthinstall() {
+#Checks
+    echo "Check packages ..."
+    check_package "apache2"
+    check_package "build-essential"
+    check_file $APACHCONF/logo.png
+    check_file $APACHCONF/style.css
+#Load PHP authentication module
+    echo "Activate PHP PAM ..."
+    echo "Compile ..."
+    currentpath=$(pwd)
+    cd $RSDEST/php-pam
+    phpize
+    ./configure --prefix=/usr
+    make
+    make install
+    cd $currentpath
+    ldconfig
+#Setup php login experimental
+    echo "Write php config ..."
+    cp -rf $RSDEST/20-pam.ini $APACHPHP/conf.d/
+    check_file $APACHPHP/conf.d/20-pam.ini
+#Setup permissions on shadow file (Dangerous)
+    echo "!Setup permissions /etc/shadow ...!"
+    chmod o+r /etc/shadow
+#Create login website
+    echo "Create login for webpages ..."
+    mkdir $APACHCONF/administrator/
+    cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
+    cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
+    check_file $APACHCONF/administrator/index.php
+    check_file $APACHCONF/administrator/profile.php
+    echo "Restart apache2 ..."
+    service apache2 restart
+}
 
 #Check if database is corectly installed
 function geo_check() {
@@ -113,14 +184,14 @@ function geoupdate_rs() {
 function ubiquiti_parser() {
     if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
         echo "Print config ..."
-	cat $RSDEST/99RSX-uni-ubi.conf
+	cat $RSDESTP/99RSX-uni-ubi.conf
 	echo ""
 	read -p "Do you want to update the default RSX configuration with this one? y/n" -n 1 -r
 	echo ""
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 	    echo "Overwrite of default RSX file ..."
-	    cp $RSDEST/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
+	    cp $RSDESTP/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
             echo "Update Elastic configuration ..."
             curl -X POST -H 'Content-Type: application/json' 'http://localhost:9200/rsx-syslog-ng/_mapping' -d \
             '{
@@ -151,7 +222,7 @@ function ubiquiti_parser() {
             echo "Restart services ..."
             service syslog-ng restart
             echo ""
-            cat $RSDEST/99RSX-uni-ubi.txt
+            cat $RSDESTP/99RSX-uni-ubi.txt
             echo ""
             echo "Done ..."
             exit
@@ -168,7 +239,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Install PHP profile authentication - Info: Do not use ..." "Remove PHP profile auhentication - Info: Do not use ..." "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -195,6 +266,18 @@ do
             clear
             banner
             ubiquiti_parser
+            exit
+    ;;
+        "Install PHP profile authentication - Info: Do not use ...")
+            clear
+            banner
+            phpauthinstall
+            exit
+    ;;
+        "Remove PHP profile auhentication - Info: Do not use ...")
+            clear
+            banner
+            phpauthremove
             exit
     ;;
         "Quit")
