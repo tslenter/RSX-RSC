@@ -51,9 +51,14 @@ fi
 
 #Check if database is corectly installed
 function geo_check() {
-    echo "Check database for IP: 1.2.3.4 ..."
-    mmdblookup --file /usr/share/GeoIP/GeoLite2-City.mmdb --ip 1.2.3.4
-    echo "Check done ..."
+    if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
+        echo "Check database for IP: 1.2.3.4 ..."
+        mmdblookup --file /usr/share/GeoIP/GeoLite2-City.mmdb --ip 1.2.3.4
+        echo "Check done ..."
+    else
+        echo "No database found ..."
+        exit
+    fi
 }
 
 #Function for geo data
@@ -90,6 +95,17 @@ function geo() {
         cat $GEOCONF | grep LicenseKey
     else
         echo "Configuration file not found ..."
+    fi
+}
+
+#Function for geo data update
+function geoupdate_rs() {
+    if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
+        echo "Update database... "
+        geoipupdate
+    else
+        echo "No database found ..."
+        exit
     fi
 }
 
@@ -146,7 +162,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -156,6 +172,13 @@ do
             geo
             exit
     ;;
+        "Update Geo2 location database")
+            clear
+            banner
+            geoupdate_rs
+            exit
+    ;;
+
         "Check Geo2 database")
             clear
             banner
