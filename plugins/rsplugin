@@ -22,6 +22,7 @@
 
 RSDEST=/opt/RS/plugins
 SYSLOGCONF=/etc/syslog-ng/conf.d
+GEOCONF=/etc/GeoIP.conf
 
 #Banner
 function banner() {
@@ -63,14 +64,33 @@ function geo() {
     apt install geoipupdate mmdb-bin syslog-ng-mod-geoip2 -y
     echo ""
     echo ""
-    echo "Instuction ...."
-    echo "Do the following with the root user:"
-    echo "Update/edit the /etc/GeoIP.conf for database download,"
-    echo "Request license @ https://dev.maxmind.com/geoip/geoipupdate/,"
-    echo "Change: 'AccountID 0' and 'LicenseKey 000000000000',"
-    echo "After you setup the license key and account run 'geoipupdate',"
-    echo "Check the database with the plugin menu and select a configuration with geo location based fields."
+    echo "Instuction:"
     echo ""
+    echo "Go to https://dev.maxmind.com/geoip/geoipupdate/ and create a account ..."
+    echo "After that request a license and then continue ..."
+    echo ""
+    if [ -f $GEOCONF ]; then
+        read -p 'Account ID: ' accountid
+        read -p 'LicenseKey: ' licensekey
+        if test "$accountid" = ""; then
+            echo "Sorry, Account ID cannot be blank" >&2
+            exit 1;
+        fi
+        if test "$licensekey" = ""; then
+            echo "Sorry, License Key cannot be blank" >&2
+            exit 1;
+        fi
+        echo "Update configuration ..."
+        sed -i "s|\AccountID 0|AccountID $accountid|" $GEOCONF
+        sed -i "s|\LicenseKey 000000000000|LicenseKey $licensekey|" $GEOCONF
+        echo "Update database..."
+        geoipupdate
+        echo "Geo configuration updated with:"
+        cat $GEOCONF | grep AccountID
+        cat $GEOCONF | grep LicenseKey
+    else
+        echo "Configuration file not found ..."
+    fi
 }
 
 #Install ubiquiti parser
@@ -84,7 +104,37 @@ function ubiquiti_parser() {
 	then
 	    echo "Overwrite of default RSX file ..."
 	    cp $RSDEST/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
+            echo "Update Elastic configuration ..."
+            curl -X POST -H 'Content-Type: application/json' 'http://localhost:9200/rsx-syslog-ng/_mapping' -d \
+            '{
+               "properties" : {
+                  "geoip2" : {
+                     "properties" : {
+                        "src.geo_point" : {
+                           "type" : "geo_point"
+                        }
+                     }
+                  }
+               }
+            }'
+            curl -X POST -H 'Content-Type: application/json' 'http://localhost:9200/rsx-syslog-ng/_mapping' -d \
+            '{
+               "properties" : {
+                  "geoip2" : {
+                     "properties" : {
+                        "dst.geo_point" : {
+                           "type" : "geo_point"
+                        }
+                     }
+                  }
+               }
+            }'
+            echo "Restart services ..."
+            service syslog-ng restart
+            echo ""
             cat $RSDEST/99RSX-uni-ubi.txt
+            echo ""
+            echo "Done ..."
             exit
 	else
 	    echo "Exit ..."
