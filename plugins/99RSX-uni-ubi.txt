@@ -1,0 +1,51 @@
+To activate Geo2 for unifi or ubiquiti do the following:
+1) Check within RSX - Kibana if the follwing fields are displayed:
+ - geoip2.src.location.latitude
+ - geoip2.src.location.longitude
+
+If displayed continue to step 2:
+
+2) Within the dev console of kibana:
+PUT /rsx-syslog-ng/_mapping
+{
+   "properties" : {
+      "geoip2" : {
+         "properties" : {
+            "dst.geo_point" : {
+               "type" : "geo_point"
+            }
+         }
+      }
+   }
+}
+PUT /rsx-syslog-ng/_mapping
+{
+   "properties" : {
+      "geoip2" : {
+         "properties" : {
+            "src.geo_point" : {
+               "type" : "geo_point"
+            }
+         }
+      }
+   }
+}
+
+This creates a geopoint location, check within RSX - Kibana then continue to:
+
+3)Within the /etc/syslog-ng/conf.d/99RSX-rs.conf uncomment:
+
+#Updated configuration RSX
+
+log {
+     ....
+     parser(edgemax_unifi);
+     parser(p_geoip2_src);
+#    Activate when geoip2.src.location.latitude and geoip2.src.location.longitude are displayed.
+#     rewrite(r_geoip2_src);  <<<---
+     parser(p_geoip2_dst);
+     ...
+};
+
+4)Restart the service:
+Run the following command: "service syslog-ng restart"

@@ -1,0 +1,121 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+RSDEST=/opt/RS/plugin
+SYSLOGCONF=/etc/syslog-ng/conf.d
+
+#Banner
+function banner() {
+    echo ""
+    echo "#################################################"
+    echo "#Remote Syslog X/C                              #"
+    echo "#More information: remotesyslog.com             #"
+    echo "#Remote Syslog plugins                          #"
+    echo "#Version: RSX 0.1                               #"
+    echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
+    echo "#################################################"
+    echo ""
+    echo "The plugins are experimental and ONLY tested for RSX ..."
+    echo "Use at your own risk ..."
+    echo ""
+}
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    clear
+    banner
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+#Check if database is corectly installed
+function geo_check() {
+    echo "Check database for IP: 1.2.3.4 ..."
+    mmdblookup --file /usr/share/GeoIP/GeoLite2-City.mmdb --ip 1.2.3.4
+    echo "Check done ..."
+}
+
+#Function for geo data
+function geo() {
+    echo "Install geo data module ..."
+    sudo add-apt-repository ppa:maxmind/ppa
+    apt update
+    apt install geoipupdate mmdb-bin syslog-ng-mod-geoip2
+    echo "Update the /etc/GeoIP.conf for database download ..."
+    echo "Request license @ https://dev.maxmind.com/geoip/geoipupdate/ ..."
+    echo "Change: 'AccountID 0' and 'LicenseKey 000000000000' ..."
+    echo "After you setup the license key and account run 'geoipupdate'"
+    echo ""
+}
+
+#Install ubiquiti parser
+function ubiquiti_parser() {
+    echo "Print config ..."
+	cat $RSDEST/99RSX-uni-ubi.conf
+	echo ""
+	read -p "Do you want to update the default RSX configuration with this one? " -n 1 -r
+	echo ""
+	if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+	    echo "Overwrite of default RSX file ..."
+	    cp $RSDEST/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
+            cat $RSDEST/99RSX-uni-ubi.txt
+            exit
+	else
+	    echo "Exit ..."
+            exit
+	fi
+}
+
+clear
+banner
+#Menu
+PS3='Please enter your choice: '
+options=("Install Geo2 location data" "Check Geo2 database" "Install ubiquiti/unifi config with Geo2" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Install Geo2 location data")
+            clear
+            banner
+            geo
+            exit
+    ;;
+        "Check Geo2 database")
+            clear
+            banner
+            geo_check
+            exit
+    ;;
+        "View ubiquiti/unifi config with optional Geo2")
+            clear
+            banner
+            ubiquiti_parser
+            exit
+    ;;
+        "Quit")
+            break
+    ;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done
