@@ -3,7 +3,8 @@ To activate Geo2 for unifi or ubiquiti do the following:
  - geoip2.src.location.latitude
  - geoip2.src.location.longitude
 
-If displayed continue to step 2:
+If there is no logging check firewall settings and syslog client settings
+If the messages are displayed then continue to step 2:
 
 2) Within the dev console of kibana:
 PUT /rsx-syslog-ng/_mapping
