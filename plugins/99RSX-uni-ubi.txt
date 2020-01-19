@@ -1,3 +1,10 @@
 To activate Geo2 for unifi or ubiquiti do the following:
+1) Geo data is loaded per hostname change "_gateway" to the correct host. Edit /etc/syslog-ng/conf.d/99RSX-rs.conf
+
+....
+  if (host('_gateway')) {
+     parser(edgemax_unifi);
+...
+
 1) The only thing left is to update the kibana index after the index recieved the data. 
 Check settings within Kibana select the correct index. Click on the update index button. 
