@@ -1,0 +1,43 @@
+PUT _ilm/policy/checkpoint-policy   
+{
+  "policy": {                       
+    "phases": {
+      "hot": {                      
+        "actions": {
+          "rollover": {             
+            "max_size": "25GB",
+            "max_age": "7d"
+          }
+        }
+      },
+      "delete": {
+        "min_age": "2d",           
+        "actions": {
+          "delete": {}              
+        }
+      }
+    }
+  }
+}
+
+PUT _template/checkpoint
+{
+  "index_patterns": ["checkpoint-*"],                 
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1,
+    "index.lifecycle.name": "checkpoint-policy",      
+    "index.lifecycle.rollover_alias": "checkpoint"    
+  }
+}
+
+PUT _template/cisco-ise
+{
+  "index_patterns": ["cisco-ise*"],                 
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1,
+    "index.lifecycle.name": "slm-history-ilm-policy",      
+    "index.lifecycle.rollover_alias": "cisco-ise"    
+  }
+}
