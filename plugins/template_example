@@ -1,0 +1,22 @@
+curl -X PUT http://127.0.0.1:9200/_template/checkpoint-rsx -H 'Content-Type:application/json' -d '{
+    "template":"checkpoint-rsx*",
+    "settings": {
+    "number_of_replicas": 1,
+    "number_of_shards": 1
+    },
+    "mappings": {
+        "properties": {
+            "geoip2": {
+                "properties": {
+                    "src.geo_point": {
+                        "type": "geo_point"
+                    },
+                    "dst.geo_point": {
+                        "type": "geo_point"
+                    }
+                }
+            }
+        }
+    }
+}'
+
