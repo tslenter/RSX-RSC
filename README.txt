@@ -200,4 +200,7 @@ Change rules:
 +log { source(s_src); filter(f_syslog3); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_syslog); };
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 
-11. More information: https://www.remotesyslog.com/
+11. Info
+11.1 More information: https://www.remotesyslog.com/
+
+11.2 Syslog-ng plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
