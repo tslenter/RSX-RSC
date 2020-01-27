@@ -18,9 +18,19 @@ For more information contact the author:
 Name author: Tom Slenter
 E-mail: info@remotesyslog.com
 
-2. Version 2 basic is free and is a duplicate of version 1.x rewritten 
-in bash. The premium version contains a API and a new GUI but is currently
-work in progress. We expect a release before 2020.
+2. Versions:
+
+RSX is a syslog-ng - elasticsearch - kibana driven syslog server. This
+combination allows you to dump and store a lot syslog messages with almost
+no performance decrease in searches. RSX has multiple enterprise grade options.
+
+RSC is a syslog-ng - CLI - PHP GUI driven syslog server. This combination is for 
+low powered dives like a Rapspberry Pi and for small environments. Depending on the
+functionality RSC will run fine with more then 1000 devices, but tuning is required.
+
+RS Core is a syslog-ng - CLI driven syslog server. This environment can be used to
+small/lab/test environments. It is very small and compact. The setup can be done within 
+within minutes.
 
 3. Config files
 To change the core configuration use the following files:
@@ -28,22 +38,15 @@ To change the core configuration use the following files:
 /opt/remotesyslog/syslog-ng => syslog configuration
 /opt/remotesyslog/logrotate => change file rotation
 
-4. Information
-The basic version is community driven. For the moment it allows you to 
-deploy the old version 1.x written in bash. It has some bug fixes.
-It allows you to download a lightweight and response syslog
-server. The basic edition only contains a TUI and the free GUI.
+4. RS version 2.0 Premium
+This version was announced but did not pass quality standards. Therefor
+it is postponed.
 
-5. RS version 2.0 Premium
-There is a Premium version in development. Currently testers are allowed
-to login and download the premium. The premium version is currently in BETA.
-The premium is NOT avialable within this installation.
-
-6. Security
+5. Security
 RSX and RSC have SSL/TLS encryption by default enabled and authentication is 
 enabled over PAM
 
-7. Installation
+6. Installation
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
 b. Run the following commands:
     - git clone https://github.com/tslenter/RSX-RSC.git
@@ -55,8 +58,8 @@ b. Run the following commands:
     - Choose option 12 to install the RSX version
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
-8. Optional configuration
-8.1 Integrate Active Directory LDAP authentication for Apache 2:
+7. Optional configuration
+7.1 Integrate Active Directory LDAP authentication for Apache 2:
 
 Activate LDAP module apache:
 "a2enmod ldap authnz_ldap"
@@ -76,7 +79,7 @@ AuthLDAPGroupAttribute member
 require ldap-group cn=,ou=Groups,dc=DC01,dc=local
 </Directory>
 
-8.2 Basic authentication for Apache 2:
+7.2 Basic authentication for Apache 2:
 
 Install apache2-utils:
 "apt-get install apache2-utils"
@@ -98,11 +101,11 @@ Order allow,deny
 Allow from all
 </Directory>
 
-9. Search multiple strngs of text within the per host logging directory
+8. Search multiple strngs of text within the per host logging directory
 grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
 
-10. Generate a mail from a event
-10.1 Install netsend:
+9. Generate a mail from a event
+9.1 Install netsend:
 sudo apt install sendmail
 
 Edit:
@@ -112,7 +115,7 @@ Change after DS:
 # "Smart" relay host (may be null)
 DSsmtp.lan.corp
 
-10.2 Use the following script and save it to /opt/mailrs:
+9.2 Use the following script and save it to /opt/mailrs:
 #!/bin/bash
 #Array of words:
 declare -a data=(Trace module)
@@ -162,9 +165,9 @@ crontab -e
 Edit:
 0 * * * * /opt/mailrs
 
-11. Known issues
+10. Known issues
 
-11.1 Disk full by Geo2
+10.1 Disk full by Geo2
 Message in logging:
 
 Jan 27 10:24:50 plisk002.prd.corp syslog-ng[1793]: geoip2(): getaddrinfo failed; gai_error='Name or service not known', ip='', location='/etc/syslog-ng/conf.d/99X-Checkpoint.conf:32:25'
@@ -197,4 +200,4 @@ Change rules:
 +log { source(s_src); filter(f_syslog3); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_syslog); };
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 
-12. More information: https://www.remotesyslog.com/
+11. More information: https://www.remotesyslog.com/
