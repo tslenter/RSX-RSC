@@ -162,4 +162,39 @@ crontab -e
 Edit:
 0 * * * * /opt/mailrs
 
-11. More information: https://www.remotesyslog.com/
+11. Known issues
+
+11.1 Disk full by Geo2
+Message in logging:
+
+Jan 27 10:24:50 plisk002.prd.corp syslog-ng[1793]: geoip2(): getaddrinfo failed; gai_error='Name or service not known', ip='', location='/etc/syslog-ng/conf.d/99X-Checkpoint.conf:32:25'
+Jan 27 10:24:50 plisk002.prd.corp syslog-ng[1793]: geoip2(): maxminddb error; error='Unknown error code', ip='', location='/etc/syslog-ng/conf.d/99X-Checkpoint.conf:32:25'
+
+Components needed for fix:
+
+File: /etc/syslog-ng/syslog-ng.conf
+
+File destinations: 
+- d_syslog
+- d_error
+
+Log rules:
+- log { source(s_src); filter(f_syslog3); destination(d_syslog); };
+- log { source(s_src); filter(f_error); destination(d_error); };
+
+Fix:
+Edit:
+
+vi /etc/syslog-ng/syslog-ng.conf
+
+Add rules:
+filter geoip_messages_1 { not match("Name or service not known"); };
+filter geoip_messages_2 { not match("Unknown error code"); };
+
+Change rules:
+-log { source(s_src); filter(f_syslog3); destination(d_syslog); };
+-log { source(s_src); filter(f_error); destination(d_error); };
++log { source(s_src); filter(f_syslog3); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_syslog); };
++log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
+
+12. More information: https://www.remotesyslog.com/
