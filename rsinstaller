@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000041
+bid=00000042
 
 #Banner
 function banner() {
@@ -1034,10 +1034,10 @@ function kibdef() {
         echo "Activate darkmodes ..."
         curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: true" localhost:5601/kibana/api/kibana/settings/theme:darkMode -d '{"value": "true"}'
         echo "Set index for Kibana ..."
-        curl -X POST "http://localhost:5601/kibana/api/saved_objects/index-pattern/rsx*" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
+        curl -X POST "http://localhost:5601/kibana/api/saved_objects/index-pattern/rsx-syslog-ng*" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d'
         {
             "attributes": {
-            "title": "rsx*",
+            "title": "rsx-syslog-ng*",
             "timeFieldName": "ISODATE"
             }
         }
