@@ -583,10 +583,19 @@ function upgrade() {
     guiupgrade
 }
 
+#Upgrade platform
 function osupdate() {
     echo "Start OS update ..."
     apt update && apt upgrade -y
     apt autoremove -y
+    if [ -e /etc/kibana/kibana.yml ]; then
+        echo "RSX Kibana found ..."
+        echo "Restart services ..."
+        service kibana stop
+        service kibana start
+    else
+        echo "Nothing to do"
+    fi
 }
 
 function changedefault() {
