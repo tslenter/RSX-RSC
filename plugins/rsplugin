@@ -239,11 +239,26 @@ function ubiquiti_parser() {
     fi
 }
 
+#LOGSTASH ADDON
+function logstash_install() {
+    echo "Started logstash installation ..."
+    chmod +x $RSDESTP/logstash/logstash_in
+    $RSDESTP/logstash/logstash_in
+    exit
+}
+
+function logstash_remove() {
+    echo "Started logstash installation ..."
+    chmod +x $RSDESTP/logstash/logstash_rm
+    $RSDESTP/logstash/logstash_rm
+    exit
+}
+
 clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Install PHP profile authentication - Info: Do not use ..." "Remove PHP profile auhentication - Info: Do not use ..." "Display example configuration Cisco ACL ..." "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Install PHP profile authentication - Info: Do not use ..." "Remove PHP profile auhentication - Info: Do not use ..." "Display example configuration Cisco ACL ..." "Install logstash ..." "Remove logstash ..." "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -288,6 +303,18 @@ do
             clear
             banner
             ciscoconfig
+            exit
+    ;;
+        "Install logstash ...")
+            clear
+            banner
+            logstash_install
+            exit
+    ;;
+        "Remove logstash ...")
+            clear
+            banner
+            logstash_remove
             exit
     ;;
         "Quit")

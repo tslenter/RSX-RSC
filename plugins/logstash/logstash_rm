@@ -1,0 +1,47 @@
+#!/bin/bash
+
+LOGSTASH_VAR=/etc/logstash/conf.d
+RSDESTP_LOG=/opt/RS/plugins/logstash
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+#Check if file does not exist
+function check_file_reverse() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, exit ..."
+        echo "Plugin already installed? ..."
+        exit
+    else
+        echo "File: $1 does not exist, continue installation ..."
+    fi
+}
+
+#Check if file exist
+function check_file() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, continue installation ..."
+    else
+        echo "File: $1 does not exist, exit ..."
+        exit
+    fi
+}
+
+echo "Check files ..."
+check_file $LOGSTASH_VAR/98-rsxdefault.conf
+echo "Remove configuration ..."
+rm -rf $LOGSTASH_VAR/98-rsxdefault.conf
+echo "Disable services ..."
+systemctl disable logstash
+service logstash stop
+echo "Remove packages ..."
+apt-get update && apt-get remove logstash -y
+echo "Logstash removal done ..."
+exit
+

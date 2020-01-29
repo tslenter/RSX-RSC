@@ -1,0 +1,55 @@
+#!/bin/bash
+
+LOGSTASH_VAR=/etc/logstash/conf.d
+RSDESTP_LOG=/opt/RS/plugins/logstash
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+#Check if file does not exist
+function check_file_reverse() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, exit ..."
+        echo "Plugin already installed? ..."
+        exit
+    else
+        echo "File: $1 does not exist, continue installation ..."
+    fi
+}
+
+#Check if file exist
+function check_file() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, continue installation ..."
+    else
+        echo "File: $1 does not exist, exit ..."
+        exit
+    fi
+}
+
+echo "Plugin is only tested for RSX with Ubuntu 18.x 64-bit ..."
+echo "Update packages ..."
+apt-get update && apt-get install logstash -y
+check_file_reverse $LOGSTASH_VAR/98-rsxdefault.conf
+echo "Copy configuration ..."
+cp -rf $RSDESTP_LOG/rsxlogstashconnector.conf $LOGSTASH_VAR/98-rsxdefault.conf
+check_file $LOGSTASH_VAR/98-rsxdefault.conf
+echo "Setup services ..."
+systemctl enable logstash
+service logstash start
+echo ""
+echo "Info:"
+echo "Syslog service is running on port 20000 using udp and udp ..."
+echo "Don't forget to configure the firewall if enabled ..."
+echo "Commands:"
+echo "To activate tcp: 'ufw allow 20000/tcp'"
+echo "To activate udp: 'ufw allow 20000/tcp'"
+echo "Logstash install done ..."
+echo ""
+exit
