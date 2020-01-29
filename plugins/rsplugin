@@ -202,7 +202,7 @@ function ubiquiti_parser() {
 	    cp $RSDESTP/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
             echo "Update Elastic configuration ..."
             curl -X PUT http://127.0.0.1:9200/_template/rsx-syslog-ng -H 'Content-Type:application/json' -d '{
-                "template":"rsx*",
+                "template":"rsx-syslog-ng*",
                 "settings": {
                 "number_of_replicas": 1,
                 "number_of_shards": 1
