@@ -1043,6 +1043,17 @@ function kibdef() {
         }
         '
         echo ""
+        echo "Enable default lifecycle to RSX index ..."
+        curl -X PUT http://127.0.0.1:9200/_template/rsx-syslog-ng -H 'Content-Type:application/json' -d '{
+            "template":"rsx-syslog-ng*",
+            "settings": {
+            "number_of_replicas": 1,
+            "number_of_shards": 1,
+            "index.lifecycle.name": "slm-history-ilm-policy",
+            "index.lifecycle.rollover_alias": "rsx-syslog-ng"
+            }
+        }'
+        echo ""
         echo "Done ..."
     else
         echo "Kibana not in time activated? Use GUI to setup kibana ..."
