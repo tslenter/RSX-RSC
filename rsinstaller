@@ -458,7 +458,7 @@ function guiupgrade() {
     echo "Check if Remote Syslog is installed ..."
     check_file "$RSBIN/rsinstaller"
 #Check packages
-    if [ -e "$APACHCONF/rs/loaddata.php" ]; then
+    if [ -e "$APACHCONF/rsc/index.php" ]; then
         check_file $APACHCONF/rsc/index.php
         echo "Starting installation legacy GUI ..."
         check_package "apache2"
