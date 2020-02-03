@@ -445,7 +445,7 @@ function coreremove() {
     echo "Move log files ..."
     cp -rf $VLOG/remote_syslog $VLOG/remote_syslog_uninstall && rm -rf $VLOG/remote_syslog
     echo "Moved files to $VLOG/remote_syslog_uninstall .."
-    if [ -e "$APACHCONF/rs/loaddata.php" ]; then
+    if [ -e "$APACHCONF/rsc/index.php" ]; then
         rscremove
     elif [ -e $SYSLOGCONF/99RSX-rs.conf ]; then
         rsxremove
@@ -721,7 +721,7 @@ function rsxinstall() {
         echo "Continue ..."
     fi
     echo "Check GUI ..."
-    check_file_gui $APACHCONF/rs/loaddata.php
+    check_file_gui $APACHCONF/rsc/index.php
     check_file_reverse $SYSLOGCONF/99RSX-rs.conf
     echo "Check if Remote Syslog is installed ..."
     check_file "$RSBIN/rsinstaller"
@@ -879,7 +879,7 @@ function phpauthupgrade() {
 #RSX removal
 function rsxremove() {
 #Basic check
-    check_file_gui $APACHCONF/rs/loaddata.php
+    check_file_gui $APACHCONF/rsc/index.php
     check_file $SYSLOGCONF/99RSX-rs.conf
 #Remove Syslog-NG RSX config
     rm -rf $SYSLOGCONF/99RSX-rs.conf
