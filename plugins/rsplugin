@@ -76,50 +76,6 @@ function check_file() {
     fi
 }
 
-#PHP authentication remove
-function phpauthremove() {
-    echo "Remove PHP Authentication ..."
-    chmod o-r /etc/shadow
-    rm -rf $APACHCONF/administrator/
-    rm -rf $APACHPHP/conf.d/20-pam.ini
-}
-
-function phpauthinstall() {
-#Checks
-    echo "Check packages ..."
-    check_package "apache2"
-    check_package "build-essential"
-    check_file $APACHCONF/logo.png
-    check_file $APACHCONF/style.css
-#Load PHP authentication module
-    echo "Activate PHP PAM ..."
-    echo "Compile ..."
-    currentpath=$(pwd)
-    cd $RSDEST/php-pam
-    phpize
-    ./configure --prefix=/usr
-    make
-    make install
-    cd $currentpath
-    ldconfig
-#Setup php login experimental
-    echo "Write php config ..."
-    cp -rf $RSDEST/20-pam.ini $APACHPHP/conf.d/
-    check_file $APACHPHP/conf.d/20-pam.ini
-#Setup permissions on shadow file (Dangerous)
-    echo "!Setup permissions /etc/shadow ...!"
-    chmod o+r /etc/shadow
-#Create login website
-    echo "Create login for webpages ..."
-    mkdir $APACHCONF/administrator/
-    cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
-    cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
-    check_file $APACHCONF/administrator/index.php
-    check_file $APACHCONF/administrator/profile.php
-    echo "Restart apache2 ..."
-    service apache2 restart
-}
-
 #Check if database is corectly installed
 function geo_check() {
     if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
@@ -260,7 +216,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Install PHP profile authentication - Info: Do not use ..." "Remove PHP profile auhentication - Info: Do not use ..." "Display example configuration Cisco ACL ..." "Install logstash ..." "Remove logstash ..." "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL ..." "Install logstash ..." "Remove logstash ..." "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -287,18 +243,6 @@ do
             clear
             banner
             ubiquiti_parser
-            exit
-    ;;
-        "Install PHP profile authentication - Info: Do not use ...")
-            clear
-            banner
-            phpauthinstall
-            exit
-    ;;
-        "Remove PHP profile auhentication - Info: Do not use ...")
-            clear
-            banner
-            phpauthremove
             exit
     ;;
         "Display example configuration Cisco ACL ...")

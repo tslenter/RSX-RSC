@@ -141,7 +141,7 @@ function rscinstall() {
     echo "Check if RSX is installed ..."
     check_file_gui $SYSLOGCONF/99RSX-rs.conf
     echo "Check if RSC is installed ..."
-    check_file_reverse $APACHCONF/rs/loaddata.php
+    check_file_reverse $APACHCONF/rsc/index.php
 #Install packages
     echo "Starting RSC installation ..."
     apt -y install apache2 apache2-utils php libapache2-mod-php libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential
@@ -157,20 +157,28 @@ function rscinstall() {
     check_package "php-pear"
     check_package "php-dev"
     check_package "build-essential"
-#Load apache modules
-    echo "Load modules ..."
-    a2enmod proxy
-    a2enmod proxy_http
-    a2enmod headers
-    a2enmod authnz_external
-    a2enmod authz_unixgroup
-    a2enmod rewrite
-    a2enmod ssl
-    a2enmod session
-    a2enmod auth_form
-    a2enmod request
-    a2enmod session_cookie
-    a2enmod session_crypto
+#Checks for php-pam build
+    echo "Check packages ..."
+    check_package "apache2"
+    check_package "build-essential"
+#Load PHP authentication module
+    echo "Activate PHP PAM ..."
+    echo "Compile ..."
+    currentpath=$(pwd)
+    cd $RSDEST/php-pam
+    phpize
+    ./configure --prefix=/usr
+    make
+    make install
+    cd $currentpath
+    ldconfig
+#Setup php login experimental
+    echo "Write php config ..."
+    cp -rf $RSDEST/rsc/20-pam.ini $APACHPHP/conf.d/
+    check_file $APACHPHP/conf.d/20-pam.ini
+#Setup permissions on shadow file (Dangerous)
+    echo "!Setup permissions /etc/shadow ...!"
+    chmod o+r /etc/shadow
 #Remove default webpage
     echo "Remove default GUI website ..."
     if [ -e "$APACHCONF/index.html" ]; then
@@ -182,21 +190,28 @@ function rscinstall() {
 #Create RSC directory
     echo "Add RSC website ..."
     echo "Create directory ..."
-    mkdir $APACHCONF/rs
+    mkdir $APACHCONF/rsc
 #Copy RSC files
     echo "Copy files ..."
-    cp -rf $RSDEST/favicon.ico $APACHCONF/rs/
-    cp -rf $RSDEST/index.php $APACHCONF/rs/
-    cp -rf $RSDEST/indexs.php $APACHCONF/rs/
-    cp -rf $RSDEST/jquery-latest.js $APACHCONF/rs/
-    cp -rf $RSDEST/loaddata.php $APACHCONF/rs/
-    cp -rf $RSDEST/login.php $APACHCONF/login.php
-    cp -rf $RSDEST/rscforwarder.php $APACHCONF/index.php
-    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
-    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+    cp -rf $RSDEST/rsc/favicon.ico $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/index.php $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/bootstrap.min.css $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/bootstrap.min.js $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/bootstrap-theme.min.css $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/html5shiv.min.js $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/jquery.min.js $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/jquery-ui.css $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/jquery-ui.min.js $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/logo_black.png $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/PHPTail.php $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/respond.min.js $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/rsc.php $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/login.php $APACHCONF/login.php
+    cp -rf $RSDEST/rsc/rscforwarder.php $APACHCONF/index.php
+    cp -rf $RSDEST/rsc/logo.png $APACHCONF/logo.png
+    cp -rf $RSDEST/rsc/favicon.ico $APACHCONF/favicon.ico
     cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
-    cp -rf $RSDEST/style.css $APACHCONF/style.css
-    rm -rf $APACHCONF/index.html
+    cp -rf $RSDEST/rsc/style.css $APACHCONF/style.css
     check_file_reverse $APACHCONF/index.html
     check_file $APACHCONF/login.php
     check_file $APACHCONF/index.php
@@ -204,15 +219,23 @@ function rscinstall() {
     check_file $APACHCONF/favicon.ico
     check_file $APACHCONF/style.css
     check_file $APACHCONF/fontawesome/css/all.css
-    check_file $APACHCONF/rs/favicon.ico
-    check_file $APACHCONF/rs/index.php
-    check_file $APACHCONF/rs/indexs.php
-    check_file $APACHCONF/rs/jquery-latest.js
-    check_file $APACHCONF/rs/loaddata.php
+    check_file $APACHCONF/rsc/favicon.ico
+    check_file $APACHCONF/rsc/index.php
+    check_file $APACHCONF/rsc/bootstrap.min.css
+    check_file $APACHCONF/rsc/bootstrap.min.js
+    check_file $APACHCONF/rsc/bootstrap-theme.min.css
+    check_file $APACHCONF/rsc/html5shiv.min.js
+    check_file $APACHCONF/rsc/jquery.min.js
+    check_file $APACHCONF/rsc/jquery-ui.css
+    check_file $APACHCONF/rsc/jquery-ui.min.js
+    check_file $APACHCONF/rsc/logo_black.png
+    check_file $APACHCONF/rsc/PHPTail.php
+    check_file $APACHCONF/rsc/respond.min.js
+    check_file $APACHCONF/rsc/rsc.php
     echo "Set archive symlink ..."
-    ln -s $VLOG/remote_syslog $APACHCONF/rs/
+    ln -s $VLOG/remote_syslog $APACHCONF/rsc/
 #Load apache2 configuration and create SSL with authentication
-    echo "Load apache2 configuration ..."
+    echo "Load apache2 configuration with SSL ..."
 #Activate SSL
     echo "Activate SSL ..."
 #Setup variables:
@@ -247,13 +270,17 @@ function rscinstall() {
     else
        echo "No .rnd found ..."
     fi
-#Proxy settings and webserver configuration
-    echo "Activate proxy ..."
-    echo "Disable default config ..."
-    cp -rf $RSDEST/rsc-apache.conf $APACONFIG/rsc-apache.conf
+#Webserver configuration
+    echo "Activate website ..."
+    cp -rf $RSDEST/rsc/rsc-apache.conf $APACONFIG/rsc-apache.conf
     check_file $APACONFIG/rsc-apache.conf
     a2ensite rsc-apache
+    echo "Disable default config ..."
     a2dissite 000-default
+#Load apache modules
+    echo "Load modules ..."
+    a2enmod rewrite
+    a2enmod ssl
     service apache2 restart
     echo "Done ..."
 }
@@ -261,23 +288,12 @@ function rscinstall() {
 function rscremove() {
 #Check removal steps ...
     echo "Check if RSX is installed ..."
-    check_file_gui $SYSLOGCONF/991-remote-mysql.conf
+    check_file_gui $SYSLOGCONF/99RSX-rs.conf
     echo "Check if RSC is installed"
-    check_file $APACHCONF/rs/loaddata.php
+    check_file $APACHCONF/rsc/index.php
 #Remove Apache files
     echo "Removing RSC website ..."
-    rm -rf $APACHCONF/remote_syslog
-    rm -rf $APACHCONF/login.php
-    rm -rf $APACHCONF/index.php
-    rm -rf $APACHCONF/logo.png
-    rm -rf $APACHCONF/favicon.ico
-    rm -rf $APACHCONF/style.css
-    rm -rf $APACHCONF/fontawesome/css/all.css
-    rm -rf $APACHCONF/rs/favicon.ico
-    rm -rf $APACHCONF/rs/index.php
-    rm -rf $APACHCONF/rs/indexs.php
-    rm -rf $APACHCONF/rs/jquery-latest.js
-    rm -rf $APACHCONF/rs/loaddata.php
+    rm -rf $APACHCONF/rsc/
 #Check core install
     echo "Removing installation RSC ..."
     if [ -e "$RSBIN/rsinstaller" ]; then
@@ -292,12 +308,16 @@ function rscremove() {
         apt -y autoremove
     fi
 #Remove Apache config and cleanup mess
-   rm -rf $certpath/rs.key
-   rm -rf $certpath/rs.crt
-   rm -rf $APACONFIG/rsx-apache.conf
-   rm -rf $APACHPHP/conf.d/20-pam.ini
-   rm -rf $APACHCONF/*
-   echo "Done ..."
+    rm -rf $certpath/rs.key
+    rm -rf $certpath/rs.crt
+    rm -rf $APACONFIG/rsx-apache.conf
+    rm -rf $APACHPHP/conf.d/20-pam.ini
+    rm -rf $APACHCONF/*
+#Remove PHP Authentication
+    echo "Remove PHP authentication modules ..."
+    chmod o-r /etc/shadow
+    rm -rf $APACHPHP/conf.d/20-pam.ini
+    echo "Done ..."
 }
 
 #Setup environment for installation

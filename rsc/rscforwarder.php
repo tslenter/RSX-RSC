@@ -25,12 +25,12 @@ E-mail: info@remotesyslog.com
 <html>
         <head>
                 <meta charset="utf-8">
-                <title>RSX Login:</title>
+                <title>Remote Syslog Classic</title>
         </head>
 <body>
 <?php
     header('HTTP/1.1 301 Moved Permanently');
-    header('Location: ' . $location . "rs");
+    header('Location: ' . $location . "rsc");
 ?>
 </body>
 </html>
