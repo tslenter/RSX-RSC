@@ -72,7 +72,7 @@ Options Indexes FollowSymLinks
 AllowOverride None
 AuthBasicProvider ldap
 AuthLDAPGroupAttributeIsDN On
-AuthLDAPURL "ldap://<myadhost>:389/dc=prd,dc=corp?sAMAccountName?sub?(objectClass=*)"
+AuthLDAPURL "ldap://<myadhost>:389/dc=DC01,dc=local?sAMAccountName?sub?(objectClass=*)"
 AuthLDAPBindDN "CN=,OU=Accounts,DC=DC01,DC=local"
 AuthLDAPBindPassword
 AuthLDAPGroupAttribute member
