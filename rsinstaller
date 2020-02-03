@@ -459,7 +459,7 @@ function guiupgrade() {
     check_file "$RSBIN/rsinstaller"
 #Check packages
     if [ -e "$APACHCONF/rs/loaddata.php" ]; then
-        check_file $APACHCONF/rs/loaddata.php
+        check_file $APACHCONF/rsc/index.php
         echo "Starting installation legacy GUI ..."
         check_package "apache2"
         check_package "apache2-utils"
@@ -479,17 +479,25 @@ function guiupgrade() {
         check_package "build-essential"
 #Update Webpage
         echo "Update webpage code ..."
-        cp -rf $RSDEST/favicon.ico $APACHCONF/rs/
-        cp -rf $RSDEST/index.php $APACHCONF/rs/
-        cp -rf $RSDEST/indexs.php $APACHCONF/rs/
-        cp -rf $RSDEST/jquery-latest.js $APACHCONF/rs/
-        cp -rf $RSDEST/loaddata.php $APACHCONF/rs/
-        cp -rf $RSDEST/login.php $APACHCONF/login.php
-        cp -rf $RSDEST/rscforwarder.php $APACHCONF/index.php
-        cp -rf $RSDEST/logo.png $APACHCONF/logo.png
-        cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+        cp -rf $RSDEST/rsc/favicon.ico $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/index.php $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/bootstrap.min.css $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/bootstrap.min.js $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/bootstrap-theme.min.css $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/html5shiv.min.js $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/jquery.min.js $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/jquery-ui.css $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/jquery-ui.min.js $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/logo_black.png $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/PHPTail.php $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/respond.min.js $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/rsc.php $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/login.php $APACHCONF/login.php
+        cp -rf $RSDEST/rsc/rscforwarder.php $APACHCONF/index.php
+        cp -rf $RSDEST/rsc/logo.png $APACHCONF/logo.png
+        cp -rf $RSDEST/rsc/favicon.ico $APACHCONF/favicon.ico
         cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
-        cp -rf $RSDEST/style.css $APACHCONF/style.css
+        cp -rf $RSDEST/rsc/style.css $APACHCONF/style.css
         check_file_reverse $APACHCONF/index.html
         check_file $APACHCONF/login.php
         check_file $APACHCONF/index.php
@@ -497,11 +505,19 @@ function guiupgrade() {
         check_file $APACHCONF/favicon.ico
         check_file $APACHCONF/style.css
         check_file $APACHCONF/fontawesome/css/all.css
-        check_file $APACHCONF/rs/favicon.ico
-        check_file $APACHCONF/rs/index.php
-        check_file $APACHCONF/rs/indexs.php
-        check_file $APACHCONF/rs/jquery-latest.js
-        check_file $APACHCONF/rs/loaddata.php
+        check_file $APACHCONF/rsc/favicon.ico
+        check_file $APACHCONF/rsc/index.php
+        check_file $APACHCONF/rsc/bootstrap.min.css
+        check_file $APACHCONF/rsc/bootstrap.min.js
+        check_file $APACHCONF/rsc/bootstrap-theme.min.css
+        check_file $APACHCONF/rsc/html5shiv.min.js
+        check_file $APACHCONF/rsc/jquery.min.js
+        check_file $APACHCONF/rsc/jquery-ui.css
+        check_file $APACHCONF/rsc/jquery-ui.min.js
+        check_file $APACHCONF/rsc/logo_black.png
+        check_file $APACHCONF/rsc/PHPTail.php
+        check_file $APACHCONF/rsc/respond.min.js
+        check_file $APACHCONF/rsc/rsc.php
         echo "Done ..."
         echo "Restarting Apache ..."
         service apache2 restart
