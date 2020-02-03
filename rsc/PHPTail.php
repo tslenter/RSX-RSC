@@ -178,7 +178,7 @@ class PHPTail {
     font-family: monospace;
     font-size: small;
     white-space: pre;
-    background: black;
+    background: #212729;
     color: lightgrey;
 }
 
@@ -330,7 +330,7 @@ class PHPTail {
 </script>
 
 </head>
-<body style="background-color:black;">
+<body style="background-color:#212729;">
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
