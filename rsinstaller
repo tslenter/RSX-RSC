@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000043
+bid=00000044
 
 #Banner
 function banner() {
@@ -206,6 +206,7 @@ function rscinstall() {
     cp -rf $RSDEST/rsc/PHPTail.php $APACHCONF/rsc/
     cp -rf $RSDEST/rsc/respond.min.js $APACHCONF/rsc/
     cp -rf $RSDEST/rsc/rsc.php $APACHCONF/rsc/
+    cp -rf $RSDEST/rsc/logout.php $APACHCONF/rsc/
     cp -rf $RSDEST/rsc/login.php $APACHCONF/login.php
     cp -rf $RSDEST/rsc/rscforwarder.php $APACHCONF/index.php
     cp -rf $RSDEST/rsc/logo.png $APACHCONF/logo.png
@@ -232,6 +233,7 @@ function rscinstall() {
     check_file $APACHCONF/rsc/PHPTail.php
     check_file $APACHCONF/rsc/respond.min.js
     check_file $APACHCONF/rsc/rsc.php
+    check_file $APACHCONF/rsc/logout.php
     echo "Set archive symlink ..."
     ln -s $VLOG/remote_syslog $APACHCONF/rsc/
 #Load apache2 configuration and create SSL with authentication
@@ -492,6 +494,7 @@ function guiupgrade() {
         cp -rf $RSDEST/rsc/PHPTail.php $APACHCONF/rsc/
         cp -rf $RSDEST/rsc/respond.min.js $APACHCONF/rsc/
         cp -rf $RSDEST/rsc/rsc.php $APACHCONF/rsc/
+        cp -rf $RSDEST/rsc/logout.php $APACHCONF/rsc/
         cp -rf $RSDEST/rsc/login.php $APACHCONF/login.php
         cp -rf $RSDEST/rsc/rscforwarder.php $APACHCONF/index.php
         cp -rf $RSDEST/rsc/logo.png $APACHCONF/logo.png
@@ -518,6 +521,7 @@ function guiupgrade() {
         check_file $APACHCONF/rsc/PHPTail.php
         check_file $APACHCONF/rsc/respond.min.js
         check_file $APACHCONF/rsc/rsc.php
+        check_file $APACHCONF/rsc/logout.php
         echo "Done ..."
         echo "Restarting Apache ..."
         service apache2 restart

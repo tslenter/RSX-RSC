@@ -346,15 +346,21 @@ class PHPTail {
                             <?php endforeach;?>
                         </ul>
                     </li>
-                    <li><a href="remote_syslog/">Archive</a></li>
-                    <li <?php if ($_GET['pg'] == "st") { exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); } ?>><a href="?pg=st">Test message</a></li>
-                    <li <?php if ($_GET['pg'] == "ar") { exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); } ?>><a href="?pg=ar">Clear live log archive</a></li>
-                    <li><a href="https://github.com/tslenter/RSX-RSC/blob/master/LICENSE" target="_blank">License</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                           <li><a href="remote_syslog/">Archive</a></li>
+                           <li <?php if ($_GET['pg'] == "st") { exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); } ?>><a href="?pg=st">Test message</a></li>
+                           <li <?php if ($_GET['pg'] == "ar") { exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); } ?>><a href="?pg=ar">Clear live log archive</a></li>
+                           <li><a href="https://github.com/tslenter/RSX-RSC/blob/master/LICENSE" target="_blank">License</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="logout.php">Logout</a></li>
                     <li><a href="#" id="grepKeyword">Filter</a></li>
                     <li><span class="navbar-text" id="grepspan"></span></li>
                     <li><span class="navbar-text" id="invertspan"></span></li>
                 </ul>
-              <!--<p class="navbar-text navbar-right" id="current"></p>-->
+              <p class="navbar-text navbar-right" id="current"></p>
             </div>
         </div>
     </div>

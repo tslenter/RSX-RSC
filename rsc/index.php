@@ -51,14 +51,14 @@ if (isset($_POST['user']) && isset($_POST['pwd'])) {
         session_start();
         $r=session_id();
         $un=uniqid();
-        echo "the session id: ".$r;
-        echo " and the session has been registered for: ".$_SESSION['name'];
+        echo "Session id: ".$r;
+        echo "<br />\n";
         echo "\r\nUnigid is: ".$un;
         $_SESSION['id'] = true;
         $_SESSION['un'] = true;
         header( "refresh:5;url=rsc.php" );
     } else {
-        #echo "<h4>Error: {$error}</h4>";
+        /*#echo "<h4>Error: {$error}</h4>";*/
         echo "<h4>Login Failed ...</h4>";
                 renderForm();
     }
