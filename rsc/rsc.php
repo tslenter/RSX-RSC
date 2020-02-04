@@ -21,6 +21,8 @@ Name author: Tom Slenter
 E-mail: info@remotesyslog.com
 
 Enhanced with PHPTail
+Found @ https://github.com/taktos/php-tail
+Forked from: http://code.google.com/p/php-tail/
 */
 ?>
 

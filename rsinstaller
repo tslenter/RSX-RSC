@@ -566,7 +566,6 @@ function guiupgrade() {
         check_file $APACHCONF/favicon.ico
         check_file $APACHCONF/fontawesome/css/all.css
         check_file $APACHCONF/style.css
-        phpauthupgrade
         echo "Restarting Apache ..."
         service apache2 restart
         echo "Restarting Syslog-NG ..."
@@ -870,20 +869,6 @@ function rsxinstall() {
     echo "RSX installation done ..."
 }
 
-#PHP authentication upgrade
-function phpauthupgrade() {
-    echo "Upgrade PHP authentication ..."
-    if [ -e "$APACHCONF/administrator/index.php" ]; then
-        echo "Copy PHP authentication files ..."
-        cp -rf $RSDEST/pamphplogin.php $APACHCONF/administrator/index.php
-        cp -rf $RSDEST/profile.php $APACHCONF/administrator/profile.php
-        check_file $APACHCONF/administrator/index.php
-        check_file $APACHCONF/administrator/profile.php
-    else
-        echo "No PHP Authentication found, skipped ..."
-    fi
-}
-
 #RSX removal
 function rsxremove() {
 #Basic check
@@ -1124,146 +1109,12 @@ function plugins(){
 
 #Elastic only installation
 function elasticonlyinstall() {
-#Check installation
-    echo "Check if Raspberry Pi ..."
-    drel="$(lsb_release -a | egrep 'Description:')"
-    echo "$drel found ..."
-    if [[ $drel =~ "Raspbian" ]]; then
-        echo "Raspberry Pi detected ..."
-        echo "It is slow ..."
-    else
-        echo "Continue ..."
-    fi
-    echo "Check if Remote Syslog Core is installed ..."
-    check_file "$RSBIN/rsinstaller"
-#Install packages
-    echo "Install required packages ..."
-    apt install libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential -y
-    check_package "libapache2-mod-authnz-external"
-    check_package "apache2"
-    check_package "php"
-    check_package "libapache2-mod-authz-unixgroup"
-    check_package "php-cli"
-    check_package "libapache2-mod-php"
-    check_package "libpam0g-dev"
-    check_package "php-pear"
-    check_package "php-dev"
-    check_package "build-essential"
-#Load apache modules
-    echo "Load modules ..."
-    a2enmod proxy
-    a2enmod proxy_http
-    a2enmod headers
-    a2enmod authnz_external
-    a2enmod authz_unixgroup
-    a2enmod rewrite
-    a2enmod ssl
-    a2enmod session
-    a2enmod auth_form
-    a2enmod request
-    a2enmod session_cookie
-    a2enmod session_crypto
-#Elastic
-    echo "Load Elastic ..."
-    if [ -e "/etc/apt/sources.list.d/elastic-7.x.list" ]; then
-        echo "Nothing to do ..."
-    else
-        wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-        apt-get install apt-transport-https -y
-        echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
-        echo "deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
-    fi
-    apt update && apt install elasticsearch liblog4j2-java -y
-    check_package "elasticsearch"
-    check_package "liblog4j2-java"
-#Writing config
-#RSX Syslog-ng config
-    echo "Update syslog-ng with RSX config ..."
-    cp $RSDEST/elastic_only/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
-#RSX elastic config
-    elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.syslog | head -n 1)"
-    if [[ $elc == *"cluster.name: syslog"* ]]; then
-        echo "Config already written ..."
-    else
-        echo "Write elastic config ..."
-        echo "cluster.name: syslog" >> /etc/elasticsearch/elasticsearch.yml
-        echo "node.name: syslog01" >> /etc/elasticsearch/elasticsearch.yml
-    fi
-#Activate service on boot
-    echo "Activate startup log configuration ..."
-    systemctl enable elasticsearch
-#Reload services
-    echo "Activate start/reload configuration ..."
-    service elasticsearch start
-    service syslog-ng restart
-#Activate SSL
-    echo "Activate SSL ..."
-#Setup variables:
-    varfullservername=$(host -TtA $(hostname -s)|grep "has address"|awk '{print $1}')
-    certpath=/etc/cert/
-    echo "Create .rnd file ..."
-    touch $HOME/.rnd
-    echo "Certificate auto request for linux webservers!"
-    echo "Powered by RSX ..."
-    echo "Generate Certificate ..."
-    if [ -f $HOME/.rnd ]; then
-        echo "File $HOME/.rnd exists ..."
-        openssl req -new -x509 -days 3650 -sha256 -newkey rsa:2048 -subj "/C=NL/ST=Limburg/L=Maastricht/O=IT/CN=$varfullservername" -nodes -keyout $HOME/$varfullservername.key -out $HOME/$varfullservername.crt
-        echo "Copy SSL certificates ..."
-        if [ -d $certpath ]; then
-            echo "Directory already exist ..."
-        else
-            mkdir $certpath
-            echo "Directory created ..."
-        fi
-       cp $HOME/$varfullservername.key $certpath/rs.key
-       cp $HOME/$varfullservername.crt $certpath/rs.crt
-       echo "Setup permissions ..."
-       chmod 600 $certpath/rs.key
-       echo "Clean up ..."
-       rm -rf $HOME/$varfullservername.key
-       rm -rf $HOME/$varfullservername.crt
-       echo "Generated key file: $certpath/rs.key"
-       echo "Generated cert file: $certpath/rs.crt"
-       check_file $certpath/rs.key
-       check_file $certpath/rs.crt
-    else
-       echo "No .rnd found ..."
-    fi
-#Proxy setup
-    echo "Activate proxy ..."
-    echo "Disable default config ..."
-    cp -rf $RSDEST/elastic_only/eonly-apache.conf $APACONFIG/eonly-apache.conf
-    check_file $APACONFIG/eonly-apache.conf
-    a2ensite eonly-apache
-    a2dissite 000-default
-#Load services
-    echo "Reload apache services ..."
-    service apache2 restart
-#Final message
-    echo "RSX installation done ..."
+    $RSDEST/elastic_only/elasticsearch_in
 }
 
 #Elastic only removal
 function elasticonlyremove() {
-#Basic check
-    check_file "$RSBIN/rsinstaller"
-#Remove Syslog-NG RSX config
-    rm -rf $SYSLOGCONF/99RSX-rs.conf
-    echo "Restart Syslog-NG ..."
-    service syslog-ng restart
-#Remove Apache config
-    rm -rf $APACONFIG/eonly-apache.conf
-    a2dissite eonly-apache
-#Remove packages
-    echo "Remove config ..."
-    rm -rf /etc/apt/sources.list.d/elastic-7.x.list
-    rm -rf /etc/elasticsearch/elasticsearch.yml
-    echo "Remove packages ..."
-    apt -y purge elasticsearch -y
-    apt -y install syslog-ng
-    apt -y autoremove
-    echo "Elastic only removed ..."
+    $RSDEST/elastic_only/elasticsearch_rm
 }
 
 #Environment setup

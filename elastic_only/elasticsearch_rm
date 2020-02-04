@@ -1,0 +1,116 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+#Variables
+SYSLOGCONF=/etc/syslog-ng/conf.d
+APACONFIG=/etc/apache2/sites-available
+APACHCONF=/var/www/html
+RSBIN=/usr/bin
+certpath=/etc/cert
+
+#Banner
+function banner() {
+    echo ""
+    echo "#################################################"
+    echo "#Remote Syslog X/C                              #"
+    echo "#More information: remotesyslog.com             #"
+    echo "#Remote Syslog installation                     #"
+    echo "#Version: RSX 0.1                               #"
+    echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
+    echo "#################################################"
+    echo ""
+}
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    clear
+    banner
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+#Check if file exist
+function check_file() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, continue installation ..."
+    else
+        echo "File: $1 does not exist, exit ..."
+        exit
+    fi
+}
+
+function guiinstalled() {
+#Basic check
+    check_file "$RSBIN/rsinstaller"
+#Remove Syslog-NG RSX config
+    rm -rf $SYSLOGCONF/99RSX-rs.conf
+    echo "Restart Syslog-NG ..."
+    service syslog-ng restart
+#Remove Apache config
+    rm -rf $APACONFIG/eonly-apache.conf
+    a2dissite eonly-apache
+#Remove packages
+    echo "Remove config ..."
+    rm -rf /etc/apt/sources.list.d/elastic-7.x.list
+    rm -rf /etc/elasticsearch/elasticsearch.yml
+    echo "Remove packages ..."
+    apt -y purge elasticsearch -y
+    apt -y install syslog-ng
+    apt -y autoremove
+    echo "Elastic only removed ..."
+}
+
+function guinotinstalled() {
+#Remove Syslog-NG config
+    rm -rf $SYSLOGCONF/99RSX-rs.conf
+    echo "Restart Syslog-NG ..."
+    service syslog-ng restart
+#Remove Apache config
+    rm -rf $certpath/rs.key
+    rm -rf $certpath/rs.crt
+    rm -rf $APACONFIG/eonly-apache.conf
+    rm -rf $APACHCONF/*
+#Remove packages
+    echo "Remove config ..."
+    rm -rf /etc/apt/sources.list.d/elastic-7.x.list
+    rm -rf /etc/elasticsearch/elasticsearch.yml
+    echo "Remove packages ..."
+    apt -y purge elasticsearch liblog4j2-java libapache2-mod-authnz-external php apache2 libapache2-mod-authz-unixgroup php-cli libpam0g-dev php-pear php-dev libapache2-mod-php build-essential -y
+    apt -y install syslog-ng
+    apt -y autoremove
+    echo "Eleastic removed ..."
+}
+
+#Elastic only removal
+function elasticremove() {
+   if [ -e "$APACHCONF/rsc/index.php" ]; then
+       guiinstalled
+   elif [ -e $APACONFIG/rsx-apache.conf ]; then
+       guiinstalled
+   else
+       guinotinstalled
+   fi
+}
+
+elasticremove
