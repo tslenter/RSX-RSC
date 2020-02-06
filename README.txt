@@ -200,6 +200,14 @@ Change rules:
 +log { source(s_src); filter(f_syslog3); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_syslog); };
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 
+11. Configuration files
+
+Default locations configuration/files:
+Syslog-ng global config: /etc/syslog-ng/syslog-ng.conf
+Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
+Kibana global config: /etc/kibana/kibana.yml
+Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
+
 11. Info
 11.1 More information: https://www.remotesyslog.com/
 
