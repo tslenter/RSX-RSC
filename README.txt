@@ -208,6 +208,10 @@ Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
 Kibana global config: /etc/kibana/kibana.yml
 Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
 
+12. Default API query's for Elasticsearch:
+Find all indexes: curl -XGET 'localhost:9200/_cat/indices'
+Find cluster disk space: curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
+
 11. Info
 11.1 More information: https://www.remotesyslog.com/
 
