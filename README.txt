@@ -212,6 +212,9 @@ Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
 Find all indexes: curl -XGET 'localhost:9200/_cat/indices'
 Find cluster disk space: curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
 
+13. Configuration checks
+Logstash test new config: /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
+
 11. Info
 11.1 More information: https://www.remotesyslog.com/
 
