@@ -49,7 +49,7 @@ echo "Syslog service is running on port 20000 using udp and udp ..."
 echo "Don't forget to configure the firewall if enabled ..."
 echo "Commands:"
 echo "To activate tcp: 'ufw allow 20000/tcp'"
-echo "To activate udp: 'ufw allow 20000/tcp'"
+echo "To activate udp: 'ufw allow 20000/udp'"
 echo "Logstash install done ..."
 echo ""
 exit
