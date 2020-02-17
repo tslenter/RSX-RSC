@@ -1,0 +1,16 @@
+#!/bin/bash
+#Var
+RSDESTP_F5=/opt/RS/plugins/f5
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+echo "Add and configure the following configuration to syslog-ng:"
+cat $RSDESTP_F5/99X-F5.conf
+echo ""
+exit
+

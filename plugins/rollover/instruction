@@ -1,0 +1,15 @@
+#!/bin/bash
+#Var
+RSDESTP_TP=/opt/RS/plugins/rollover
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+echo "Add and configure the following configuration to Elasticsearch:"
+cat $RSDESTP_TP/template_rollover
+echo ""
+exit

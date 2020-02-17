@@ -1,0 +1,39 @@
+input {
+  beats {
+   port => 20000
+  }
+}
+
+filter
+{
+    if [type] == "dhcp"
+    {
+        dissect {
+          mapping => {
+          "message" => "%{ID},%{Date},%{Time},%{Description},%{IP_Address},%{Host_Name},%{MAC_Address},%{User_Name},%{TransactionID},%{QResult},%{Probationtime},%{CorrelationID},%{Dhcid},%{VendorClass_hex},%{VendorClass_ascii},%{UserCla$
+                   }
+           }
+         mutate
+         {
+            add_field => { "log_timestamp" => "%{Date}-%{Time}" }
+         }
+         date {
+              match => [ "log_timestamp", "MM/dd/YY-HH:mm:ss" ]
+              timezone => "Europe/Copenhagen"
+         }
+         if "_dateparsefailure" not in [tags]
+         {
+             mutate
+             {
+                remove_field=> ['Date', 'Time', 'log_timestamp', 'message']
+             }
+        }
+     }
+}
+
+output {
+  if [type] == "dhcp"
+  {
+  elasticsearch { hosts => ["localhost:9200"] index => "logstash-rsx-dhcp-%{+YYYY.MM.dd}"}
+}
+}

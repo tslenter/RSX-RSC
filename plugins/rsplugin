@@ -140,7 +140,39 @@ function geoupdate_rs() {
 function ciscoconfig() {
     echo "Displaying default configuration ACL Cisco ..."
     echo ""
-    cat $RSDESTP/cisco_acl_syslog-ng.conf
+    $RSDESTP/cisco/instruction
+    exit
+}
+
+#Function for view Checkpoint
+function checkpointconfig() {
+    echo "Displaying default Checkpoint configuration ..."
+    echo ""
+    $RSDESTP/checkpoint/instruction
+    exit
+}
+
+#Function for view rollover
+function rolloverconfig() {
+    echo "Displaying default rollover configuration ..."
+    echo ""
+    $RSDESTP/rollover/instruction
+    exit
+}
+
+#Function for view f5
+function f5config() {
+    echo "Displaying default F5 configuration ..."
+    echo ""
+    $RSDESTP/f5/instruction
+    exit
+}
+
+#Function for view msdhcp
+function msdhcpconfig() {
+    echo "Displaying default F5 configuration ..."
+    echo ""
+    $RSDESTP/msdhcp/instruction
     exit
 }
 
@@ -148,21 +180,37 @@ function ciscoconfig() {
 function ubiquiti_parser() {
     if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
         echo "Print config ..."
-	cat $RSDESTP/99RSX-uni-ubi.conf
+	cat $RSDESTP/ubiquiti/99RSX-uni-ubi.conf
 	echo ""
 	read -p "Do you want to update the default RSX configuration with this one? y/n " -n 1 -r
 	echo ""
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 	    echo "Overwrite of default RSX file ..."
-	    cp $RSDESTP/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
+	    cp $RSDESTP/ubiquiti/99RSX-uni-ubi.conf $SYSLOGCONF/99RSX-rs.conf
             echo "Update Elastic configuration ..."
+            curl -X PUT http://127.0.0.1:9200/_ilm/policy/rsx-default-geo -H 'Content-Type:application/json' -d '{
+               "policy": {
+                   "phases": {
+                   "hot": {
+                       "min_age": "0ms",
+                       "actions": {}
+                   },
+                   "delete": {
+                        "min_age": "10d",
+                        "actions": {
+                           "delete": {}
+                            }
+                        }
+                    }
+                }
+            }'
             curl -X PUT http://127.0.0.1:9200/_template/rsx-syslog-ng -H 'Content-Type:application/json' -d '{
                 "template":"rsx-syslog-ng*",
                 "settings": {
                 "number_of_replicas": 1,
                 "number_of_shards": 1,
-                "index.lifecycle.name": "slm-history-ilm-policy",
+                "index.lifecycle.name": "rsx-default-geo",
                 "index.lifecycle.rollover_alias": "rsx-syslog-ng"
                 },
                 "mappings": {
@@ -184,7 +232,7 @@ function ubiquiti_parser() {
             echo "Restart services ..."
             service syslog-ng restart
             echo ""
-            cat $RSDESTP/99RSX-uni-ubi.txt
+            cat $RSDESTP/ubiquiti/99RSX-uni-ubi.txt
             echo ""
             echo "Done ..."
             exit
@@ -216,7 +264,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL ..." "Install logstash ..." "Remove logstash ..." "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL ..." "Display example configuration CheckPoint ..." "Display example configuration F5 ..." "Display example template Elasticsearch rollover ..." "Display example configuration Microsoft DHCP ..." "Install logstash ..." "Remove logstash ..." "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -249,6 +297,30 @@ do
             clear
             banner
             ciscoconfig
+            exit
+    ;;
+        "Display example configuration CheckPoint ...")
+            clear
+            banner
+            checkpointconfig
+            exit
+    ;;
+        "Display example configuration F5 ...")
+            clear
+            banner
+            f5config
+            exit
+    ;;
+        "Display example template Elasticsearch rollover ...")
+            clear
+            banner
+            rolloverconfig
+            exit
+    ;;
+        "Display example configuration Microsoft DHCP ...")
+            clear
+            banner
+            msdhcpconfig
             exit
     ;;
         "Install logstash ...")

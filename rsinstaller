@@ -1076,12 +1076,28 @@ function kibdef() {
         '
         echo ""
         echo "Enable default lifecycle to RSX index ..."
+        curl -X PUT http://127.0.0.1:9200/_ilm/policy/rsx-default -H 'Content-Type:application/json' -d '{
+            "policy": {
+               "phases": {
+               "hot": {
+                   "min_age": "0ms",
+                   "actions": {}
+               },
+               "delete": {
+                   "min_age": "10d",
+                   "actions": {
+                       "delete": {}
+                        }
+                    }
+                }
+            }
+        }'
         curl -X PUT http://127.0.0.1:9200/_template/rsx-syslog-ng -H 'Content-Type:application/json' -d '{
             "template":"rsx-syslog-ng*",
             "settings": {
             "number_of_replicas": 1,
             "number_of_shards": 1,
-            "index.lifecycle.name": "slm-history-ilm-policy",
+            "index.lifecycle.name": "rsx-default",
             "index.lifecycle.rollover_alias": "rsx-syslog-ng"
             }
         }'
@@ -1095,7 +1111,15 @@ function kibdef() {
 function plugins(){
     echo "Check plugins requirments ..."
     check_file $RSBIN/rsinstaller
-    check_file $SYSLOGCONF/99RSX-rs.conf
+    echo "Plugins are experemental check configuration before installation ..."
+    while true; do
+    read -p "Do you wish to continue? y/n: " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+    done
     echo "Check if directory exist ..."
     if [ -d $RSDEST/plugins ]; then
         $RSDEST/plugins/rsplugin

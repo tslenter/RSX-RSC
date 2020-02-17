@@ -1,0 +1,22 @@
+#!/bin/bash
+#Var
+LOGSTASH_VAR=/etc/logstash/conf.d
+RSDESTP_DHCP=/opt/RS/plugins/msdhcp
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+echo "Use filebeat.yml to setup filebeat"
+echo "Replace in $LOGSTASH_VAR/filebeat.yml"
+echo "output.logstash:"
+echo "# The Logstash hosts"
+echo 'hosts: ["<my_server>:20000"]'
+echo ""
+echo "Add the following configuration to logstash:"
+cat $RSDESTP_DHCP/logstash_config.txt
+echo ""
+exit

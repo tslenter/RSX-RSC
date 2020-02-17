@@ -1,0 +1,15 @@
+#!/bin/bash
+#Var
+RSDESTP_CIS=/opt/RS/plugins/cisco
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+echo "Add and configure the following configuration to syslog-ng:"
+cat $RSDESTP_CIS/cisco_acl_syslog-ng.conf
+echo ""
+exit
