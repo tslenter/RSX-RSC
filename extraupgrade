@@ -20,7 +20,7 @@
 #Name author: Tom Slenter, Ronald Gerits, You Li
 #E-mail: info@remotesyslog.com
 
-echo "Installer copy ..." 
+echo "Installer copy ..."
 RSDEST=/opt/RS
 RSBIN=/usr/bin
 cp -rf $RSDEST/rsinstaller $RSBIN/rsinstaller

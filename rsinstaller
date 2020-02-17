@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000044
+bid=00000045
 
 #Banner
 function banner() {
@@ -390,13 +390,13 @@ function coreinstall() {
     chown www-data:www-data $VLOG/remote_syslog/
     chown www-data:www-data $VLOG/remote_syslog/remote_syslog.log
     echo "Configuring syslog-ng ..."
-    cp -rf $RSDEST/syslog-ng $SYSLOGCONF/99-remote.conf
+    cp -rf $RSDEST/core/syslog-ng $SYSLOGCONF/99-remote.conf
     echo "Restart syslog-ng ..."
     service syslog-ng restart
     echo "Set logrotation ..."
-    cp -rf $RSDEST/logrotate /etc/logrotate.d/remotelog
+    cp -rf $RSDEST/core/logrotate /etc/logrotate.d/remotelog
     echo "Activate colortail regex ..."
-    cp -rf $RSDEST/colortail /etc/colortail/conf.colortail
+    cp -rf $RSDEST/core/colortail /etc/colortail/conf.colortail
     echo "Deploying application for CLI logging ..."
     cp -rf $RSDEST/rsview $RSBIN/rsview
     echo "Set permissions for CLI application ..."
@@ -405,13 +405,13 @@ function coreinstall() {
     cp -rf $RSDEST/rsinstaller $RSBIN/rsinstaller
     echo "Deploy config to $RSCONF/ ..."
     mkdir $RSCONF/
-    cp -rf $RSDEST/syslog-ng $RSCONF/
-    cp -rf $RSDEST/syslog-ng $RSCONF/syslog-ngdefault
-    cp -rf $RSDEST/logrotate $RSCONF/
-    cp -rf $RSDEST/logrotate $RSCONF/logrotatedefault
-    cp -rf $RSDEST/colortail $RSCONF/
-    cp -rf $RSDEST/colortail $RSCONF/colortaildefault
-    cp -rf $RSDEST/syslog-ng-local $RSCONF/syslog-ng-localdefault
+    cp -rf $RSDEST/core/syslog-ng $RSCONF/
+    cp -rf $RSDEST/core/syslog-ng $RSCONF/syslog-ngdefault
+    cp -rf $RSDEST/core/logrotate $RSCONF/
+    cp -rf $RSDEST/core/logrotate $RSCONF/logrotatedefault
+    cp -rf $RSDEST/core/colortail $RSCONF/
+    cp -rf $RSDEST/core/colortail $RSCONF/colortaildefault
+    cp -rf $RSDEST/core/syslog-ng-local $RSCONF/syslog-ng-localdefault
 }
 
 #Remove core and RSX or RSC (Complete deinstall)
@@ -546,19 +546,19 @@ function guiupgrade() {
         check_package "php-pear"
         check_package "php-dev"
         check_package "build-essential"
-        #Enable if required, but access control user is running through apache2
+        #Enable if required, but any custom apache2 config will be lost
         #echo "Copy new apache config ..."
-        #cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
+        #cp -rf $RSDEST/rsx/rsx-apache.conf $APACONFIG/rsx-apache.conf
         #check_file $APACONFIG/rsx-apache.conf
         #echo "Update syslog-ng with RSX config ..."
-        #cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+        #cp $RSDEST/rsx/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
         check_file $SYSLOGCONF/99RSX-rs.conf
-        cp -rf $RSDEST/login.php $APACHCONF/login.php
-        cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
-        cp -rf $RSDEST/logo.png $APACHCONF/logo.png
-        cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+        cp -rf $RSDEST/rsx/login.php $APACHCONF/login.php
+        cp -rf $RSDEST/rsx/rsxforwarder.php $APACHCONF/index.php
+        cp -rf $RSDEST/rsx/logo.png $APACHCONF/logo.png
+        cp -rf $RSDEST/rsx/favicon.ico $APACHCONF/favicon.ico
         cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
-        cp -rf $RSDEST/style.css $APACHCONF/style.css
+        cp -rf $RSDEST/rsx/style.css $APACHCONF/style.css
         check_file_reverse $APACHCONF/index.html
         check_file $APACHCONF/login.php
         check_file $APACHCONF/index.php
@@ -606,9 +606,9 @@ function upgrade() {
     echo "Set permissions for installer ..."
     chmod +x $RSBIN/rsinstaller
     echo "Set new default core configuration in $RSCONF/ ..."
-    cp -rf $RSDEST/syslog-ng $RSCONF/syslog-ngdefault
-    cp -rf $RSDEST/logrotate $RSCONF/logrotatedefault
-    cp -rf $RSDEST/colortail $RSCONF/colortaildefault
+    cp -rf $RSDEST/core/syslog-ng $RSCONF/syslog-ngdefault
+    cp -rf $RSDEST/core/logrotate $RSCONF/logrotatedefault
+    cp -rf $RSDEST/core/colortail $RSCONF/colortaildefault
     echo "Copy upgrade file to $RSTMP/ ..."
     cp -rf $RSDEST/extraupgrade $RSTMP/extraupgrade
     chmod +x $RSTMP/extraupgrade
@@ -662,8 +662,8 @@ function restoredefault() {
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         echo "Restore default RSX configuration ..."
-        cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
-        cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+        cp -rf $RSDEST/rsx/rsx-apache.conf $APACONFIG/rsx-apache.conf
+        cp $RSDEST/rsx/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
     else
         echo "Done ..."
     fi
@@ -770,7 +770,7 @@ function rsxinstall() {
 #Writing config
 #RSX Syslog-ng config
     echo "Update syslog-ng with RSX config ..."
-    cp $RSDEST/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+    cp $RSDEST/rsx/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
 #RSX elastic config
     elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.syslog | head -n 1)"
     if [[ $elc == *"cluster.name: syslog"* ]]; then
@@ -835,7 +835,7 @@ function rsxinstall() {
 #Proxy setup
     echo "Activate proxy ..."
     echo "Disable default config ..."
-    cp -rf $RSDEST/rsx-apache.conf $APACONFIG/rsx-apache.conf
+    cp -rf $RSDEST/rsx/rsx-apache.conf $APACONFIG/rsx-apache.conf
     check_file $APACONFIG/rsx-apache.conf
     a2ensite rsx-apache
     a2dissite 000-default
@@ -849,13 +849,12 @@ function rsxinstall() {
     fi
 #Create login website
     echo "Create login for webpages ..."
-    cp -rf $RSDEST/login.php $APACHCONF/login.php
-    cp -rf $RSDEST/rsxforwarder.php $APACHCONF/index.php
-    cp -rf $RSDEST/logo.png $APACHCONF/logo.png
-    cp -rf $RSDEST/favicon.ico $APACHCONF/favicon.ico
+    cp -rf $RSDEST/rsx/login.php $APACHCONF/login.php
+    cp -rf $RSDEST/rsx/rsxforwarder.php $APACHCONF/index.php
+    cp -rf $RSDEST/rsx/logo.png $APACHCONF/logo.png
+    cp -rf $RSDEST/rsx/favicon.ico $APACHCONF/favicon.ico
     cp -rf $RSDEST/fontawesome $APACHCONF/fontawesome
-    cp -rf $RSDEST/style.css $APACHCONF/style.css
-    rm -rf $APACHCONF/index.html
+    cp -rf $RSDEST/rsx/style.css $APACHCONF/style.css
     check_file_reverse $APACHCONF/index.html
     check_file $APACHCONF/login.php
     check_file $APACHCONF/index.php
