@@ -207,6 +207,10 @@ Syslog-ng global config: /etc/syslog-ng/syslog-ng.conf
 Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
 Kibana global config: /etc/kibana/kibana.yml
 Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
+Logstash global config: /etc/logstash/logstash.yml
+Logstash additional configs: /etc/logstash/conf.d/99*
+Logrotate: /etc/logrotate.d/remotelog
+Syslog-ng logrotate: syslog-ng
 
 12. Default API query's for Elasticsearch:
 Find all indexes: curl -XGET 'localhost:9200/_cat/indices'
@@ -215,7 +219,10 @@ Find cluster disk space: curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
 13. Configuration checks
 Logstash test new config: /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
 
-11. Info
-11.1 More information: https://www.remotesyslog.com/
+14. Info
+14.1 More information: https://www.remotesyslog.com/
 
-11.2 Syslog-ng plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
+14.2 Syslog-ng plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
+
+15. Donation
+Paypal:
