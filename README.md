@@ -22,7 +22,7 @@ Name author: Tom Slenter
 
 E-mail: info@remotesyslog.com
 
-## 2. Versions:
+## 2. Versions
 
 RSX is a syslog-ng - elasticsearch - kibana driven syslog server. This
 combination allows you to dump and store a lot syslog messages with almost
@@ -84,7 +84,7 @@ Choose option 12 to install the RSX version
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
 ## 7. Optional configuration
-### 7.1 Integrate Active Directory LDAP authentication for Apache 2:
+### 7.1 Integrate Active Directory LDAP authentication for Apache 2
 
 Activate LDAP module apache:
 ```bash
@@ -108,7 +108,7 @@ require ldap-group cn=,ou=Groups,dc=DC01,dc=local
 </Directory>
 ```
 
-### 7.2 Basic authentication for Apache 2:
+### 7.2 Basic authentication for Apache 2
 
 Install apache2-utils:
 ```bash
@@ -142,7 +142,7 @@ grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
 ```
 
 ## 9. Generate a mail from a event
-### 9.1 Install netsend:
+### 9.1 Install netsend
 ```bash
 sudo apt install sendmail
 ```
@@ -155,7 +155,7 @@ Edit:
 Search for => #"Smart" relay host (may be null)
 Change after DS => DSsmtp.lan.corp
 
-### 9.2 Use the following script and save it to /opt/mailrs:
+### 9.2 Use the following script and save it to /opt/mailrs
 ```bash
 #!/bin/bash
 #Array of words:
@@ -206,7 +206,7 @@ Make file executable:
 chmod +x /opt/mailrs
 ```
 
-### 9.3 Install with cron:
+### 9.3 Install with cron
 Command:
 ```bash
 crontab -e
@@ -260,7 +260,7 @@ Change rules:
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 ```
 
-## 11. Default API query's for Elasticsearch:
+## 11. Default API query's for Elasticsearch
 Find all indexes:
 ```bash
 curl -XGET 'localhost:9200/_cat/indices'
