@@ -1,4 +1,4 @@
-# 1. License
+## 1. License
 "Remote Syslog" is a free application what can be used to view syslog messages.
 Copyright (C) 2020 Tom Slenter
 
@@ -18,7 +18,7 @@ For more information contact the author:
 Name author: Tom Slenter
 E-mail: info@remotesyslog.com
 
-2. Versions:
+## 2. Versions:
 
 RSX is a syslog-ng - elasticsearch - kibana driven syslog server. This
 combination allows you to dump and store a lot syslog messages with almost
@@ -32,21 +32,27 @@ RS Core is a syslog-ng - CLI driven syslog server. This environment can be used 
 small/lab/test environments. It is very small and compact. The setup can be done within 
 within minutes.
 
-3. Config files
-To change the core configuration use the following files:
-/opt/remotesyslog/colortail => for a new color regex
-/opt/remotesyslog/syslog-ng => syslog configuration
-/opt/remotesyslog/logrotate => change file rotation
+## 3. Config files
+Default locations configuration/files:
+Syslog-ng global config: /etc/syslog-ng/syslog-ng.conf
+Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
+Kibana global config: /etc/kibana/kibana.yml
+Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
+Logstash global config: /etc/logstash/logstash.yml
+Logstash additional configs: /etc/logstash/conf.d/99*
+Logrotate: /etc/logrotate.d/remotelog
+Syslog-ng logrotate: syslog-ng
+Colortail: /opt/remotesyslog/colortail
 
-4. RS version 2.0 Premium
+## 4. RS version 2.0 Premium
 This version was announced but did not pass quality standards. Therefor
 it is postponed.
 
-5. Security
+## 5. Security
 RSX and RSC have SSL/TLS encryption by default enabled and authentication is 
 enabled over PAM
 
-6. Installation
+## 6. Installation
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
 b. Run the following commands:
     - git clone https://github.com/tslenter/RSX-RSC.git
@@ -58,8 +64,8 @@ b. Run the following commands:
     - Choose option 12 to install the RSX version
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
-7. Optional configuration
-7.1 Integrate Active Directory LDAP authentication for Apache 2:
+## 7. Optional configuration
+### 7.1 Integrate Active Directory LDAP authentication for Apache 2:
 
 Activate LDAP module apache:
 "a2enmod ldap authnz_ldap"
@@ -79,7 +85,7 @@ AuthLDAPGroupAttribute member
 require ldap-group cn=,ou=Groups,dc=DC01,dc=local
 </Directory>
 
-7.2 Basic authentication for Apache 2:
+### 7.2 Basic authentication for Apache 2:
 
 Install apache2-utils:
 "apt-get install apache2-utils"
@@ -101,21 +107,20 @@ Order allow,deny
 Allow from all
 </Directory>
 
-8. Search multiple strngs of text within the per host logging directory
+## 8. Search multiple strngs of text within the per host logging directory
 grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
 
-9. Generate a mail from a event
-9.1 Install netsend:
+## 9. Generate a mail from a event
+### 9.1 Install netsend:
 sudo apt install sendmail
 
 Edit:
 /etc/mail/sendmail.cf
 
-Change after DS:
-# "Smart" relay host (may be null)
-DSsmtp.lan.corp
+Search for => #"Smart" relay host (may be null)
+Change after DS => DSsmtp.lan.corp
 
-9.2 Use the following script and save it to /opt/mailrs:
+### 9.2 Use the following script and save it to /opt/mailrs:
 #!/bin/bash
 #Array of words:
 declare -a data=(Trace module)
@@ -158,16 +163,16 @@ fi
 Make file executable:
 chmod +x /opt/mailrs
 
-10.3 Install with cron:
+### 9.3 Install with cron:
 Command:
 crontab -e
 
 Edit:
 0 * * * * /opt/mailrs
 
-10. Known issues
+# 10. Known issues
 
-10.1 Disk full by Geo2
+### 10.1 Disk full by Geo2
 Message in logging:
 
 Jan 27 10:24:50 plisk002.prd.corp syslog-ng[1793]: geoip2(): getaddrinfo failed; gai_error='Name or service not known', ip='', location='/etc/syslog-ng/conf.d/99X-Checkpoint.conf:32:25'
@@ -200,35 +205,23 @@ Change rules:
 +log { source(s_src); filter(f_syslog3); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_syslog); };
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 
-11. Configuration files
-
-Default locations configuration/files:
-Syslog-ng global config: /etc/syslog-ng/syslog-ng.conf
-Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
-Kibana global config: /etc/kibana/kibana.yml
-Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
-Logstash global config: /etc/logstash/logstash.yml
-Logstash additional configs: /etc/logstash/conf.d/99*
-Logrotate: /etc/logrotate.d/remotelog
-Syslog-ng logrotate: syslog-ng
-
-12. Default API query's for Elasticsearch:
+## 11. Default API query's for Elasticsearch:
 Find all indexes: curl -XGET 'localhost:9200/_cat/indices'
 Find cluster disk space: curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
 
-13. Configuration checks
+## 12. Configuration checks
 Logstash test new config: /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
 
-14. Info
-14.1 More information: https://www.remotesyslog.com/
+## 13. Info
+### 13.1 More information: https://www.remotesyslog.com/
 
-14.2 Syslog-ng plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
+### 13.2 Syslog-ng plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
 
-15. Donation
+## 14. Donation
 XRP/Ripple: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B
 BTC/Bitcoin: 1H7g9udJ51iPLQCR6mo3ftqiR8LG4Z8gnq
 Paypal:
-'''html
+```html
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_donations" />
 <input type="hidden" name="business" value="KQKRPDQYHYR7W" />
@@ -236,4 +229,4 @@ Paypal:
 <input type="image" src="https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 <img alt="" border="0" src="https://www.paypal.com/en_NL/i/scr/pixel.gif" width="1" height="1" />
 </form>
-'''
+```
