@@ -34,15 +34,15 @@ within minutes.
 
 ## 3. Config files
 Default locations configuration/files:
-Syslog-ng global config: /etc/syslog-ng/syslog-ng.conf
-Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
-Kibana global config: /etc/kibana/kibana.yml
-Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
-Logstash global config: /etc/logstash/logstash.yml
-Logstash additional configs: /etc/logstash/conf.d/99*
-Logrotate: /etc/logrotate.d/remotelog
-Syslog-ng logrotate: syslog-ng
-Colortail: /opt/remotesyslog/colortail
+- Syslog-ng global config: /etc/syslog-ng/syslog-ng.conf
+- Syslog-ng additional configs: /etc/syslog-ng/conf.d/99*
+- Kibana global config: /etc/kibana/kibana.yml
+- Elasticsearch global config: /etc/elasticsearch/elasticsearch.yml
+- Logstash global config: /etc/logstash/logstash.yml
+- Logstash additional configs: /etc/logstash/conf.d/99*
+- Logrotate: /etc/logrotate.d/remotelog
+- Syslog-ng logrotate: syslog-ng
+- Colortail global: /opt/remotesyslog/colortail
 
 ## 4. RS version 2.0 Premium
 This version was announced but did not pass quality standards. Therefor
