@@ -1,6 +1,7 @@
 ## 1. License
-```
+
 "Remote Syslog" is a free application what can be used to view syslog messages.
+
 Copyright (C) 2020 Tom Slenter
 
 This program is free software: you can redistribute it and/or modify
@@ -16,9 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 For more information contact the author:
+
 Name author: Tom Slenter
+
 E-mail: info@remotesyslog.com
-```
 
 ## 2. Versions:
 
