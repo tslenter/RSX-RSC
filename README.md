@@ -275,6 +275,34 @@ Logstash test new config:
 ```bash
 /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
 ```
+## 13. Upgrade from Remote Syslog 1.x
+
+Manual remove Remote Syslog 1.x with the following bash script:
+```bash
+echo "File is only present if local syslog is activated"
+rm -rf /etc/syslog-ng/conf.d/99-remote-local.conf
+echo "Remove configuration files"
+rm -rf /etc/syslog-ng/conf.d/99-remote.conf
+rm -rf /etc/logrotate.d/remotelog
+rm -rf /etc/colortail/conf.colortail
+rm -rf /opt/remotesyslog
+echo "Remove binary files"
+rm -rf /usr/bin/rsview
+rm -rf /usr/bin/rsinstaller
+echo "Removing legacy GUI website …"
+rm -rf /var/www/html/favicon.ico
+rm -rf /var/www/html/index.php
+rm -rf /var/www/html/indexs.php
+rm -rf /var/www/html/jquery-latest.js
+rm -rf /var/www/html/loaddata.php
+echo "Remove packages …"
+apt -y purge apache2 apache2-utils php libapache2-mod-php syslog-ng colortail
+apt -y autoremove
+echo "Reinstall rsyslog"
+apt -y install rsyslog
+```
+
+After the removal of Remote Syslog 1.x install the new RSX or RSC. The old syslog data is still available through RSC or RSX but only in plain text.
 
 ## 13. Information and external links
 
