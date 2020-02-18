@@ -88,7 +88,7 @@ c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
 Activate LDAP module apache:
 ```bash
-"a2enmod ldap authnz_ldap"
+a2enmod ldap authnz_ldap
 ```
 
 Configure /etc/apache2/apache2.conf as following:
@@ -112,12 +112,12 @@ require ldap-group cn=,ou=Groups,dc=DC01,dc=local
 
 Install apache2-utils:
 ```bash
-"apt-get install apache2-utils"
+apt-get install apache2-utils
 ```
 
 Create .htpasswd file:
 ```bash
-"htpasswd -c /etc/apache2/.htpasswd <myuser>"
+htpasswd -c /etc/apache2/.htpasswd <myuser>
 ```
 
 Configure /etc/apache2/apache2.conf as following:
