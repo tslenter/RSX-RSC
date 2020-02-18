@@ -136,7 +136,7 @@ Allow from all
 </Directory>
 ```
 
-## 8. Search multiple strngs of text within the per host logging directory
+## 8. Search multiple strings of text within the per host logging directory
 ```bash
 grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
 ```
