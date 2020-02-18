@@ -250,16 +250,13 @@ Find cluster disk space: curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
 ## 12. Configuration checks
 Logstash test new config: /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
 
-## 13. Info
-### 13.1 
-More information: https://www.remotesyslog.com/
+## 13. Information and external links
 
-### 13.2 Syslog-ng 
+More information: https://www.remotesyslog.com/
 Find more plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
 
 ## 14. Donation
 XRP/Ripple: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B
-
 BTC/Bitcoin: 1H7g9udJ51iPLQCR6mo3ftqiR8LG4Z8gnq
 
 Paypal:
