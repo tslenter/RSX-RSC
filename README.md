@@ -170,7 +170,7 @@ crontab -e
 Edit:
 0 * * * * /opt/mailrs
 
-# 10. Known issues
+## 10. Known issues
 
 ### 10.1 Disk full by Geo2
 Message in logging:
