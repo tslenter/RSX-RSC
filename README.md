@@ -254,6 +254,7 @@ Logstash test new config: /usr/share/logstash/bin/logstash --config.test_and_exi
 ## 13. Information and external links
 
 More information: https://www.remotesyslog.com/
+
 Find more plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
 
 ## 14. Donation
@@ -263,15 +264,5 @@ BTC/Bitcoin: 1H7g9udJ51iPLQCR6mo3ftqiR8LG4Z8gnq
 
 Paypal:
 ```html
-<pre>
-    <div class="container">
-       <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-       <input type="hidden" name="cmd" value="_donations" />
-       <input type="hidden" name="business" value="KQKRPDQYHYR7W" />
-       <input type="hidden" name="currency_code" value="EUR" />
-       <input type="image" src="https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal        - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-       <img alt="" border="0" src="https://www.paypal.com/en_NL/i/scr/pixel.gif" width="1" height="1" />
-       </form>
-    </div>
-</pre>
+[![paypal](https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KQKRPDQYHYR7W)
 ```
