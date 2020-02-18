@@ -263,6 +263,5 @@ XRP/Ripple: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B
 BTC/Bitcoin: 1H7g9udJ51iPLQCR6mo3ftqiR8LG4Z8gnq
 
 Paypal:
-```html
 [![paypal](https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KQKRPDQYHYR7W)
-```
+
