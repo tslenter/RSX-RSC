@@ -53,6 +53,7 @@ All external connections are encrypted with TLS/SSL, this includes the API on po
 
 ## 6. Installation
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
+
 b. Run the following commands:
 
 ```bash
