@@ -49,8 +49,7 @@ This version was announced but did not pass quality standards. Therefor
 it is postponed.
 
 ## 5. Security
-RSX and RSC have SSL/TLS encryption by default enabled and authentication is 
-enabled over PAM
+All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add the all allowed users for login. 
 
 ## 6. Installation
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
