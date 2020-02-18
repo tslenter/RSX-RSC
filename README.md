@@ -1,4 +1,5 @@
 ## 1. License
+```
 "Remote Syslog" is a free application what can be used to view syslog messages.
 Copyright (C) 2020 Tom Slenter
 
@@ -17,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 For more information contact the author:
 Name author: Tom Slenter
 E-mail: info@remotesyslog.com
+```
 
 ## 2. Versions:
 
@@ -34,15 +36,17 @@ within minutes.
 
 ## 3. Config files
 Default locations configuration/files:
-- Syslog-ng global config:       /etc/syslog-ng/syslog-ng.conf
-- Syslog-ng additional configs:  /etc/syslog-ng/conf.d/99*
-- Kibana global config:          /etc/kibana/kibana.yml
-- Elasticsearch global config:   /etc/elasticsearch/elasticsearch.yml
-- Logstash global config:        /etc/logstash/logstash.yml
-- Logstash additional configs:   /etc/logstash/conf.d/99*
-- Logrotate:                     /etc/logrotate.d/remotelog
-- Syslog-ng logrotate:           /etc/logrotate.d/syslog-ng
-- Colortail global:              /opt/remotesyslog/colortail
+```
+Syslog-ng global config:       /etc/syslog-ng/syslog-ng.conf
+Syslog-ng additional configs:  /etc/syslog-ng/conf.d/99*
+Kibana global config:          /etc/kibana/kibana.yml
+Elasticsearch global config:   /etc/elasticsearch/elasticsearch.yml
+Logstash global config:        /etc/logstash/logstash.yml
+Logstash additional configs:   /etc/logstash/conf.d/99*
+Logrotate:                     /etc/logrotate.d/remotelog
+Syslog-ng logrotate:           /etc/logrotate.d/syslog-ng
+Colortail global:              /opt/remotesyslog/colortail
+```
 
 ## 4. RS version 2.0 Premium
 This version was announced but did not pass quality standards. Therefor
@@ -245,11 +249,20 @@ Change rules:
 ```
 
 ## 11. Default API query's for Elasticsearch:
-Find all indexes: curl -XGET 'localhost:9200/_cat/indices'
-Find cluster disk space: curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
+Find all indexes:
+```bash
+curl -XGET 'localhost:9200/_cat/indices'
+```
+Find cluster disk space:
+```bash
+curl -XGET 'localhost:9200/_cat/allocation?v&pretty'
+```
 
 ## 12. Configuration checks
-Logstash test new config: /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
+Logstash test new config: 
+```bash
+/usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
+```
 
 ## 13. Information and external links
 
