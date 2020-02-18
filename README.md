@@ -55,6 +55,7 @@ enabled over PAM
 ## 6. Installation
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
 b. Run the following commands:
+```bash
     - git clone https://github.com/tslenter/RSX-RSC.git
     - cd RSX-RSC
     - chmod +x rsinstaller
@@ -62,6 +63,7 @@ b. Run the following commands:
     - Choose option 1 to install the core
     - Choose option 10 to install the RSC version (Remote Syslog Classic)
     - Choose option 12 to install the RSX version
+```
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
 ## 7. Optional configuration
