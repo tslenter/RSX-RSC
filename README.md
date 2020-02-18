@@ -156,6 +156,8 @@ Search for => #"Smart" relay host (may be null)
 Change after DS => DSsmtp.lan.corp
 
 ### 9.2 Use the following script and save it to /opt/mailrs
+
+Create array:
 ```bash
 #!/bin/bash
 #Array of words:
