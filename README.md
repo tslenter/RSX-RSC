@@ -57,6 +57,16 @@ it is postponed.
 ## 5. Security
 All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add the all allowed users for login. 
 
+To install new SSL certificates use the following location:
+```
+/etc/cert/
+```
+
+After you installed the new certificates, update the apache2 configuration. File location:
+```
+/etc/apache2/sites-enabled/
+```
+
 ## 6. Installation
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
 
