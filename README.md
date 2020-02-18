@@ -302,7 +302,7 @@ echo "Reinstall rsyslog"
 apt -y install rsyslog
 ```
 
-After the removal of Remote Syslog 1.x install the new RSX or RSC. The old syslog data is still available through RSC or RSX but only in plain text.
+After the removal of Remote Syslog 1.x, install the new RSX or RSC. The old syslog data is still available through RSC or RSX but only in plain text.
 
 More information over Remote Syslog 1.x: https://github.com/tslenter/Remote_Syslog
 
