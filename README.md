@@ -152,7 +152,7 @@ Change after DS => DSsmtp.lan.corp
 declare -a data=(Trace module)
 ```
 
-#Check if error messages exist
+Check if error messages exist:
 ```bash
 for word in "${data[@]}"; do
     mesg=$(cat /var/log/remote_syslog/remote_syslog.log | grep "^$(date +'%b %d')" | grep $word)
@@ -166,7 +166,7 @@ for word in "${data[@]}"; do
 done
 ```
 
-#Generate mail
+Generate mail:
 ```bash
 if [ -z "$mesgall" ]
 then
