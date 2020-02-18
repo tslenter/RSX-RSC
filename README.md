@@ -70,9 +70,12 @@ c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 ### 7.1 Integrate Active Directory LDAP authentication for Apache 2:
 
 Activate LDAP module apache:
+```bash
 "a2enmod ldap authnz_ldap"
+```
 
 Configure /etc/apache2/apache2.conf as following:
+```bash
 <Directory /var/www/html>
 AuthType Basic
 AuthName "Remote Syslog Login"
@@ -86,16 +89,22 @@ AuthLDAPBindPassword
 AuthLDAPGroupAttribute member
 require ldap-group cn=,ou=Groups,dc=DC01,dc=local
 </Directory>
+```
 
 ### 7.2 Basic authentication for Apache 2:
 
 Install apache2-utils:
+```bash
 "apt-get install apache2-utils"
+```
 
 Create .htpasswd file:
+```bash
 "htpasswd -c /etc/apache2/.htpasswd <myuser>"
+```
 
 Configure /etc/apache2/apache2.conf as following:
+```bash
 <Directory /var/www/html>
 AuthType Basic
 AuthName "Remote Syslog Login"
@@ -108,26 +117,37 @@ Require valid-user
 Order allow,deny
 Allow from all
 </Directory>
+```
 
 ## 8. Search multiple strngs of text within the per host logging directory
+```bash
 grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
+```
 
 ## 9. Generate a mail from a event
 ### 9.1 Install netsend:
+```bash
 sudo apt install sendmail
+```
 
 Edit:
+```bash
 /etc/mail/sendmail.cf
+```
 
 Search for => #"Smart" relay host (may be null)
 Change after DS => DSsmtp.lan.corp
+```
 
 ### 9.2 Use the following script and save it to /opt/mailrs:
+```bash
 #!/bin/bash
 #Array of words:
 declare -a data=(Trace module)
+```
 
 #Check if error messages exist
+```bash
 for word in "${data[@]}"; do
     mesg=$(cat /var/log/remote_syslog/remote_syslog.log | grep "^$(date +'%b %d')" | grep $word)
     if [ -z "$mesg" ]
@@ -138,8 +158,10 @@ for word in "${data[@]}"; do
         mesgall=1
     fi
 done
+```
 
 #Generate mail
+```bash
 if [ -z "$mesgall" ]
 then
     echo "Nothing to do, abort"
@@ -161,24 +183,32 @@ else
     cat /opt/rs.txt
     /usr/sbin/sendmail -v -F "T.Slenter" -f "info@mydomain.com" ticketsystem@domain.com < /opt/rs.txt
 fi
+```
 
 Make file executable:
+```bash
 chmod +x /opt/mailrs
+```
 
 ### 9.3 Install with cron:
 Command:
+```bash
 crontab -e
+```
 
 Edit:
+```bash
 0 * * * * /opt/mailrs
+```
 
 ## 10. Known issues
 
 ### 10.1 Disk full by Geo2
 Message in logging:
-
+```bash
 Jan 27 10:24:50 plisk002.prd.corp syslog-ng[1793]: geoip2(): getaddrinfo failed; gai_error='Name or service not known', ip='', location='/etc/syslog-ng/conf.d/99X-Checkpoint.conf:32:25'
 Jan 27 10:24:50 plisk002.prd.corp syslog-ng[1793]: geoip2(): maxminddb error; error='Unknown error code', ip='', location='/etc/syslog-ng/conf.d/99X-Checkpoint.conf:32:25'
+```
 
 Components needed for fix:
 
@@ -189,23 +219,30 @@ File destinations:
 - d_error
 
 Log rules:
+```bash
 - log { source(s_src); filter(f_syslog3); destination(d_syslog); };
 - log { source(s_src); filter(f_error); destination(d_error); };
+```
 
 Fix:
 Edit:
-
+```bash
 vi /etc/syslog-ng/syslog-ng.conf
+```
 
 Add rules:
+```bash
 filter geoip_messages_1 { not match("Name or service not known"); };
 filter geoip_messages_2 { not match("Unknown error code"); };
+```
 
 Change rules:
+```bash
 -log { source(s_src); filter(f_syslog3); destination(d_syslog); };
 -log { source(s_src); filter(f_error); destination(d_error); };
 +log { source(s_src); filter(f_syslog3); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_syslog); };
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
+```
 
 ## 11. Default API query's for Elasticsearch:
 Find all indexes: curl -XGET 'localhost:9200/_cat/indices'
