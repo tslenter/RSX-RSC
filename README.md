@@ -55,13 +55,13 @@ All external connections are encrypted with TLS/SSL, this includes the API on po
 a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
 b. Run the following commands:
 ```bash
-    - git clone https://github.com/tslenter/RSX-RSC.git
-    - cd RSX-RSC
-    - chmod +x rsinstaller
-    - ./rsinstaller
-    - Choose option 1 to install the core
-    - Choose option 10 to install the RSC version (Remote Syslog Classic)
-    - Choose option 12 to install the RSX version
+git clone https://github.com/tslenter/RSX-RSC.git
+cd RSX-RSC
+chmod +x rsinstaller
+./rsinstaller
+Choose option 1 to install the core
+Choose option 10 to install the RSC version (Remote Syslog Classic)
+Choose option 12 to install the RSX version
 ```
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
