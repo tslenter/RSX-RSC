@@ -1,4 +1,4 @@
-1. License
+# 1. License
 "Remote Syslog" is a free application what can be used to view syslog messages.
 Copyright (C) 2020 Tom Slenter
 
