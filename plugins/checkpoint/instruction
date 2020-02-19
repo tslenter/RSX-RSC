@@ -17,4 +17,11 @@ cat $RSDESTP_CP/template_example
 echo ""
 echo "copy $RSDESTP_CP/checkpointplugin.conf to /etc/syslog-ng/scl/checkpoint/plugin.conf"
 echo ""
+echo "Configure CheckPoint with the following commands:"
+echo "cp_log_export add name RSX target-server <enter_server_ip_here> target-port 5000 protocol udp format syslog read-mode semi-unified"
+echo "cp_log_export restart name RSX"
+echo ""
+echo "To remove use:"
+echo "cp_log_export delete name RSX --apply-now"
+echo ""
 exit
