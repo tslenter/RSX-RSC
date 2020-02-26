@@ -381,7 +381,7 @@ class PHPTail {
     </div>
     <div align="center">
         <br></br>
-        <?php echo "<font color=\"silver\">Remote Syslog Classic v0.1 - Donate Ripple: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B</font><br>"; ?>
+        <?php echo "<font color=\"silver\">Remote Syslog Classic v0.1 - <a href='https://github.com/tslenter/RSX-RSC/blob/master/README.md' target='_blank'>Donate and help</a></font><br>"; ?>
         <br></br>
     </div>
 <script src="bootstrap.min.js"></script>

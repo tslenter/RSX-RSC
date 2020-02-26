@@ -36,7 +36,7 @@ E-mail: info@remotesyslog.com
                 <link href='<?php echo ($url . "/style.css"); ?>' rel="stylesheet" type="text/css">
         </head>
 <!-- Site main -->
-<body>
+<body VLINK= "#000000" ALINK="#000000">
 <center>
 <br></br>
 <img src='<?php echo ($url . "/logo.png"); ?>' width="280" height="280" title="Logo" alt="Logo of RSX" />
@@ -59,7 +59,8 @@ E-mail: info@remotesyslog.com
 <?php
 echo "RSX 0.1 - T.Slenter - https://www.remotesyslog.com/";
 echo "<br />\n";
-echo "Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B";
+echo "<br />\n";
+echo "<a href='https://github.com/tslenter/RSX-RSC/blob/master/README.md' target='_blank'>Donate and help</a>";
 ?>
 </center>
 </body>
