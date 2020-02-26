@@ -359,7 +359,7 @@ RSCX distribution:
  - 4 million RSCX is available for developers
  - 5 million is reserved
 
-Were to trade RSCX:
+Where to trade RSCX:
 
 https://waves.exchange/dex-demo?assetId2=CqWLkpZ47CQLjtojz8S14Ao1xsv7i3zue2aWLcH6RJoG&assetId1=8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS
 
