@@ -38,7 +38,7 @@ function banner() {
     echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
     echo "#################################################"
     echo ""
-    echo "The plugins are experimental and ONLY tested for RSX / Elasticsearch configurations ..."
+    echo "The plugins are experimental ..."
     echo "Use at your own risk ..."
     echo ""
 }
