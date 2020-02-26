@@ -343,7 +343,7 @@ We have a reward system in place, Remote Syslog has it own token available calle
 Send usable code/patterns to info@remotesyslog.com. We will review the code or pattern, this may take some time. This token can only be used to trade.
 
 Expected payout RSCX:
- - patterns: minimum of 10 RSCX
+ - Patterns: minimum of 10 RSCX
  - Code fixes: minimum of 10 RSCX
  - Security fixes: minimum of 20 RSCX
  - New functionality like a plugin: minimum of 20 RSCX
