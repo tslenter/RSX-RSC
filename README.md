@@ -390,4 +390,4 @@ RSCX / LIQUID
 ```
 
 ### 14.5 Funds
-All donations and other funds will be used to cover cost of this project and to improve functions/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
+All donations and other funds will be used to cover cost of this project and to improve tests/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
