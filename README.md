@@ -340,7 +340,7 @@ RSCX is created to reward developers for there work and to support the project. 
 ### 14.3 RSCX token
 We have a reward system in place, Remote Syslog has it own token available called RSCX. How to get RSCX?
 
-Send usable code/patterns to info@remotesyslog.com. We will take it in for a review. This may take some time. Payout RSCX:
+Send usable code/patterns to info@remotesyslog.com. We will review the code or pattern, this may take some time. Payout RSCX:
  - patterns: minimum of 10 RSCX
  - Code fixes: minimum of 10 RSCX
  - Security fixes: minimum of 20 RSCX
