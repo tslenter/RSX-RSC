@@ -334,7 +334,10 @@ PayPal:
 
 To improve the code and functions we like to have you help. Send you idea or code to: info@remotesyslog.com. We will review it and add it to this project.
 
-### 14.3 Reward
+### 14.4 What is a RSXC token?
+RSCX is created to reward developers for there work and to support the project. It is a tradable token by the waves exchange. It comes with no warranty and the price indication is based on the live market. Sending funds to the wrong adres will result in a loss of those funds. We do not refund RSCX tokens. We suggest that you use a hardware token to secure the RSCX tokens. Good luck trading and have fun.
+
+### 14.3 RSCX token
 We have a reward system in place, Remote Syslog has it own token available called RSCX. How to get RSCX?
 
 Send usable code/patterns to info@remotesyslog.com. Payout RSCX:
@@ -343,12 +346,16 @@ Send usable code/patterns to info@remotesyslog.com. Payout RSCX:
  - Security fixes: minimum of 20 RSCX
  - New functionality like a plugin: minimum of 20 RSCX
  - Rewards can be higher depending on the code quality
+ - Bounty programs may be available in future
  
 Note: code what is useless will not have a reward. 
 
-Token distribution:
+RSCX distribution:
+
+10 million RSCX tokens are created. 
+
  - Only 1 million RSCX will be up for sale
-   -  Every 3 months 1000 RSCX will be sold
+   -  Every 3 months a maximum of 1000 RSCX will be sold (Only if tradingvolume is sustainable)
  - 4 million RSCX is available for developers
  - 5 million is reserved
 
