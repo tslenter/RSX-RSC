@@ -334,7 +334,7 @@ PayPal:
 
 To improve the code and functions we like to have you help. Send you idea or code to: info@remotesyslog.com. We will review it and add it to this project.
 
-### 14.3 What is a RSXC token?
+### 14.3 What is a RSCX token?
 RSCX is created to reward developers for there work and to support the project. It is a tradable token by the waves exchange. It comes with no warranty and the price indication is based on the live market. Sending funds to the wrong adres will result in a loss of those funds. We do not refund RSCX tokens. We suggest that you use a hardware token to secure the RSCX tokens. Good luck trading and have fun.
 
 ### 14.4 RSCX token
