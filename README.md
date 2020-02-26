@@ -316,6 +316,10 @@ Find more plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
 
 ## 14. Donation and help
 
+### 14.1 Donation
+
+Crypto:
+
 ```
 XRP/Ripple: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B
 BTC/Bitcoin: 1JVmexqGBQyGv9fVkSynHapi2U6ZCyjTUJ
@@ -326,6 +330,6 @@ PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=KQKRPDQYHYR7W&currency_code=EUR&source=url)
 
-Help:
+### 14.2 Help
 
 To improve the code and functions we like to have you help. Send you idea or code to: info@remotesyslog.com. We will review it and add it to this project.
