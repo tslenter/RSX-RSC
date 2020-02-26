@@ -386,3 +386,6 @@ RSCX / EFYT
 RSCX / MRT
 RSCX / LIQUID
 ```
+
+### 14.4 Funds
+All donations and other funds will be used to cover cost of this project and to improve functions/plugins/core scripts. Furthermore there are some other some other project on the roadmap. Funding these will be done from this project as well.
