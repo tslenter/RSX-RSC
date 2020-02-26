@@ -1,6 +1,6 @@
 #Remote Syslog
 /var/log/remote_syslog/remote_syslog.log{
-  rotate 52
+  rotate 2
   maxsize 100M
   weekly
   missingok
