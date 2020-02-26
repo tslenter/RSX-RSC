@@ -348,14 +348,15 @@ Note: code what is useless will not have a reward.
 
 Token distribution:
  - Only 1 million RSCX will be up for sale
-    - Every 3 month 1000 RSCX are up for sale
+   -  
  - 4 million RSCX is available for developers
  - 5 million is reserved
 
 Were to trade RSCX:
-https://waves.exchange/dex-demo?assetId2=WAVES&assetId1=8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS
+https://waves.exchange/dex-demo?assetId2=CqWLkpZ47CQLjtojz8S14Ao1xsv7i3zue2aWLcH6RJoG&assetId1=8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS
 
 Trading pairs:
+```
 RSCX / WAVES
 RSCX / USDN
 RSCX / USDT
@@ -376,3 +377,4 @@ RSCX / WNET
 RSCX / EFYT
 RSCX / MRT
 RSCX / LIQUID
+```
