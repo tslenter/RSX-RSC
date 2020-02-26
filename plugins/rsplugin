@@ -260,11 +260,27 @@ function logstash_remove() {
     exit
 }
 
+function rstextperhost() {
+    echo "Please use only numbers and no strings ..."
+    read -p 'Over how many day do you want to remove old host logging: ' dayrm
+    if test "$dayrm" = ""; then
+        echo "Sorry, days cannot be blank"
+        exit 1;
+    fi
+    echo "Update configuration ..."
+    echo ""
+    echo "Remove old line ..."
+    crontab -l | grep -v '/usr/bin/find /var/log/remote_syslog/per_host/'  | crontab -
+    echo "Update configuration ..."
+    crontab -l | { cat; echo "*/10 * * * * /usr/bin/find /var/log/remote_syslog/per_host/* -type f -mtime +$dayrm -exec /bin/rm {} \;"; } | crontab -
+    echo "Done"
+}
+
 clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL ..." "Display example configuration CheckPoint ..." "Display example configuration F5 ..." "Display example template Elasticsearch rollover ..." "Display example configuration Microsoft DHCP ..." "Install logstash ..." "Remove logstash ..." "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -293,48 +309,54 @@ do
             ubiquiti_parser
             exit
     ;;
-        "Display example configuration Cisco ACL ...")
+        "Display example configuration Cisco ACL")
             clear
             banner
             ciscoconfig
             exit
     ;;
-        "Display example configuration CheckPoint ...")
+        "Display example configuration CheckPoint")
             clear
             banner
             checkpointconfig
             exit
     ;;
-        "Display example configuration F5 ...")
+        "Display example configuration F5")
             clear
             banner
             f5config
             exit
     ;;
-        "Display example template Elasticsearch rollover ...")
+        "Display example template Elasticsearch rollover")
             clear
             banner
             rolloverconfig
             exit
     ;;
-        "Display example configuration Microsoft DHCP ...")
+        "Display example configuration Microsoft DHCP")
             clear
             banner
             msdhcpconfig
             exit
     ;;
-        "Install logstash ...")
+        "Install logstash")
             clear
             banner
             logstash_install
             exit
     ;;
-        "Remove logstash ...")
+        "Remove logstash")
             clear
             banner
             logstash_remove
             exit
     ;;
+        "Set removal in days for per host directory")
+            clear
+            banner
+            rstextperhost
+            exit
+   ;;
         "Quit")
             break
     ;;
