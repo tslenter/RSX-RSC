@@ -348,11 +348,12 @@ Note: code what is useless will not have a reward.
 
 Token distribution:
  - Only 1 million RSCX will be up for sale
-   -  
+   -  Every 3 months 1000 RSCX will be sold
  - 4 million RSCX is available for developers
  - 5 million is reserved
 
 Were to trade RSCX:
+
 https://waves.exchange/dex-demo?assetId2=CqWLkpZ47CQLjtojz8S14Ao1xsv7i3zue2aWLcH6RJoG&assetId1=8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS
 
 Trading pairs:
