@@ -333,3 +333,46 @@ PayPal:
 ### 14.2 Help
 
 To improve the code and functions we like to have you help. Send you idea or code to: info@remotesyslog.com. We will review it and add it to this project.
+
+### 14.3 Reward
+We have a reward system in place, Remote Syslog has it own token available called RSCX. How to get RSCX?
+
+Send usable code/patterns to info@remotesyslog.com. Payout RSCX:
+ - patterns: minimum of 10 RSCX
+ - Code fixes: minimum of 10 RSCX
+ - Security fixes: minimum of 20 RSCX
+ - New functionality like a plugin: minimum of 20 RSCX
+ - Rewards can be higher depending on the code quality
+ 
+Note: code what is useless will not have a reward. 
+
+Token distribution:
+ - Only 1 million RSCX will be up for sale
+    - Every 3 month 1000 RSCX are up for sale
+ - 4 million RSCX is available for developers
+ - 5 million is reserved
+
+Were to trade RSCX:
+https://waves.exchange/dex-demo?assetId2=WAVES&assetId1=8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS
+
+Trading pairs:
+RSCX / WAVES
+RSCX / USDN
+RSCX / USDT
+RSCX / BTC
+RSCX / BCH
+RSCX / BSV
+RSCX / ETH
+RSCX / TRY
+RSCX / LTC
+RSCX / ZEC
+RSCX / XMR
+RSCX / DASH
+BNT / RSCX
+RSCX / ERGO
+RSCX / WEST
+WCT / RSCX
+RSCX / WNET
+RSCX / EFYT
+RSCX / MRT
+RSCX / LIQUID
