@@ -318,7 +318,9 @@ Find more plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
 
 ```
 XRP/Ripple: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B
-BTC/Bitcoin: 1H7g9udJ51iPLQCR6mo3ftqiR8LG4Z8gnq
+BTC/Bitcoin: 1JVmexqGBQyGv9fVkSynHapi2U6ZCyjTUJ
+LTC/Litecoin Segwit: MAH8ATCK6X7biiTQrW7jUZ6L9eg1YBo5qS
+ETH/Ethereum: 0xd617391076F9bEa628f657606DEAB7a189199AF5
 ```
 PayPal:
 
