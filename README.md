@@ -348,7 +348,8 @@ Send usable code/patterns to info@remotesyslog.com. Payout RSCX:
  - Rewards can be higher depending on the code quality
  - Bounty programs may be available in future
  
-Note: code what is useless will not have a reward. 
+Note 1: code what is useless will not have a reward. 
+Note 2: before sending any code send a mail to info@remotesyslog.com to verify everything
 
 RSCX distribution:
 
