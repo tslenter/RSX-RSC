@@ -1,6 +1,6 @@
 ## 1. License
 
-"Remote Syslog" is a free application what can be used to view syslog messages.
+"Remote Syslog" is a free application that can be used to view syslog messages.
 
 Copyright (C) 2020 Tom Slenter
 
@@ -25,14 +25,14 @@ E-mail: info@remotesyslog.com
 ## 2. Versions
 
 RSX is a syslog-ng - elasticsearch - kibana driven syslog server. This
-combination allows you to dump and store a lot syslog messages with almost
+combination allows you to dump and store a lot of syslog messages with almost
 no performance decrease in searches. RSX has multiple enterprise grade options.
 
 RSC is a syslog-ng - CLI - PHP GUI driven syslog server. This combination is for 
 low powered dives like a Rapspberry Pi and for small environments. Depending on the
 functionality RSC will run fine with more then 1000 devices, but tuning is required.
 
-RS Core is a syslog-ng - CLI driven syslog server. This environment can be used to
+RS Core is a syslog-ng - CLI driven syslog server. This environment can be used in
 small/lab/test environments. It is very small and compact. The setup can be done within 
 within minutes.
 
@@ -51,11 +51,11 @@ Colortail global:              /opt/remotesyslog/colortail
 ```
 
 ## 4. RS version 2.0 Premium
-This version was announced but did not pass quality standards. Therefor
+This version was announced, but did not pass quality standards. Therefore
 it is postponed.
 
 ## 5. Security
-All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add the all allowed users for login. 
+All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add all the users that are allowed to login. 
 
 To update the certificates, copy the new certificates to the following directory:
 ```
@@ -68,7 +68,7 @@ After you installed the new certificates, update the apache2 configuration. File
 ```
 
 ## 6. Installation
-a. Install a clean debian 9.x or Ubuntu 18.04.2 distro
+a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro.
 
 b. Run the following commands:
 
@@ -136,12 +136,12 @@ Allow from all
 </Directory>
 ```
 
-## 8. Search multiple strings of text within the per host logging directory
+## 8. Search multiple strings of text within the per_host logging directory
 ```bash
 grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
 ```
 
-## 9. Generate a mail from a event
+## 9. Generate an email from an event
 ### 9.1 Install netsend
 ```bash
 sudo apt install sendmail
@@ -178,7 +178,7 @@ for word in "${data[@]}"; do
 done
 ```
 
-Generate mail:
+Generate email:
 ```bash
 if [ -z "$mesgall" ]
 then
@@ -262,7 +262,7 @@ Change rules:
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 ```
 
-## 11. Default API query's for Elasticsearch
+## 11. Default API queries for Elasticsearch
 Find all indexes:
 ```bash
 curl -XGET 'localhost:9200/_cat/indices'
@@ -332,15 +332,15 @@ PayPal:
 
 ### 14.2 Help
 
-To improve the code and functions we like to have you help. Send you idea or code to: info@remotesyslog.com. We will review it and add it to this project.
+To improve the code and functions we like to have you help. Send your idea or code to: info@remotesyslog.com or create a pull request. We will review it and add it to this project.
 
 ### 14.3 What is a RSCX token?
-RSCX is created to reward developers for there work and to support the project. It is a tradable token by the waves exchange. It comes with no warranty and the price indication is based on the live market. Sending funds to the wrong adres will result in a loss of those funds. We do not refund RSCX tokens. We suggest that you use a hardware token to secure the RSCX tokens. Good luck trading and have fun.
+RSCX is created to reward developers for their work and to support the project. It is a tradable token by the Waves exchange. It comes with no warranty and the price indication is based on the live market. Sending funds to the wrong address will result in a loss of those funds. We do not refund RSCX tokens. We suggest that you use a hardware token to secure the RSCX tokens. Good luck trading and have fun!
 
 ### 14.4 RSCX token
 We have a reward system in place, Remote Syslog has it own token available called RSCX. How to get RSCX?
 
-Send usable code/patterns to info@remotesyslog.com. We will review the code or pattern, this may take some time. This token can only be used to trade.
+Send usable code/patterns to info@remotesyslog.com or create a pull request. We will review the code or pattern, this may take some time.
 
 Expected payout RSCX:
  - Patterns: minimum of 10 RSCX
@@ -350,7 +350,7 @@ Expected payout RSCX:
  - Rewards can be higher depending on the code quality
  - Bounty programs may be available in future
  
-Note 1: code what is useless will not have a reward
+Note 1: code that is useless will not have a reward.
 
 RSCX distribution:
 
@@ -359,7 +359,7 @@ RSCX distribution:
  - Only 1 million RSCX will be up for sale
    -  Every 3 months a maximum of 1000 RSCX will be sold (Only if tradingvolume is sustainable)
  - 4 million RSCX is available for developers
- - 5 million is reserved
+ - 5 million is reserved for future use
 
 Where to trade RSCX:
 
