@@ -357,7 +357,8 @@ RSCX distribution:
 10 million RSCX tokens are created. 
 
  - Only 1 million RSCX will be up for sale
-   -  Every 3 months a maximum of 1000 RSCX will be sold (Only if tradingvolume is sustainable)
+   - Every 3 months a maximum of 1000 RSCX will be sold (Only if tradingvolume is sustainable)
+   - Selling pair is always RSCX / BTC
  - 4 million RSCX is available for developers
  - 5 million is reserved for future use
 
