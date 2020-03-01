@@ -23,7 +23,7 @@
 echo ""
 echo "##################################################"
 echo "#Remote Syslog X/C                               #"
-echo "#More information: remotesyslog.com              #"
+echo "#More information: https://www.remotesyslog.com  #"
 echo "#Remote Syslog viewer                            #"
 echo "#Version: RSX 0.1                                #"
 echo "#Donations: https://github.com/tslenter/RSX-RSC  #"
