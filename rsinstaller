@@ -31,18 +31,18 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000046
+bid=00000047
 
 #Banner
 function banner() {
     echo ""
-    echo "#################################################"
-    echo "#Remote Syslog X/C                              #"
-    echo "#More information: remotesyslog.com             #"
-    echo "#Remote Syslog installation                     #"
-    echo "#Version: RSX 0.1                               #"
-    echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
-    echo "#################################################"
+    echo "##################################################"
+    echo "#Remote Syslog X/C                               #"
+    echo "#More information: remotesyslog.com              #"
+    echo "#Remote Syslog installation                      #"
+    echo "#Version: RSX 0.1                                #"
+    echo "#Donations: https://github.com/tslenter/RSX-RSC  #"
+    echo "##################################################"
     echo ""
 }
 

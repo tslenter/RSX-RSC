@@ -21,13 +21,13 @@
 #E-mail: info@remotesyslog.com
 
 echo ""
-echo "#################################################"
-echo "#Remote Syslog X/C                              #"
-echo "#More information: remotesyslog.com             #"
-echo "#Remote Syslog viewer                           #"
-echo "#Version: RSX 0.1                               #"
-echo "#Donate XRP: rHdkpJr3qYqBYY3y3S9ZMr4cFGpgP1eM6B #"
-echo "#################################################"
+echo "##################################################"
+echo "#Remote Syslog X/C                               #"
+echo "#More information: remotesyslog.com              #"
+echo "#Remote Syslog viewer                            #"
+echo "#Version: RSX 0.1                                #"
+echo "#Donations: https://github.com/tslenter/RSX-RSC  #"
+echo "##################################################"
 echo ""
 
 RSV=/var/log/remote_syslog/remote_syslog.log
