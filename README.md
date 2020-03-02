@@ -262,6 +262,13 @@ Change rules:
 +log { source(s_src); filter(f_error); filter(geoip_messages_1); filter(geoip_messages_2); destination(d_error); };
 ```
 
+### 10.2 Kibana not started after upgrade
+Restarting the server will solve this problem. Some report that a restart of the Kibana or Elasticsearch will fix the issue.
+```bash
+service elasticsearch restart
+service kibana restart
+```
+
 ## 11. Default API queries for Elasticsearch
 Find all indexes:
 ```bash
