@@ -1,4 +1,8 @@
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/tslenter/RSX-RSC)
+[![Website remotesyslog.com](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.remotesyslog.com/)
+[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+[![HitCount](http://hits.dwyl.com/tslenter/RSX-RSC.svg)](http://hits.dwyl.com/tslenter/RSX-RSC)
 ## 1. License
 
 "Remote Syslog" is a free application that can be used to view syslog messages.
