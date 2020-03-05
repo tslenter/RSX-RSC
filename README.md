@@ -1,4 +1,5 @@
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/tslenter/RSX-RSC)
+[![Website shields.nu](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://shields.io/)
 ## 1. License
 
 "Remote Syslog" is a free application that can be used to view syslog messages.
