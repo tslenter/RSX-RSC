@@ -276,11 +276,18 @@ function rstextperhost() {
     echo "Done"
 }
 
+function rsl_install() {
+    echo "Started rsl installation ..."
+    chmod +x $RSDESTP/rsl/rsl_in
+    $RSDESTP/rsl/rsl_in
+    exit
+}
+
 clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Quit")
+options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Laravel project development" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -355,6 +362,12 @@ do
             clear
             banner
             rstextperhost
+            exit
+   ;;
+        "Laravel project development")
+            clear
+            banner
+            rsl_install
             exit
    ;;
         "Quit")
