@@ -10,7 +10,7 @@ filter
     {
         dissect {
           mapping => {
-          "message" => "%{ID},%{Date},%{Time},%{Description},%{IP_Address},%{Host_Name},%{MAC_Address},%{User_Name},%{TransactionID},%{QResult},%{Probationtime},%{CorrelationID},%{Dhcid},%{VendorClass_hex},%{VendorClass_ascii},%{UserCla$
+          "message" => "%{ID},%{Date},%{Time},%{Description},%{IP_Address},%{Host_Name},%{MAC_Address},%{User_Name},%{TransactionID},%{QResult},%{Probationtime},%{CorrelationID},%{Dhcid},%{VendorClass_hex},%{VendorClass_ascii},%{UserClass_hex},%{UserClass_ascii},%{RelayAgentInformation},%{DnsRegError}"
                    }
            }
          mutate
