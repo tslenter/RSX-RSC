@@ -171,7 +171,7 @@ setup.kibana:
 output.logstash:
   # The Logstash hosts
   #hosts: ["localhost:5044"]
-  hosts: ["10.136.106.250:20001"]
+  hosts: ["<ip_RSX_Server>:20001"]
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
   #ssl.certificate_authorities: ["/etc/pki/root/ca.pem"]
