@@ -8,7 +8,7 @@ filter {
     if [fields][type] == "squid" {
         mutate
         {
-          add_field => { "squid_cluster" => "proxy.dmz.corp" }
+          add_field => { "squid_cluster" => "proxy.lan.local" }
         }
         if "_grokparsefailure" in [tags] {
           drop { }
@@ -23,7 +23,7 @@ filter {
 }
 
 output {
- if [squid_cluster] == "proxy.dmz.corp" {
+ if [squid_cluster] == "proxy.lan.local" {
   elasticsearch { hosts => ["localhost:9200"] index => "logstash-rsx-squid-%{+YYYY.MM.dd}"
     }
   }
