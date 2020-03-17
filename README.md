@@ -274,6 +274,26 @@ service elasticsearch restart
 service kibana restart
 ```
 
+### 10.3 Data too large, data for [<http_request>] (JVM heap size)
+Error mesage:
+```bash
+tom@plisk002:~$ curl -X GET 'http://localhost:9200/_cat/health?v'
+{"error":{"root_cause":[{"type":"circuit_breaking_exception","reason":"[parent] Data too large, data for [<http_request>] would be [1014538592/967.5mb], which is larger than the limit of [986061209/940.3mb], real usage: [1014538592/967.5mb], new bytes reserved: [0/0b], usages [request=0/0b, fielddata=3057213/2.9mb, in_flight_requests=0/0b, accounting=261018719/248.9mb]","bytes_wanted":1014538592,"bytes_limit":986061209,"durability":"PERMANENT"}],"type":"circuit_breaking_exception","reason":"[parent] Data too large, data for [<http_request>] would be [1014538592/967.5mb], which is larger than the limit of [986061209/940.3mb], real usage: [1014538592/967.5mb], new bytes reserved: [0/0b], usages [request=0/0b, fielddata=3057213/2.9mb, in_flight_requests=0/0b, accounting=261018719/248.9mb]","bytes_wanted":1014538592,"bytes_limit":986061209,"durability":"PERMANENT"},"status":429}
+```
+
+Increase memory fix:
+```bash
+nano /etc/elasticsearch/jvm.options
+```
+
+Edit:
+```bash
+--Xms1g
+--Xmx1g
++-Xms6g
++-Xmx6g
+```
+
 ## 11. Default API queries for Elasticsearch
 Find all indexes:
 ```bash
