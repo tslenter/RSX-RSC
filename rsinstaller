@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000050
+bid=00000051
 
 #Banner
 function banner() {
@@ -1191,7 +1191,6 @@ do
         "Core removal")
             clear
             banner
-            distocheck
             coreremove
             exit
     ;;
