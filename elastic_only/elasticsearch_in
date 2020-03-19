@@ -129,7 +129,7 @@ function elasticinstall() {
 #Writing config
 #RSX Syslog-ng config
     echo "Update syslog-ng with RSX config ..."
-    cp $RSDEST/elastic_only/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
+    cp $RSDEST/elastic_only/97EL-rs.conf $SYSLOGCONF/97EL-rs.conf
 #RSX elastic config
     elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.syslog | head -n 1)"
     if [[ $elc == *"cluster.name: syslog"* ]]; then
