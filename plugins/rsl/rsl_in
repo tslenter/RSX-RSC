@@ -1,0 +1,269 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+# This function checks whether the install script is executed with root privileges.
+function check_root()
+{
+    if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+}
+
+function set_parameters()
+{
+    PASS=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
+	APACHEDIR=/var/www/html
+	RSDEST=/opt/RS
+}
+
+# This function checks whether the $1 package is installed.
+function check_package() {
+echo "Check package $1"
+dpkg-query -l $1 > /dev/null 2>&1
+if [ $? = 0 ]
+then
+    echo "Installation found ..."
+else
+    echo "Installation failed, abort (Hint: Did you install the core? ..."
+    exit
+fi
+}
+
+# This function displays the banner
+function display_banner() {
+    echo ""
+    echo "##################################################"
+    echo "#Remote Syslog Laravel                           #"
+    echo "#More information: https://www.remotesyslog.com  #"
+    echo "#Remote Syslog installation                      #"
+    echo "#Version: RSL 0.1                                #"
+    echo "#Donations: https://github.com/tslenter/RSX-RSC  #"
+    echo "##################################################"
+    echo "Information: Do not use this with RSX or RSC."
+    echo "Only RS core with elasticsearch and ubuntu 18.04 LTS is tested."
+    echo ""
+}
+
+# This function installs the php modules
+function install_php_modules()
+{
+   echo "Installing php modules..."
+   apt update && apt install -y composer php php-bcmath php-common php-json php-mbstring php-tokenizer php-xml php-zip apache2 libapache2-mod-php apache2-utils mysql-server libdbi1 libdbd-mysql acl php-mysql
+   check_package "php"
+   check_package "php-bcmath"
+   check_package "php-ctype"
+   check_package "php-json"
+   check_package "php-mbstring"
+   check_package "php-pdo"
+   check_package "php-tokenizer"
+   check_package "php-xml"
+   check_package "php-zip"
+   check_package "apache2"
+   check_package "libapache2-mod-php"
+   check_package "apache2-utils"
+   check_package "mysql-server"
+   check_package "libdbi1"
+   check_package "libdbd-mysql"
+   check_package "acl"
+   check_package "php-mysql"
+}
+
+# This function creates and activates a new site on Apache for Laravel.
+function create_rsv2_apache_site()
+{
+   cp $RSDEST/plugins/rsl/rsv2-default.conf /etc/apache2/sites-available/
+   a2ensite rsv2-default
+   a2dissite 000-default
+   service apache2 restart
+}
+
+function create_rsl_apache_site()
+{
+   cp $RSDEST/plugins/rsl/rsl-default.conf /etc/apache2/sites-available/
+   a2ensite rsl-default.conf
+   a2dissite 000-default
+   service apache2 restart
+}
+
+# This function creates the rs user for MySQL
+function install_mysql()
+{
+    mysql --execute="CREATE USER 'rs'@'localhost' IDENTIFIED BY '$PASS';"
+    mysql --execute="CREATE DATABASE laravel;"
+    mysql --execute="GRANT ALL PRIVILEGES ON laravel.* TO 'rs'@'localhost';"
+}
+
+# Installs the master version of the rsv2 Laravel project
+function install_rsv2_project()
+{
+   rm -rf $APACHEDIR/* > /dev/null 2>&1
+   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+   git clone --branch master https://github.com/rgerits/remotesyslog-rsv2.git $APACHEDIR/rsv2
+
+   useradd -m -s /bin/bash -p $PASS rs
+
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsv2/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsv2/
+
+   runuser -l rs -c "cd $APACHEDIR/rsv2 && composer update --lock && composer install"
+   runuser -l rs -c "cp $APACHEDIR/rsv2/.env.example $APACHEDIR/rsv2/.env"
+   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan key:generate"
+
+   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
+
+   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
+}
+
+function install_backup_project()
+{
+   rm -rf $APACHEDIR/* > /dev/null 2>&1
+   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+
+   read -p 'GitHub url: ' urlgithub
+   if test "$urlgithub" = ""; then
+       echo "Sorry, GitHub URL cannot be blank" >&2
+       exit 1;
+   fi
+   read -p 'GitHub branch: ' branchgithub
+   if test "$urlgithub" = ""; then
+       echo "Sorry, GitHub branch cannot be blank" >&2
+       exit 1;
+   fi
+   echo "URL detected ..."
+   git clone --branch $branchgithub $urlgithub $APACHEDIR/rsl
+
+   useradd -m -s /bin/bash -p $PASS rs
+
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsl/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsl/
+
+   runuser -l rs -c "cd $APACHEDIR/rsl && composer update --lock && composer install"
+   runuser -l rs -c "cp $APACHEDIR/rsl/.env.example $APACHEDIR/rsl/.env"
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan key:generate"
+
+   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsl/.env >/dev/null 2>&1
+
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan migrate"
+}
+
+function install_clean_project()
+{
+   rm -rf $APACHEDIR/* > /dev/null 2>&1
+   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+   useradd -m -s /bin/bash -p $PASS rs
+   mkdir $APACHEDIR/rsl/
+
+   #Set permissions for laravel deployment
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsl/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsl/
+
+   runuser -l rs -c "composer create-project laravel/laravel $APACHEDIR/rsl/"
+   runuser -l rs -c "cp $RSDEST/plugins/rsl/env.example $APACHEDIR/rsl/.env"
+   runuser -l rs -c "cd $APACHEDIR/rsl && composer update --lock && composer install"
+   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan key:generate"
+
+   #Set permissiosn for all subfolders and files
+   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsl/
+   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsl/
+
+   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsl/.env >/dev/null 2>&1
+
+#   runuser -l rs -c "cd $APACHEDIR/rsl && php artisan migrate"
+}
+
+function rm_laravel()
+{
+   a2dissite rsl-default > /dev/null 2>&1
+   a2dissite rsv2-default > /dev/null 2>&1
+   userdel -r rs > /dev/null 2>&1
+   mysql --execute="DROP DATABASE laravel;" > /dev/null 2>&1
+   mysql --execute="DROP USER 'rs'@'localhost';" > /dev/null 2>&1
+   rm -rf $APACHEDIR/* > /dev/null 2>&1
+   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+   apt remove -y composer php php-mysql php-bcmath php-common php-json php-mbstring php-tokenizer php-xml php-zip apache2 libapache2-mod-php apache2-utils mysql-server libdbi1 libdbd-mysql acl
+}
+
+function display_values()
+{
+    echo "Your password for the rs user is: $PASS (Mysql + PAM)"
+}
+
+clear
+display_banner
+#Menu
+PS3='Please enter your choice: '
+options=("RSV2 by Ronald Gerits" "Clean Laravel project" "Deploy github laravel backup" "Remove Laravel project" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "RSV2 by Ronald Gerits")
+            clear
+            display_banner
+            check_root
+            set_parameters
+            install_php_modules
+            create_rsv2_apache_site
+            install_mysql
+            install_rsv2_project
+            display_values
+            exit
+    ;;
+        "Clean Laravel project")
+            clear
+            display_banner
+            check_root
+            set_parameters
+            install_php_modules
+            create_rsl_apache_site
+            install_mysql
+            install_clean_project
+            display_values
+            exit
+    ;;
+        "Deploy github laravel backup")
+            clear
+            display_banner
+            check_root
+            set_parameters
+            install_php_modules
+            create_rsl_apache_site
+            install_mysql
+            install_backup_project
+            display_values
+            exit
+    ;;
+        "Remove Laravel project")
+            clear
+            display_banner
+            check_root
+            set_parameters
+            rm_laravel
+            exit
+    ;;
+        "Quit")
+            break
+    ;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done

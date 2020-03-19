@@ -1,0 +1,31 @@
+input {
+  beats {
+    port => 20001
+  }
+}
+
+filter {
+    if [fields][type] == "squid" {
+        mutate
+        {
+          add_field => { "squid_cluster" => "proxy.lan.local" }
+        }
+        if "_grokparsefailure" in [tags] {
+          drop { }
+        }
+        grok {
+          match => [ "message", "%{INT:timestamp}.%{INT}\s*%{NUMBER:request_msec:float} %{IPORHOST:src_ip} %{WORD:cache_result}/%{NUMBER:response_status:int} %{NUMBER:response_size:int} %{WORD:http_method} (%{URIPROTO:http_proto}://)?%{IPORHOST:dst_host}(?::%{POSINT:port})?(?:%{DATA:uri_param})? %{USERNAME:cache_user} %{WORD:request_route}/(%{IPORHOST:forwarded_to}|-) %{GREEDYDATA:content_type}"]
+        }
+        date {
+          match => [ "timestamp", "UNIX" ]
+        }
+    }
+}
+
+output {
+ if [squid_cluster] == "proxy.lan.local" {
+  elasticsearch { hosts => ["localhost:9200"] index => "logstash-rsx-squid-%{+YYYY.MM.dd}"
+    }
+  }
+stdout { codec => rubydebug }
+}

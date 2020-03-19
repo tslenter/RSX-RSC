@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000048
+bid=00000050
 
 #Banner
 function banner() {
@@ -978,6 +978,16 @@ function ubntrepofix() {
 #Syslog-ng
     echo "Update repository's ..."
     echo "Load syslog-ng ..."
+    echo "Check if ARM ..."
+    drel="$(uname -a | egrep 'aarch64')"
+    echo "$drel found ..."
+    if [[ $drel =~ "aarch64" ]]; then
+        echo "ARM detected ..."
+        echo "Apply fix ..."
+        sudo echo "" > /etc/apt/sources.list.d/syslog-ng.list
+    else
+        echo "Continue ..."
+    fi
     if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
         echo "Nothing to do ..."
     else
@@ -1109,9 +1119,10 @@ function kibdef() {
 }
 
 function plugins(){
-    echo "Check plugins requirments ..."
-    check_file $RSBIN/rsinstaller
-    echo "Plugins are experemental check configuration before installation ..."
+    echo "Check plugins/fixes requirments ..."
+    #Check disabled
+    #check_file $RSBIN/rsinstaller
+    echo "Plugins/fixes are experimental check configuration before installation ..."
     while true; do
     read -p "Do you wish to continue? y/n: " yn
     case $yn in
@@ -1163,7 +1174,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Install elasticsearch" "Remove elasticsearch" "Enable firewall" "Disable firewall" "OS Upgrade" "Plugins (Experimental ...)" "Status RS" "Quit")
+options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Install elasticsearch" "Remove elasticsearch" "Enable firewall" "Disable firewall" "OS Upgrade" "Plugins/fixes (Experimental ...)" "Status RS" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1303,7 +1314,7 @@ do
             osupdate
             exit
     ;;
-        "Plugins (Experimental ...)")
+        "Plugins/fixes (Experimental ...)")
             clear
             banner
             distocheck

@@ -170,9 +170,17 @@ function f5config() {
 
 #Function for view msdhcp
 function msdhcpconfig() {
-    echo "Displaying default F5 configuration ..."
+    echo "Displaying default dhcp configuration ..."
     echo ""
     $RSDESTP/msdhcp/instruction
+    exit
+}
+
+#Function for view squid
+function squidconfig() {
+    echo "Displaying default Squid configuration ..."
+    echo ""
+    $RSDESTP/squid/instruction
     exit
 }
 
@@ -276,14 +284,54 @@ function rstextperhost() {
     echo "Done"
 }
 
+function rsl_install() {
+    echo "Started rsl installation ..."
+    chmod +x $RSDESTP/rsl/rsl_in
+    $RSDESTP/rsl/rsl_in
+    exit
+}
+
+function rsl_install() {
+    echo "Started rsl installation ..."
+    chmod +x $RSDESTP/rsl/rsl_in
+    $RSDESTP/rsl/rsl_in
+    exit
+}
+
+function arm_fix() {
+    echo "Started Ubuntu ARM fix ..."
+    chmod +x $RSDESTP/armubntfix/armubntfix_in
+    $RSDESTP/armubntfix/armubntfix_in
+    exit
+}
+
+function arm_fix_undo() {
+    echo "Started Ubuntu ARM fix reversal ..."
+    chmod +x $RSDESTP/armubntfix/armubntfix_rm
+    $RSDESTP/armubntfix/armubntfix_rm
+    exit
+}
+
 clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Quit")
+options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Laravel project development" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
+        "Manual Ubuntu ARM fix")
+            clear
+            banner
+            arm_fix
+            exit
+    ;;
+        "Manual undo Ubuntu ARM fix")
+            clear
+            banner
+            arm_fix_undo
+            exit
+    ;;
         "Install Geo2 location data")
             clear
             banner
@@ -296,7 +344,6 @@ do
             geoupdate_rs
             exit
     ;;
-
         "Check Geo2 database")
             clear
             banner
@@ -339,6 +386,12 @@ do
             msdhcpconfig
             exit
     ;;
+        "Display example configuration Squid")
+            clear
+            banner
+            squidconfig
+            exit
+    ;;
         "Install logstash")
             clear
             banner
@@ -355,6 +408,12 @@ do
             clear
             banner
             rstextperhost
+            exit
+   ;;
+        "Laravel project development")
+            clear
+            banner
+            rsl_install
             exit
    ;;
         "Quit")

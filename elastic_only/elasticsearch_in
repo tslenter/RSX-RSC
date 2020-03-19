@@ -80,7 +80,7 @@ function elasticinstall() {
     echo "$drel found ..."
     if [[ $drel =~ "Raspbian" ]]; then
         echo "Raspberry Pi detected ..."
-        echo "It is slow ..."
+        echo "It is slow and will probably break, but we install it anyway ..."
     else
         echo "Continue ..."
     fi
