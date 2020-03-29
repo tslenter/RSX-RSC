@@ -88,6 +88,15 @@ Choose option 12 to install the RSX version
 ```
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
+### 6.1 RSX Cluster
+With build 52 of RSX 0.1 clustering is supported. RSX will load the default configuration. Feel free to add some best practice option, found here:
+```
+https://logz.io/blog/elasticsearch-cluster-tutorial/
+```
+Check the cluster health by running the following command:
+```bash
+curl -XGET -H "Content-Type: application/json" http://localhost:9200/_cluster/health?pretty=true
+```
 ## 7. Optional configuration
 ### 7.1 Integrate Active Directory LDAP authentication for Apache 2
 
