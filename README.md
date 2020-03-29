@@ -73,6 +73,7 @@ After you installed the new certificates, update the apache2 configuration. File
 ```
 
 ## 6. Installation
+### 6.1 Quick start
 a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro.
 
 b. Run the following commands:
@@ -88,7 +89,7 @@ Choose option 12 to install the RSX version
 ```
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
-### 6.1 RSX Cluster
+### 6.2 RSX Cluster
 With build 52 of RSX 0.1 clustering is supported. RSX will load the default configuration. Feel free to add some best practice option, found here:
 ```
 https://logz.io/blog/elasticsearch-cluster-tutorial/
