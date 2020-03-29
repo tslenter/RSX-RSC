@@ -1,0 +1,50 @@
+###################
+#MASTER NODE
+#give your cluster a name.
+cluster.name: rsx
+
+#give your nodes a name (change node number from node to node).
+node.name: ${HOSTNAME}
+
+#define node 1 as master-eligible:
+node.master: true
+
+#define nodes 2 and 3 as data nodes:
+node.data: true
+
+#enter the private IP and port of your node:
+network.host: 0.0.0.0
+http.port: 9200
+transport.tcp.port: 9300
+
+#detail the private IPs of your nodes:
+discovery.zen.ping.unicast.hosts: ["172.16.2.249"]
+
+#Avoid split brain
+#discovery.zen.minimum_master_nodes: 2
+
+###################
+#DATA NODE
+#give your cluster a name.
+cluster.name: rsx
+
+#give your nodes a name (change node number from node to node).
+node.name: ${HOSTNAME}
+
+#define node 1 as master-eligible:
+node.master: false
+
+#define nodes 2 and 3 as data nodes:
+node.data: true
+
+#enter the private IP and port of your node:
+network.host: 0.0.0.0
+http.port: 9200
+transport.tcp.port: 9300
+
+#detail the private IPs of your nodes:
+discovery.zen.ping.unicast.hosts: ["172.16.2.249"]
+
+#Avoid split brain
+#discovery.zen.minimum_master_nodes: 2
+
