@@ -1,0 +1,214 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+function check_root()
+{
+    if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+}
+
+function check_package() {
+echo "Check package $1"
+dpkg-query -l $1 > /dev/null 2>&1
+if [ $? = 0 ]
+then
+    echo "Installation found ..."
+else
+    echo "Installation failed, abort (Hint: Did you install the core? ..."
+    exit
+fi
+}
+
+# This function displays the banner
+function display_banner() {
+    echo ""
+    echo "##################################################"
+    echo "#Remote Syslog cluster installer                 #"
+    echo "#More information: https://www.remotesyslog.com  #"
+    echo "#Remote Syslog installation                      #"
+    echo "#Version: RSX 0.1                                #"
+    echo "#Donations: https://github.com/tslenter/RSX-RSC  #"
+    echo "##################################################"
+    echo "Information: Only tested with RSX config."
+    echo "Information: Extra data nodes will be cleared from all data."
+    echo ""
+}
+
+#Set global var
+function gparameter() {
+    RSDEST=/opt/RS/cluster
+}
+
+# Set var
+function parameter() {
+    echo "Select enrollment type ..."
+    read -p 'Is it a masternode or a datanode, type MASTER or DATA to choose: ' typevar
+    echo 'Type by a single ["<ip>"] and by a multiple mastersetup: ["<ip>"], ["<ip>"]'
+    read -p 'What are the IP adresses of the master(s): ' masteripvar
+}
+
+function check_elastic() {
+    if [ -e "/etc/elasticsearch/elasticsearch.yml" ]; then
+        echo "Config file found ..."
+    else
+        echo "No elasticsearch config file found ..."
+        exit
+    fi
+}
+
+function remove_cluster() {
+    check_elastic
+    service elasticsearch stop
+    echo "Remove old config ..."
+    sed -i '/^node.master:*/'d /etc/elasticsearch/elasticsearch.yml
+    sed -i '/^node.data:*/'d /etc/elasticsearch/elasticsearch.yml
+    sed -i '/^network.host:*/'d /etc/elasticsearch/elasticsearch.yml
+    sed -i '/^http.port:*/'d /etc/elasticsearch/elasticsearch.yml
+    sed -i '/^transport.tcp.port:*/'d /etc/elasticsearch/elasticsearch.yml
+    sed -i '/^discovery.zen.ping.unicast.hosts:*/'d /etc/elasticsearch/elasticsearch.yml
+    sed -i '/^#discovery.zen.minimum_master_nodes:*/'d /etc/elasticsearch/elasticsearch.yml
+    service elasticsearch start
+}
+
+function fw_add {
+    FWSTATUS="$(ufw status | grep -Eo '\bactive\b')"
+    if [[ $FWSTATUS == active ]]; then
+        echo "Active FW found ..."
+        check_package "ufw"
+        echo "Setting new firewall rules ..."
+        ufw allow 9300/tcp
+        ufw status
+        echo "Done ..."
+    else
+        echo "It appears that no firewall is enabled, we recommend that you do!"
+        echo "Cluster setup gives public access to the Elasticsearch API on port 9200/tcp"
+        echo "Active the FW using iptables of the FW manager ufw. Run 'ufw allow 9300/tcp' to add the port"
+    fi
+}
+
+function global_conf() {
+    echo "Load default config ..."
+    echo "node.data: true" >> /etc/elasticsearch/elasticsearch.yml
+    echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
+    echo "http.port: 9200" >> /etc/elasticsearch/elasticsearch.yml
+    echo "transport.tcp.port: 9300" >> /etc/elasticsearch/elasticsearch.yml
+    echo "discovery.zen.ping.unicast.hosts: $masteripvar" >> /etc/elasticsearch/elasticsearch.yml
+    echo "#discovery.zen.minimum_master_nodes: 2" >> /etc/elasticsearch/elasticsearch.yml
+}
+
+function elastic_setup() {
+    echo "Start setup elasticsearch ..."
+    echo "Check if config file exist ..."
+    check_elastic
+    parameter
+    echo "Setup node config ..."
+    if [[ $typevar == MASTER ]]; then
+        service elasticsearch stop
+        remove_cluster
+        echo "Master config started ..."
+        echo "node.master: true" >> /etc/elasticsearch/elasticsearch.yml
+        global_conf
+        echo "Starting services ..."
+        service elasticsearch start
+        echo "Display config ..."
+        tail -n 9 /etc/elasticsearch/elasticsearch.yml
+        fw_add
+   elif [[ $typevar == DATA ]]; then
+        service elasticsearch stop
+        remove_cluster
+        rm -rf /var/lib/elasticsearch/*
+        echo "Data config started ..."
+        echo "node.master: false" >> /etc/elasticsearch/elasticsearch.yml
+        global_conf
+        echo "Starting services ..."
+        service elasticsearch start
+        echo "Display config ..."
+        tail -n 9 /etc/elasticsearch/elasticsearch.yml
+        fw_add
+   else
+        echo "Please select MASTER or DATA ..."
+        echo "Something went wrong here ..."
+   fi
+}
+
+function print_example() {
+   gparameter
+   cat $RSDEST/example_config
+}
+
+function clear_node () {
+   echo "Stop elasticsearch ..."
+   service elasticsearch stop
+   echo "Remove elasticsearch data ..."
+   rm -rf /var/lib/elasticsearch/*
+   echo "Wait 60 seconds for start ..."
+   sleep 60
+   echo "Start elasticsearch ..."
+   service elasticsearch start
+}
+
+clear
+display_banner
+check_root
+#Menu
+PS3='Please enter your choice: '
+options=("Setup cluster" "Show config example" "Remove cluster" "Purge node and reset" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Setup cluster")
+            clear
+            display_banner
+            check_root
+            elastic_setup
+            exit
+    ;;
+        "Show config example")
+            clear
+            display_banner
+            check_root
+            print_example
+            exit
+    ;;
+        "Remove cluster")
+            clear
+            display_banner
+            check_root
+            remove_cluster
+            exit
+    ;;
+        "Purge node and reset")
+            clear
+            display_banner
+            check_root
+            clear_node
+            exit
+    ;;
+        "Quit")
+            break
+    ;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done

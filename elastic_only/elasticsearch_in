@@ -131,13 +131,13 @@ function elasticinstall() {
     echo "Update syslog-ng with RSX config ..."
     cp $RSDEST/elastic_only/97EL-rs.conf $SYSLOGCONF/97EL-rs.conf
 #RSX elastic config
-    elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.syslog | head -n 1)"
-    if [[ $elc == *"cluster.name: syslog"* ]]; then
+    elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.rsx | head -n 1)"
+    if [[ $elc == *"cluster.name: rsx"* ]]; then
         echo "Config already written ..."
     else
         echo "Write elastic config ..."
-        echo "cluster.name: syslog" >> /etc/elasticsearch/elasticsearch.yml
-        echo "node.name: syslog01" >> /etc/elasticsearch/elasticsearch.yml
+        echo "cluster.name: rsx" >> /etc/elasticsearch/elasticsearch.yml
+        echo "node.name: ${HOSTNAME}" >> /etc/elasticsearch/elasticsearch.yml
     fi
 #Activate service on boot
     echo "Activate startup log configuration ..."

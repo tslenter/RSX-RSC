@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000051
+bid=00000052
 
 #Banner
 function banner() {
@@ -772,13 +772,13 @@ function rsxinstall() {
     echo "Update syslog-ng with RSX config ..."
     cp $RSDEST/rsx/99RSX-rs.conf $SYSLOGCONF/99RSX-rs.conf
 #RSX elastic config
-    elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.syslog | head -n 1)"
-    if [[ $elc == *"cluster.name: syslog"* ]]; then
+    elc="$(cat /etc/elasticsearch/elasticsearch.yml | grep cluster.name:.rsx | head -n 1)"
+    if [[ $elc == *"cluster.name: rsx"* ]]; then
         echo "Config already written ..."
     else
         echo "Write elastic config ..."
-        echo "cluster.name: syslog" >> /etc/elasticsearch/elasticsearch.yml
-        echo "node.name: syslog01" >> /etc/elasticsearch/elasticsearch.yml
+        echo "cluster.name: rsx" >> /etc/elasticsearch/elasticsearch.yml
+        echo "node.name: ${HOSTNAME}" >> /etc/elasticsearch/elasticsearch.yml
     fi
 #RSX kibana config
     kic="$(cat /etc/kibana/kibana.yml | grep server.rewriteBasePath:.true | head -n 1)"
@@ -1113,42 +1113,25 @@ function kibdef() {
         }'
         echo ""
         echo "Done ..."
-    else
-        echo "Kibana not in time activated? Use GUI to setup kibana ..."
-    fi
-}
-
-function plugins(){
-    echo "Check plugins/fixes requirments ..."
-    #Check disabled
-    #check_file $RSBIN/rsinstaller
-    echo "Plugins/fixes are experimental check configuration before installation ..."
-    while true; do
-    read -p "Do you wish to continue? y/n: " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-    done
-    echo "Check if directory exist ..."
-    if [ -d $RSDEST/plugins ]; then
-        $RSDEST/plugins/rsplugin
-    else
-        echo "No plugin directory found ..."
-        echo "Exit ..."
-        exit
     fi
 }
 
 #Elastic only installation
 function elasticonlyinstall() {
+    chmod +x $RSDEST/elastic_only/elasticsearch_in
     $RSDEST/elastic_only/elasticsearch_in
 }
 
 #Elastic only removal
 function elasticonlyremove() {
+    chmod +x $RSDEST/elastic_only/elasticsearch_rm
     $RSDEST/elastic_only/elasticsearch_rm
+}
+
+#Elastic cluster setup
+function clustersetup() {
+    chmod +x $RSDEST/cluster/cluster_in
+    $RSDEST/cluster/cluster_in
 }
 
 #Environment setup
@@ -1174,7 +1157,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Install elasticsearch" "Remove elasticsearch" "Enable firewall" "Disable firewall" "OS Upgrade" "Plugins/fixes (Experimental ...)" "Status RS" "Quit")
+options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Install elasticsearch" "Remove elasticsearch" "RSX Cluster setup" "Enable firewall" "Disable firewall" "OS Upgrade" "Plugins/fixes (Experimental ...)" "Status RS" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1292,11 +1275,11 @@ do
             elasticonlyremove
             exit
     ;;
-       "Enable firewall")
+       "RSX Cluster setup")
             clear
             banner
             distocheck
-            fwenable
+            clustersetup
             exit
     ;;
         "Disable firewall")
