@@ -158,12 +158,23 @@ function print_example() {
    cat $RSDEST/example_config
 }
 
+function clear_node () {
+   echo "Stop elasticsearch ..."
+   service elasticsearch stop
+   echo "Remove elasticsearch data ..."
+   rm -rf /var/lib/elasticsearch/*
+   echo "Wait 60 seconds for start ..."
+   sleep 60
+   echo "Start elasticsearch ..."
+   service elasticsearch start
+}
+
 clear
 display_banner
 check_root
 #Menu
 PS3='Please enter your choice: '
-options=("Setup cluster" "Show config example" "Remove cluster" "Quit")
+options=("Setup cluster" "Show config example" "Remove cluster" "Purge node and reset" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -186,6 +197,13 @@ do
             display_banner
             check_root
             remove_cluster
+            exit
+    ;;
+        "Purge node and reset")
+            clear
+            display_banner
+            check_root
+            clear_node
             exit
     ;;
         "Quit")
