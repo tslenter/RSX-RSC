@@ -74,7 +74,7 @@ After you installed the new certificates, update the apache2 configuration. File
 
 ## 6. Installation
 ### 6.1 Quick start
-a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro.
+a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro, Ubuntu 20.04 LTS is released for testing.
 
 b. Run the following commands:
 
@@ -171,9 +171,16 @@ Allow from all
 </Directory>
 ```
 
-## 8. Search multiple strings of text within the per_host logging directory
+## 8. Search strings CLI
+
+### 8.1 Search multiple strings of text within the per_host logging directory
 ```bash
 grep -h "switch1\|switch2\|switch3" /var/log/remote_syslog/* | more
+```
+
+### 8.2 Search for the top 15 messages
+```bash
+egrep -o "%.+?: "/var/log/remote_syslog/remote_syslog.log | sort | uniq -c | sort -nr | head -n 15
 ```
 
 ## 9. Generate an email from an event
