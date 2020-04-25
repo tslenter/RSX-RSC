@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000053
+bid=00000054
 
 #Banner
 function banner() {
@@ -626,7 +626,8 @@ function upgrade() {
 function osupdate() {
     echo "Start OS update ..."
     apt update && apt upgrade -y
-    apt autoremove -y
+#Disabled apt autoremove may break something. Run apt autoremove -y if you like to remove unused packages.
+    #apt autoremove -y
     if [ -e /etc/kibana/kibana.yml ]; then
         echo "RSX Kibana found ..."
         echo "Restart services ..."
@@ -1309,6 +1310,13 @@ do
             banner
             distocheck
             clustersetup
+            exit
+    ;;
+       "Enable firewall")
+            clear
+            banner
+            distocheck
+            fwenable
             exit
     ;;
         "Disable firewall")
