@@ -74,7 +74,7 @@ After you installed the new certificates, update the apache2 configuration. File
 
 ## 6. Installation
 ### 6.1 Quick start
-a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro.
+a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro, Ubuntu 20.04 LTS is released for testing.
 
 b. Run the following commands:
 

@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000052
+bid=00000053
 
 #Banner
 function banner() {
@@ -1014,6 +1014,10 @@ function distocheck() {
         echo "Ubuntu found ..."
         ubntrepofix
         echo "Done ..."
+    elif [[ $drel =~ "focal" ]]; then
+        echo "Ubuntu found ..."
+        ubntrepofix
+        echo "Done ..."
     else
         echo "No distro detected ..."
         exit
@@ -1113,6 +1117,31 @@ function kibdef() {
         }'
         echo ""
         echo "Done ..."
+    else
+        echo "Kibana not in time activated? Use GUI to setup kibana ..."
+    fi
+}
+
+#Going to the plugin menu
+function plugins(){
+    echo "Check plugins requirments ..."
+    check_file $RSBIN/rsinstaller
+    echo "Plugins are experemental check configuration before installation ..."
+    while true; do
+    read -p "Do you wish to continue? y/n: " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+    done
+    echo "Check if directory exist ..."
+    if [ -d $RSDEST/plugins ]; then
+        $RSDEST/plugins/rsplugin
+    else
+        echo "No plugin directory found ..."
+        echo "Exit ..."
+        exit
     fi
 }
 
