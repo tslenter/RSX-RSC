@@ -391,7 +391,7 @@ It appears that the package "syslog-ng-mod-rdkafka" has some conflics with the c
 apt remove syslog-ng-mod-rdkafka
 ```
 After the upgrade there is a issue with the Apache2 configuration:
-Edit the following file: /etc/apache2/mods-enabled/php7.2.load and chnage:
+Edit the following file: /etc/apache2/mods-enabled/php7.2.load and change:
 ```
 -LoadModule php7_module /usr/lib/apache2/modules/libphp7.2.so
 +LoadModule php7_module /usr/lib/apache2/modules/libphp7.4.so
