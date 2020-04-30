@@ -346,8 +346,10 @@ Logstash test new config:
 ```bash
 /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/97-rsmdefault.conf --path.settings /etc/logstash/
 ```
-## 13. Upgrade from Remote Syslog 1.x
 
+## 13. Upgrades
+
+### 13.1 Upgrade from Remote Syslog 1.x
 Manual remove Remote Syslog 1.x with the following bash script:
 ```bash
 echo "File is only present if local syslog is activated"
@@ -372,20 +374,85 @@ apt -y autoremove
 echo "Reinstall rsyslog"
 apt -y install rsyslog
 ```
-
 After the removal of Remote Syslog 1.x, install the new RSX or RSC. The old syslog data is still available through RSC or RSX but only in plain text.
 
 More information over Remote Syslog 1.x: https://github.com/tslenter/Remote_Syslog
 
-## 13. Information and external links
+### 13.2 Upgrade from Ubuntu 18.04 to 20.04
+Upgrade commands:
+```bash
+apt update && sudo apt upgrade
+reboot
+apt install update-manager-core
+do-release-upgrade -d
+```
+It appears that the package "syslog-ng-mod-rdkafka" has some conflics with the core configuration, If you run in this error, try to uninstall this package:
+```bash
+apt remove syslog-ng-mod-rdkafka
+```
+After the upgrade there is a issue with the Apache2 configuration:
+Edit the following file: /etc/apache2/mods-enabled/php7.2.load and chnage:
+```
+-LoadModule php7_module /usr/lib/apache2/modules/libphp7.2.so
++LoadModule php7_module /usr/lib/apache2/modules/libphp7.4.so
+```
+Check to /var/log/syslog for errors. We found 2 errors and this depends on which platform you run the RSX server.
+DNS message:
+```
+Apr 30 20:56:22 lusysl003 systemd-resolved[923]: Server returned error NXDOMAIN, mitigating potential DNS violation DVE-2018-0001, retrying transaction with reduced feature level UDP
+```
+Recreate symlink will fix this issue:
+```
+ln -sfn /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+or
+
+rm /etc/resolv.conf
+ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+```
+If you run the server on ESXi you get the following error:
+```
+Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: add missing path
+Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: failed to get udev uid: Invalid argument
+Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: failed to get sysfs uid: Invalid argument
+Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: failed to get sgio uid: No such file or directory
+```
+Edit the follwoing file /etc/multipath.conf to fix this issue:
+```
++blacklist {
++    device {
++        vendor "VMware"
++        product "Virtual disk"
++    }
++}
+```
+After that restart the deamon:
+```
+systemctl restart multipath-tools
+```
+Reactivate repo:
+```
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+apt-get install apt-transport-https -y
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
+echo "deb https://artifacts.elastic.co/packages/oss-7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
+
+wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_20.04/Release.key | /usr/bin/apt-key add -
+echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_20.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+apt update
+apt install syslog-ng-mod-snmp syslog-ng-mod-freetds syslog-ng-mod-json syslog-ng-mod-mysql syslog-ng-mod-pacctformat syslog-ng-mod-pgsql syslog-ng-mod-snmptrapd-parser syslog-ng-mod-sqlite3
+sudo apt autoremove
+```
+
+## 14. Information and external links
 
 More information: https://www.remotesyslog.com/
 
 Find more plugins: https://github.com/syslog-ng/syslog-ng/tree/master/scl
 
-## 14. Donation and help
+## 15. Donation and help
 
-### 14.1 Donation
+### 15.1 Donation
 
 Crypto:
 
@@ -399,14 +466,14 @@ PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=KQKRPDQYHYR7W&currency_code=EUR&source=url)
 
-### 14.2 Help
+### 15.2 Help
 
 To improve the code and functions we like to have you help. Send your idea or code to: info@remotesyslog.com or create a pull request. We will review it and add it to this project.
 
-### 14.3 What is a RSCX token?
+### 15.3 What is a RSCX token?
 RSCX is created to reward developers for their work and to support the project. It is a tradable token by the Waves exchange. It comes with no warranty and the price indication is based on the live market. Sending funds to the wrong address will result in a loss of those funds. We do not refund RSCX tokens. We suggest that you use a hardware token to secure the RSCX tokens. Good luck trading and have fun!
 
-### 14.4 RSCX token
+### 15.4 RSCX token
 We have a reward system in place, Remote Syslog has it own token available called RSCX. How to get RSCX?
 
 Send usable code/patterns to info@remotesyslog.com or create a pull request. We will review the code or pattern, this may take some time.
@@ -459,5 +526,5 @@ RSCX / MRT
 RSCX / LIQUID
 ```
 
-### 14.5 Funds
+### 15.5 Funds
 All donations and other funds will be used to cover cost of this project and to improve tests/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
