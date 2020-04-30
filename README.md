@@ -397,7 +397,7 @@ Edit the following file: /etc/apache2/mods-enabled/php7.2.load and chnage:
 +LoadModule php7_module /usr/lib/apache2/modules/libphp7.4.so
 ```
 Check to /var/log/syslog for errors. We found 2 errors and this depends on which platform you run the RSX server.
-DNS message:
+Error 1 || DNS message:
 ```
 Apr 30 20:56:22 lusysl003 systemd-resolved[923]: Server returned error NXDOMAIN, mitigating potential DNS violation DVE-2018-0001, retrying transaction with reduced feature level UDP
 ```
@@ -410,14 +410,14 @@ or
 rm /etc/resolv.conf
 ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 ```
-If you run the server on ESXi you get the following error:
+Error 2 || If you run the server on ESXi you get the following error:
 ```
 Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: add missing path
 Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: failed to get udev uid: Invalid argument
 Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: failed to get sysfs uid: Invalid argument
 Apr 30 12:47:53 plisk001.prd.corp multipathd[856]: sdb: failed to get sgio uid: No such file or directory
 ```
-Edit the follwoing file /etc/multipath.conf to fix this issue:
+Edit the following file /etc/multipath.conf to fix this issue:
 ```
 +blacklist {
 +    device {
