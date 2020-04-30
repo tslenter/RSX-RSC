@@ -989,9 +989,11 @@ function ubntrepofix() {
     else
         echo "Continue ..."
     fi
+    drel="$(lsb_release -a | egrep 'Codename:')"
     if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
         echo "Nothing to do ..."
-    else
+    elif [[ $drel =~ "bionic" ]]; then
+        touch /etc/apt/sources.list.d/syslog-ng.list
         wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
         echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
         apt update
@@ -999,6 +1001,18 @@ function ubntrepofix() {
 #If upgrade is triggered
         apt install syslog-ng -y
         check_package "syslog-ng"
+    elif [[ $drel =~ "focal" ]]; then
+        touch /etc/apt/sources.list.d/syslog-ng.list
+        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_20.04/Release.key | /usr/bin/apt-key add -
+        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_20.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+        apt update
+        apt auto-remove -y
+#If upgrade is triggered
+        apt install syslog-ng -y
+        check_package "syslog-ng"
+    else
+        echo "No distro found ..."
+        exit
     fi
 }
 
