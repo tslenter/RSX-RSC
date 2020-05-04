@@ -312,11 +312,18 @@ function arm_fix_undo() {
     exit
 }
 
+function netflow() {
+    echo "Started Ubuntu ARM fix reversal ..."
+    chmod +x $RSDESTP/netflow/netflow_in
+    $RSDESTP/netflow/netflow_in
+    exit
+}
+
 clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Laravel project development" "Quit")
+options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Laravel project development" "Remove/Install netflow" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -416,9 +423,15 @@ do
             rsl_install
             exit
    ;;
+        "Remove/Install netflow")
+            clear
+            banner
+            netflow
+            exit
+   ;;
         "Quit")
             break
-    ;;
+   ;;
         *) echo "Invalid option $REPLY ..." ;;
     esac
 done
