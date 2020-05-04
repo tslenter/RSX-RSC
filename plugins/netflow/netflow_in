@@ -1,0 +1,168 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+FCONF=/etc/filebeat/filebeat.yml
+FCONFMOD=/etc/filebeat/modules.d/netflow.yml
+
+#Banner
+function banner() {
+    echo ""
+    echo "#################################################"
+    echo "#Remote Syslog X/C                              #"
+    echo "#More information: remotesyslog.com             #"
+    echo "#Remote Syslog plugins                          #"
+    echo "#Version: RSX 0.1                               #"
+    echo "#Donate: https://github.com/tslenter/RSX-RSC/   #"
+    echo "#################################################"
+    echo ""
+    echo "Install netflow module with filebeat ..."
+    echo ""
+}
+
+#Check if user is root
+function checkroot() {
+    if ! [ $(id -u) = 0 ]; then
+        clear
+        banner
+        echo "This installation must be run as root!"
+        echo ""
+        exit 1
+    fi
+}
+
+#Check if file exist
+function check_file() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, continue installation ..."
+    else
+        echo "File: $1 does not exist, exit ..."
+        exit
+    fi
+}
+
+function installfilebeat() {
+    apt update
+    apt install filebeat
+    check_file $FCONF
+    filebeat modules enable netflow
+    check_file $FCONFMOD
+}
+
+function writeconfig() {
+    echo "Writing new config ..."
+    sed -i "s|\      netflow_host:.localhost|      netflow_host: 0\\.0\\.0\\.0|" $FCONFMOD
+    sed -i 's|\#host: "localhost:5601"|host: "localhost:5601\/kibana"|' $FCONF
+}
+
+function testconfig() {
+    filebeat test config
+}
+
+function loadconf() {
+    filebeat setup -e
+    ufw allow 2055/udp
+    systemctl enable filebeat
+    service filebeat restart
+}
+
+function info() {
+    echo "Default port 2055/udp is used to recieve netflow ..."
+    echo "The following is a Cisco example config:"
+    echo "flow record RSXrecord"
+    echo "match ipv4 source address"
+    echo "match ipv4 destination address"
+    echo "match ipv4 protocol"
+    echo "match transport source-port"
+    echo "match transport destination-port"
+    echo "match ipv4 tos"
+    echo "match interface input"
+    echo "collect interface output"
+    echo "collect counter bytes"
+    echo "collect counter packets"
+    echo "collect timestamp sys-uptime first"
+    echo "collect timestamp sys-uptime last"
+    echo ""
+    echo "flow exporter RSXExport"
+    echo "destination 10.100.106.250"
+    echo "transport UDP 2055"
+    echo "export-protocol netflow-v9"
+    echo "template data timeout 60"
+    echo ""
+    echo "flow monitor RSXMonitor"
+    echo "record RSXrecord"
+    echo "exporter RSXExport"
+    echo "cache timeout active 60"
+    echo "cache timeout inactive 15"
+    echo "exit"
+    echo ""
+    echo "int te4/1"
+    echo "ip flow monitor RSXMonitor input"
+    echo "int te3/1"
+    echo "ip flow monitor RSXMonitor input"
+}
+
+function disablenetflow() {
+    echo "Going to disable netflow ..."
+    filebeat modules disable netflow
+    echo "Do you wish to disable filebeat service? ..."
+    while true; do
+    read -p "Do you wish to continue? y/n: " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+    done
+    service filebeat stop
+    systemctl disable filebeat
+}
+
+clear
+banner
+
+#Menu
+PS3='Please enter your choice: '
+options=("Install netflow" "Remove netflow" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Install netflow")
+            checkroot
+            installfilebeat
+            writeconfig
+            testconfig
+            loadconf
+            info
+            exit
+    ;;
+        "Remove netflow")
+            checkroot
+            disablenetflow
+            exit
+    ;;
+        "Quit")
+            break
+    ;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done
