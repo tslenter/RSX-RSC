@@ -382,6 +382,8 @@ More information over Remote Syslog 1.x: https://github.com/tslenter/Remote_Sysl
 Upgrade commands:
 ```bash
 apt update && sudo apt upgrade
+#You probably run in a syslog-ng rdkafka error. This will stop the installation. Therefore we added "apt install -f"
+apt install -f
 reboot
 apt install update-manager-core
 do-release-upgrade -d
