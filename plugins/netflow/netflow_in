@@ -112,6 +112,14 @@ function infoload() {
     echo "ip flow monitor RSXMonitor input"
     echo "int te3/1"
     echo "ip flow monitor RSXMonitor input"
+    echo ""
+    echo "Example configuration Ubiquiti EdgeMax:"
+    echo "set system flow-accounting interface eth0"
+    echo "set system flow-accounting netflow enable-ingress"
+    echo "set system flow-accounting netflow engine-id 1"
+    echo "set system flow-accounting netflow server 172.16.2.249 port 2055"
+    echo "set system flow-accounting netflow version 9"
+    echo "commit"
     systemctl enable filebeat
     service filebeat restart
 }
