@@ -53,6 +53,9 @@ Logstash additional configs:   /etc/logstash/conf.d/99*
 Logrotate:                     /etc/logrotate.d/remotelog
 Syslog-ng logrotate:           /etc/logrotate.d/syslog-ng
 Colortail global:              /opt/remotesyslog/colortail
+Filebeat global:               /etc/filebeat/filebeat.yml
+Filebeat Cisco:                /etc/filebeat/modules.d/cisco.yml
+Filebeat netflow:              /etc/filebeat/modules.d/netflow.yml
 ```
 
 ## 4. RS version 2.0 Premium

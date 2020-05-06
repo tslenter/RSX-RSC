@@ -21,7 +21,7 @@
 #E-mail: info@remotesyslog.com
 
 FCONF=/etc/filebeat/filebeat.yml
-FCONFMOD=/etc/filebeat/modules.d/netflow.yml
+FCONFMOD=/etc/filebeat/modules.d/cisco.yml
 
 #Banner
 function banner() {
@@ -34,7 +34,8 @@ function banner() {
     echo "#Donate: https://github.com/tslenter/RSX-RSC/   #"
     echo "#################################################"
     echo ""
-    echo "Install netflow module with filebeat ..."
+    echo "Install cisco module with filebeat ..."
+    echo "Make sure that kibana and elasticsearch are installed ..."
     echo ""
 }
 
@@ -64,14 +65,28 @@ function installfilebeat() {
     apt update
     apt install filebeat
     check_file $FCONF
-    filebeat modules enable netflow
+    filebeat modules enable cisco
     check_file $FCONFMOD
 }
 
 function writeconfig() {
+    echo "Do you wish to enable the Cisco module? ..."
+    echo "We do activate ASA, IOS, FTD, edit /etc/filebeat/modules.d/cisco.yml to disable some services ..." 
+    while true; do
+    read -p "Do you wish to continue? y/n: " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+    done
     echo "Writing new config ..."
-    sed -i "s|\      netflow_host:.localhost|      netflow_host: 0\\.0\\.0\\.0|" $FCONFMOD
-    sed -i 's|\#host: "localhost:5601"|host: "localhost:5601\/kibana"|' $FCONF
+    sed -i "s|\#var.syslog_host: localhost|var.syslog_host: 0\\.0\\.0\\.0|" $FCONFMOD
+    sed -i "s|\#var.input: syslog|var.input: syslog|" $FCONFMOD
+    sed -i "s|\enabled: false|enabled: true|" $FCONFMOD
+    sed -i "s|\#var.syslog_port: 9001|var.syslog_port: 561|" $FCONFMOD
+    sed -i "s|\#var.syslog_port: 9002|var.syslog_port: 560|" $FCONFMOD
+    sed -i "s|\#var.syslog_port: 9003|var.syslog_port: 562|" $FCONFMOD
 }
 
 function testconfig() {
@@ -79,47 +94,10 @@ function testconfig() {
 }
 
 function infoload() {
-    echo "Default port 2055/udp is used to recieve netflow ..."
-    echo "The following is a Cisco example config:"
-    echo "flow record RSXrecord"
-    echo "match ipv4 source address"
-    echo "match ipv4 destination address"
-    echo "match ipv4 protocol"
-    echo "match transport source-port"
-    echo "match transport destination-port"
-    echo "match ipv4 tos"
-    echo "match interface input"
-    echo "collect interface output"
-    echo "collect counter bytes"
-    echo "collect counter packets"
-    echo "collect timestamp sys-uptime first"
-    echo "collect timestamp sys-uptime last"
-    echo ""
-    echo "flow exporter RSXExport"
-    echo "destination 10.100.106.250"
-    echo "transport UDP 2055"
-    echo "export-protocol netflow-v9"
-    echo "template data timeout 60"
-    echo ""
-    echo "flow monitor RSXMonitor"
-    echo "record RSXrecord"
-    echo "exporter RSXExport"
-    echo "cache timeout active 60"
-    echo "cache timeout inactive 15"
-    echo "exit"
-    echo ""
-    echo "int te4/1"
-    echo "ip flow monitor RSXMonitor input"
-    echo "int te3/1"
-    echo "ip flow monitor RSXMonitor input"
-    echo ""
-    echo "Example configuration Ubiquiti EdgeMax:"
-    echo "set system flow-accounting interface eth0"
-    echo "set system flow-accounting netflow enable-ingress"
-    echo "set system flow-accounting netflow engine-id 1"
-    echo "set system flow-accounting netflow server 172.16.2.249 port 2055"
-    echo "set system flow-accounting netflow version 9"
-    echo "commit"
+    echo "Default port 561/udp is used to recieve ASA ..."
+    echo "Default port 562/udp is used to recieve FTD ..."
+    echo "Default port 560/udp is used to recieve IOS ..."
+    echo "Cisco example logging command for IOS: logging host 172.16.2.249 transport udp port 560"
     systemctl enable filebeat
     service filebeat restart
 }
@@ -136,12 +114,14 @@ function fwconf() {
         * ) echo "Please answer yes or no.";;
     esac
     done
-    ufw allow 2055/udp
+    ufw allow 560/udp
+    ufw allow 561/udp
+    ufw allow 562/udp
 }
 
-function disablenetflow() {
-    echo "Going to disable netflow ..."
-    filebeat modules disable netflow
+function disablenetcisco() {
+    echo "Going to disable cisco module ..."
+    filebeat modules disable cisco
     echo "Do you wish to disable filebeat service? ..."
     while true; do
     read -p "Do you wish to continue? y/n: " yn
@@ -160,11 +140,11 @@ banner
 
 #Menu
 PS3='Please enter your choice: '
-options=("Install netflow" "Remove netflow" "Quit")
+options=("Install filebeat Cisco" "Remove filebeat Cisco" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Install netflow")
+        "Install filebeat Cisco")
             checkroot
             installfilebeat
             writeconfig
@@ -173,9 +153,9 @@ do
             infoload
             exit
     ;;
-        "Remove netflow")
+        "Remove filebeat Cisco")
             checkroot
-            disablenetflow
+            disablenetcisco
             exit
     ;;
         "Quit")
