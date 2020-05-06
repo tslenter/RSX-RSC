@@ -81,6 +81,7 @@ function writeconfig() {
     esac
     done
     echo "Writing new config ..."
+    sed -i 's|\#host: "localhost:5601"|host: "localhost:5601\/kibana"|' $FCONF
     sed -i "s|\#var.syslog_host: localhost|var.syslog_host: 0\\.0\\.0\\.0|" $FCONFMOD
     sed -i "s|\#var.input: syslog|var.input: syslog|" $FCONFMOD
     sed -i "s|\enabled: false|enabled: true|" $FCONFMOD
