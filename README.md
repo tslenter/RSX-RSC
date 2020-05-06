@@ -382,6 +382,13 @@ After the removal of Remote Syslog 1.x, install the new RSX or RSC. The old sysl
 More information over Remote Syslog 1.x: https://github.com/tslenter/Remote_Syslog
 
 ### 13.2 Upgrade from Ubuntu 18.04 to 20.04
+First update rsinstaller:
+```bash
+rsinstaller
+Select option: 3
+```
+Build 56 or higher is recommended.
+
 Upgrade commands:
 ```bash
 apt update && sudo apt upgrade
