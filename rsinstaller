@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000056
+bid=00000057
 
 #Banner
 function banner() {
@@ -988,6 +988,14 @@ function ubntrepofix() {
         sudo echo "" > /etc/apt/sources.list.d/syslog-ng.list
     else
         echo "Continue ..."
+    fi
+#Java path fix
+    JVMPATH="$(cat /etc/environment | egrep 'LD_LIBRARY_PATH')"
+    if [[ $JVMPATH =~ "jdk" ]]; then
+        echo "Java environment found ..."
+        echo "Continue ..."
+    else
+        echo "LD_LIBRARY_PATH=/usr/lib/jvm/java-11-openjdk-amd64/lib/server" >> /etc/environment
     fi
     drel="$(lsb_release -a | egrep 'Codename:')"
     if [ -e "/etc/apt/sources.list.d/syslog-ng.list" ]; then
