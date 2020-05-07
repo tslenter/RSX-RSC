@@ -348,30 +348,38 @@ dpkg: dependency problems prevent configuration of syslog-ng-mod-redis:
 Fix:
 
 Backup configuration
+```bash
 mkdir ~/syslog-ng_backup/
 cp -rf /etc/syslog-ng/* ~/syslog-ng_backup/
-
+```
 Verify configuration
+```bash
 ls ~/syslog-ng_backup/
-
+```
 Purge syslog-ng and remove everything
+```bash
 sudo apt purge syslog-ng-core
-
+```
 If some files remain, delete them all
+```bash
 rm -rf /etc/syslog-ng
-
+```
 Reinstall syslog-ng-core
+```bash
 sudo apt install syslog-ng-core
-
+```
 Reinstall syslog-ng
+```bash
 sudo apt install syslog-ng
-
+```
 Cleanup some packages
+```bash
 sudo apt auto-remove
-
+```
 Restore RS configuration files
+```bash
 cp ~/syslog-ng_backup/conf.d/99* /etc/syslog-ng/conf.d/
-
+```
 If you edited the /etc/syslog-ng/syslog-ng.conf file, check the difference and restore your custom configuration.
 
 This issue should be fixed in version 3.27.1-2.1.
