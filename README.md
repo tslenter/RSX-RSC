@@ -451,7 +451,8 @@ Build 56 or higher is recommended.
 Upgrade commands:
 ```bash
 apt update && sudo apt upgrade
-#You probably run in a syslog-ng rdkafka error. This will stop the installation. Therefore we added "apt install -f"
+#You probably run in a syslog-ng rdkafka error. This will stop the installation. Therefore we added "apt install -f".
+#This only effects version 3.27.1 and was fixed in 3.27.1-2.
 apt install -f
 reboot
 apt install update-manager-core
@@ -459,6 +460,7 @@ do-release-upgrade -d
 ```
 It appears that the package "syslog-ng-mod-rdkafka" has some conflics with the core configuration, If you run in this error, try to uninstall this package:
 ```bash
+#This only effects version 3.27.1 and was fixed in 3.27.1-2.
 apt remove syslog-ng-mod-rdkafka
 ```
 After the upgrade there is a issue with the Apache2 configuration:
