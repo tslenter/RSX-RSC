@@ -315,7 +315,7 @@ service kibana restart
 ```
 
 ### 10.3 Data too large, data for [<http_request>] (JVM heap size)
-Error mesage:
+Error message:
 ```bash
 tom@plisk002:~$ curl -X GET 'http://localhost:9200/_cat/health?v'
 {"error":{"root_cause":[{"type":"circuit_breaking_exception","reason":"[parent] Data too large, data for [<http_request>] would be [1014538592/967.5mb], which is larger than the limit of [986061209/940.3mb], real usage: [1014538592/967.5mb], new bytes reserved: [0/0b], usages [request=0/0b, fielddata=3057213/2.9mb, in_flight_requests=0/0b, accounting=261018719/248.9mb]","bytes_wanted":1014538592,"bytes_limit":986061209,"durability":"PERMANENT"}],"type":"circuit_breaking_exception","reason":"[parent] Data too large, data for [<http_request>] would be [1014538592/967.5mb], which is larger than the limit of [986061209/940.3mb], real usage: [1014538592/967.5mb], new bytes reserved: [0/0b], usages [request=0/0b, fielddata=3057213/2.9mb, in_flight_requests=0/0b, accounting=261018719/248.9mb]","bytes_wanted":1014538592,"bytes_limit":986061209,"durability":"PERMANENT"},"status":429}
@@ -333,6 +333,65 @@ Edit:
 +-Xms6g
 +-Xmx6g
 ```
+
+### 10.4 Syslog-NG 3.27.1 breaks with new upgrade on Ubuntu 18.04 and 20.04
+Error message:
+```bash
+dpkg: error processing package syslog-ng-mod-sql (--configure):
+ dependency problems - leaving unconfigured
+dpkg: dependency problems prevent configuration of syslog-ng-mod-redis:
+ syslog-ng-mod-redis depends on syslog-ng-core (>= 3.27.1-2); however:
+  Package syslog-ng-core is not configured yet.
+ syslog-ng-mod-redis depends on syslog-ng-core (<< 3.27.1-2.1~); however:
+  Package syslog-ng-core is not configured yet.
+```
+Fix:
+
+Backup configuration
+```bash
+mkdir ~/syslog-ng_backup/
+cp -rf /etc/syslog-ng/* ~/syslog-ng_backup/
+```
+Verify configuration
+```bash
+ls ~/syslog-ng_backup/
+```
+Purge syslog-ng and remove everything
+```bash
+sudo apt purge syslog-ng-core
+```
+If some files remain, delete them all
+```bash
+rm -rf /etc/syslog-ng
+```
+Reinstall syslog-ng-core
+```bash
+sudo apt install syslog-ng-core
+```
+Reinstall syslog-ng
+```bash
+sudo apt install syslog-ng
+```
+Cleanup some packages
+```bash
+sudo apt auto-remove
+```
+Restore RS configuration files
+```bash
+cp ~/syslog-ng_backup/conf.d/99* /etc/syslog-ng/conf.d/
+```
+If you edited the /etc/syslog-ng/syslog-ng.conf file, check the difference and restore your custom configuration.
+
+This issue should be fixed in version 3.27.1-2.1.
+
+### 10.5 My elasticsearch does not recieve any logging, but everything is fine
+You probably should check the date. If the date is not correct run in the CLI as root:
+dpkg-reconfigure tzdata
+
+This allows you to configure the timezone.
+
+The next thing to check is within the Kibana console
+Management => Advanced Settings => Timezone for date formatting => setup the right timezone.
 
 ## 11. Default API queries for Elasticsearch
 Find all indexes:
@@ -392,7 +451,8 @@ Build 56 or higher is recommended.
 Upgrade commands:
 ```bash
 apt update && sudo apt upgrade
-#You probably run in a syslog-ng rdkafka error. This will stop the installation. Therefore we added "apt install -f"
+#You probably run in a syslog-ng rdkafka error. This will stop the installation. Therefore we added "apt install -f".
+#This only effects version 3.27.1 and was fixed in 3.27.1-2.
 apt install -f
 reboot
 apt install update-manager-core
@@ -400,6 +460,7 @@ do-release-upgrade -d
 ```
 It appears that the package "syslog-ng-mod-rdkafka" has some conflics with the core configuration, If you run in this error, try to uninstall this package:
 ```bash
+#This only effects version 3.27.1 and was fixed in 3.27.1-2.
 apt remove syslog-ng-mod-rdkafka
 ```
 After the upgrade there is a issue with the Apache2 configuration:
