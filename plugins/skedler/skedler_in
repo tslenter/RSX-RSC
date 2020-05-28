@@ -1,0 +1,124 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+FCONF=/etc/skedler-reports/reporting.yml
+
+#Banner
+function banner() {
+    echo ""
+    echo "#################################################"
+    echo "#Remote Syslog X/C                              #"
+    echo "#More information: remotesyslog.com             #"
+    echo "#Remote Syslog plugins                          #"
+    echo "#Version: RSX 0.1                               #"
+    echo "#Donate: https://github.com/tslenter/RSX-RSC/   #"
+    echo "#################################################"
+    echo ""
+    echo "Install Skedler module ..."
+    echo "Make sure that kibana and elasticsearch are installed ..."
+    echo ""
+}
+
+#Check if user is root
+function checkroot() {
+    if ! [ $(id -u) = 0 ]; then
+        clear
+        banner
+        echo "This installation must be run as root!"
+        echo ""
+        exit 1
+    fi
+}
+
+function sked_in() {
+    echo "Start install packages ..."
+    apt-get install libfontconfig libnss3
+    echo "Download skedler ..."
+    wget https://s3-us-west-1.amazonaws.com/skedler-releases/downloads/packages/skedler-reports.deb -P /tmp
+    wget https://s3.amazonaws.com/skedler-alerts/skedler-alerts-releases/downloads/packages/skedler-alerts.deb -P /tmp
+    echo "Install packages ..."
+    dpkg -i /tmp/skedler-alerts.deb /tmp/skedler-reports.deb
+    echo "Setup ports ..."
+    sed -i 's|\#port: 3000|port: 3000|' $FCONF
+    sed -i 's|\#host: "0.0.0.0"|host: "0.0.0.0"|' $FCONF
+    sed -i 's|\#basePath: ""|basePath: ""|' $FCONF
+    sed -i 's|\#elasticsearch_url: "http://localhost:9200"|elasticsearch_url: "http://localhost:9200"|' $FCONF
+    echo "Activate services ..."
+    currentpath=$(pwd)
+    chmod +x /usr/share/skedler-reports/install_as_service.sh
+    cd /usr/share/skedler-reports
+    ./install_as_service.sh
+    cd $currentpath
+    systemctl enable skedler
+    service skedler start
+    echo "Configure Skedler with the following Kibana URL:"
+    echo "http://localhost:5601/kibana"
+    echo "Report executable: /usr/share/skedler-reports/bin/skedler"
+    echo "Alert executable: /usr/share/skedler-alerts/bin/alert"
+    echo "URL is activated on http://<ip or hostname>:3000/"
+    echo ""
+    echo "Only activate fw rules if you activated the firewall module ..."
+    while true; do
+    read -p "Do you wish to activate the firewall rules? y/n: " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+    done
+    ufw allow 3000/tcp
+    ufw allow 3001/tcp
+}
+
+function sked_rm() {
+    echo "Start removal ..."
+    service skedler stop
+    systemctl disable skedler
+    dpkg -r skedler-alerts skedler-reports
+    echo "Deinstallation done, please check the firewall module for unused open ports ..."
+}
+
+clear
+banner
+
+#Menu
+PS3='Please enter your choice: '
+options=("Install Skedler reporting and alerting" "Remove Skedler reporting and alerting" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Install Skedler reporting and alerting")
+            checkroot
+            sked_in
+            exit
+    ;;
+        "Remove Skedler reporting and alerting")
+            checkroot
+            sked_rm
+            exit
+    ;;
+        "Quit")
+            break
+    ;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done
