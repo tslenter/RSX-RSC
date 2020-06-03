@@ -174,6 +174,145 @@ Allow from all
 </Directory>
 ```
 
+### 7.3 Active Directory integration via PAM
+Run commands as root:
+```bash
+su -
+```
+Upgrade distro:
+```bash
+apt-get update && apt upgrade -y
+```
+
+Install packages:
+```bash
+apt-get install realmd packagekit sssd-tools sssd libnss-sss libpam-sss adcli oddjob oddjob-mkhomedir adcli samba-common ntpdate ntp unzip resolvconf git -y
+```
+
+Enable DNS service:
+```bash
+systemctl start resolvconf.service
+systemctl enable resolvconf.service
+systemctl status resolvconf.service
+```
+
+Configure DNS service:
+```bash
+nano /etc/resolvconf/resolv.conf.d/head
+```
+
+Add:
+```
+nameserver <ip dnsserver domeincontroller>
+```
+
+Reload DNS service:
+```bash
+systemctl restart resolvconf.service
+```
+
+Check if domain controller connection:
+```bash
+ping dom001.lan.local
+```
+
+Join controller:
+```bash
+realm join --user=administrator lan.local --verbose
+```
+
+Expected output:
+```
+* Successfully enrolled machine in realm
+```
+
+Edit sssd deamon:
+```bash
+nano /etc/sssd/sssd.conf
+```
+
+Edit configuration:
+```
+[sssd]
+domains = LAN.LOCAL
+config_file_version = 2
+services = nss, pam, sudo
+default_domain_suffix = lan.local
+full_name_format = %1$s
+
+[domain/lan.local]
+ad_domain = lan.local
+krb5_realm = LAN.LOCAL
+realmd_tags = manages-system joined-with-adcli
+cache_credentials = True
+id_provider = ad
+krb5_store_password_if_offline = True
+default_shell = /bin/bash
+ldap_id_mapping = True
+use_fully_qualified_names = True
+fallback_homedir = /home/%u@%d
+#Restict AD search:
+#ldap_search_base = DC=lan,DC=local
+#ldap_user_search_base OU=Power Users,OU=Accounts,DC=lan,DC=local
+#ldap_group_search_base OU=Groups,DC=lan,DC=local
+access_provider = simple
+simple_allow_groups = ad-group1, ad-group2
+manage-system = yes
+automatic-id-mapping = yes
+```
+
+Reload sssd deamon:
+```bash
+service sssd restart
+```
+
+Configure PAM to auto create home folder:
+```bash
+nano /etc/pam.d/common-session
+```
+
+Add:
+```
+session    required    pam_mkhomedir.so skel=/etc/skel/ umask=0022
+```
+
+Grant root rights (only ubuntu):
+```bash
+nano /etc/sudoers
+```
+
+Add:
+```
+%<add ad group here> ALL=(ALL:ALL) ALL
+```
+
+To add a additional group use the following command:
+```bash
+realm permit -g <groepnaam>@lan.local
+```
+
+Secure apache2 login:
+```bash
+nano /etc/apache2/sites-enabled/rsx-apache.conf
+```
+
+Change the following configuration:
+```
+Change in all 3 location blocks:
+                Require valid-user
+                #Require user user1 user2 user3
+#To:
+                #Require valid-user
+                Require user test01 <<-- username
+```
+
+Reload apache2 services:
+```bash
+service apache2 restart
+```
+
+Login or continue the RSX/RSC installation.
+
 ## 8. Search strings CLI
 
 ### 8.1 Search multiple strings of text within the per_host logging directory
