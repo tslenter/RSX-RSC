@@ -312,6 +312,10 @@ service apache2 restart
 ```
 
 Login or continue the RSX/RSC installation.
+Default logout link: 
+```
+https://<ip or dns>/logout
+```
 
 ## 8. Search strings CLI
 
