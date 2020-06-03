@@ -711,7 +711,7 @@ RSCX distribution:
  - 4 million RSCX is available for developers
  - 6 million is reserved for future use
 
-The only way to get those tokens is to develop something usefull for this project.
+The only way to get RSCX tokens is to develop something usefull for this project.
 
 Where to trade RSCX:
 
