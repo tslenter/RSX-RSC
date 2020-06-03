@@ -256,7 +256,7 @@ fallback_homedir = /home/%u@%d
 #ldap_user_search_base OU=Power Users,OU=Accounts,DC=lan,DC=local
 #ldap_group_search_base OU=Groups,DC=lan,DC=local
 access_provider = simple
-simple_allow_groups = ad-group1, ad-group2
+simple_allow_groups = <ad group 1>, <ad group 2>
 manage-system = yes
 automatic-id-mapping = yes
 ```
