@@ -1,0 +1,122 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2020 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+KCONF="/etc/kibana/kibana.yml"
+
+#Banner
+function banner() {
+    echo ""
+    echo "#################################################"
+    echo "#Remote Syslog X/C                              #"
+    echo "#More information: remotesyslog.com             #"
+    echo "#Remote Syslog plugins                          #"
+    echo "#Version: RSX 0.1                               #"
+    echo "#Donate: https://github.com/tslenter/RSX-RSC/   #"
+    echo "#################################################"
+    echo ""
+    echo "Enable/Disable proxy authentication module ..."
+    echo ""
+}
+
+#Check if user is root
+function checkroot() {
+    if ! [ $(id -u) = 0 ]; then
+        clear
+        banner
+        echo "This installation must be run as root!"
+        echo ""
+        exit 1
+    fi
+}
+
+#Check if file exist
+function check_file() {
+    file=$1
+    if [ -e "$file" ]; then
+        echo "File: $1 exists, continue installation ..."
+    else
+        echo "File: $1 does not exist, exit ..."
+        exit
+    fi
+}
+
+function disableproxy() {
+    check_file $KCONF
+    service apache2 stop
+    systemctl disable apache2
+    if grep ^server.host: $KCONF;
+    then
+       echo "Nothing to do ..."
+    else
+       echo "writing config to $KCONF"
+       sed -i 's|#server.host: "localhost"|\server.host: 0.0.0.0|' $KCONF
+       sed -i "s|#server\\.host: 0\\.0\\.0\\.0|\server\\.host: 0\\.0\\.0\\.0|" $KCONF
+    fi
+    echo "The proxy module is disabled and Kibana is active http://<ip_server>:5601/kibana"
+    echo "!WARNING! Removing the path can break some modules ..."
+    read -p "Do you which to disable the kibana path y/n? " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+       sed -i "s|server\\.rewriteBasePath: true|\#server\\.rewriteBasePath: true|" $KCONF
+       sed -i 's|server.basePath: "/kibana"|\#server.basePath: "/kibana"|' $KCONF
+       echo "New URL: http://<ip_server>:5601/"
+    fi
+    service kibana restart
+}
+
+function enableproxy() {
+    check_file $KCONF
+    service apache2 start
+    systemctl enable apache2
+    echo "Reverse configuration ..."
+    sed -i "s|server\\.host: 0\\.0\\.0\\.0|\#server\\.host: 0\\.0\\.0\\.0|" $KCONF
+    sed -i "s|#server\\.rewriteBasePath: true|server\\.rewriteBasePath: true|" $KCONF
+    sed -i 's|#server.basePath: "/kibana"|server.basePath: "/kibana"|' $KCONF
+    service kibana restart
+}
+
+clear
+banner
+
+#Menu
+PS3='Please enter your choice: '
+options=("Enable proxy" "Disable proxy" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Enable proxy")
+            checkroot
+            enableproxy
+            exit
+    ;;
+        "Disable proxy")
+            checkroot
+            disableproxy
+            exit
+    ;;
+        "Quit")
+            break
+    ;;
+        *) echo "Invalid option $REPLY ..." ;;
+    esac
+done
