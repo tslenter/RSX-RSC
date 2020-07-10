@@ -73,7 +73,7 @@ function disableproxy() {
     fi
     echo "The proxy module is disabled and Kibana is active http://<ip_server>:5601/kibana"
     echo "!WARNING! Removing the path can break some modules ..."
-    read -p "Do you which to disable the kibana path y/n? " -n 1 -r
+    read -p "Do you want to disable the kibana path y/n? " -n 1 -r
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
