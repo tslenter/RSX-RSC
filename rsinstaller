@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000059
+bid=00000060
 
 #Banner
 function banner() {
@@ -625,17 +625,25 @@ function upgrade() {
 #Upgrade platform
 function osupdate() {
     echo "Start OS update ..."
-    apt update && apt upgrade -y
-#Disabled apt autoremove may break something. Run apt autoremove -y if you like to remove unused packages.
-    #apt autoremove -y
-    if [ -e /etc/kibana/kibana.yml ]; then
-        echo "RSX Kibana found ..."
-        echo "Restart services ..."
-        service kibana stop
-        service kibana start
+    echo "WARNING: This will upgrade all Elasticsearch products ..."
+    read -p "Are you sure? Press y/Y: " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        apt update && apt upgrade -y
+            if [ -e /etc/kibana/kibana.yml ]; then
+                  echo "RSX Kibana found ..."
+                  echo "Restart services ..."
+                  service kibana stop
+                  service kibana start
+             else
+                  echo "Nothing to do"
+             fi
     else
         echo "Nothing to do"
     fi
+#Disabled apt autoremove may break something. Run apt autoremove -y if you like to remove unused packages.
+    #apt autoremove -y
 }
 
 function changedefault() {

@@ -35,6 +35,7 @@ function check_file() {
 
 echo "Plugin is only tested for RSX with Ubuntu 18.x 64-bit ..."
 echo "Update packages ..."
+apt-get update && apt-get install default-jre -y
 apt-get update && apt-get install logstash -y
 check_file_reverse $LOGSTASH_VAR/98-rsxdefault.conf
 echo "Copy configuration ..."
