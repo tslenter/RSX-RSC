@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000060
+bid=00000061
 
 #Banner
 function banner() {
@@ -451,7 +451,6 @@ function coreremove() {
         rsxremove
     else
         echo "No GUI found, remove done ..."
-        exit
     fi
 }
 
@@ -575,7 +574,6 @@ function guiupgrade() {
         echo "Upgrade GUI done ..."
     else
         echo "No GUI found, upgrade done ..."
-        exit
     fi
 }
 
