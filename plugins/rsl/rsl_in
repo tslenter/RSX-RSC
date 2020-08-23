@@ -141,7 +141,7 @@ function install_rsv2_project_beta()
 {
    rm -rf $APACHEDIR/* > /dev/null 2>&1
    rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   git clone --branch master https://jc.remotesyslog.com:9080/gitlab/tslenter/remotesyslog-rsv2.git $APACHEDIR/rsv2
+   git clone --branch release/v0.5-beta https://jc.remotesyslog.com:9080/gitlab/tslenter/remotesyslog-rsv2.git $APACHEDIR/rsv2
 
    useradd -m -s /bin/bash -p $PASS rs
 
@@ -156,7 +156,7 @@ function install_rsv2_project_beta()
 
    runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
 
-   mysql --execute="use laravel; insert into users (name, email, username, email_verified_at, password, remember_token, updated_at, created_at) values ('rs', 'noreply@remotesyslog.com', 'rs', now(), '$PASS',  'VnmLy0JJNG', now(), now())"
+   mysql --execute="use laravel; insert into users (name, email, username, email_verified_at, password, remember_token, updated_at, created_at) values ('rs', 'noreply@remotesyslog.com', 'rs', now(), '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',  'VnmLy0JJNG', now(), now())"
 }
 
 function install_backup_project()
