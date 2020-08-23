@@ -59,7 +59,7 @@ Filebeat netflow:              /etc/filebeat/modules.d/netflow.yml
 ```
 
 ## 4. RS version 2.0 open for BETA
-This version is based on Laravel and programmed by Ronald Gerits. This prodcut is not completed and may have some bugs. Feel free to try it. To install run the following with the "rsinstaller" the folowing options:
+This version is based on Laravel and programmed by Ronald Gerits. This product is not completed and may have some bugs. Feel free to try it. To install run the following with the "rsinstaller" the folowing options:
 ```
 First option:
 1) Core installation
