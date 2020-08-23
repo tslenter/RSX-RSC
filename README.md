@@ -58,9 +58,16 @@ Filebeat Cisco:                /etc/filebeat/modules.d/cisco.yml
 Filebeat netflow:              /etc/filebeat/modules.d/netflow.yml
 ```
 
-## 4. RS version 2.0 Premium
-This version was announced, but did not pass quality standards. Therefore
-it is postponed.
+## 4. RS version 2.0 open for BETA
+This version is based on Laravel and programmed by Ronald Gerits. This prodcut is not completed and may have some bugs. Feel free to try it. To install run the following with the "rsinstaller" the folowing options:
+```
+First option:
+1) Core installation
+Second option:
+14) Install elasticsearch
+Third option:
+20) Plugins/fixes (Experimental ...) ==> 16) Laravel project development ==> 2) RSV2 BETA by Ronald Gerits 
+```
 
 ## 5. Security
 All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add all the users that are allowed to login. 

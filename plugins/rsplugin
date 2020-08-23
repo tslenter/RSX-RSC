@@ -270,7 +270,7 @@ function logstash_remove() {
 
 function rstextperhost() {
     echo "Please use only numbers and no strings ..."
-    read -p 'Over how many day do you want to remove old host logging: ' dayrm
+    read -p 'After how many days do you want to remove old plain text host files?: ' dayrm
     if test "$dayrm" = ""; then
         echo "Sorry, days cannot be blank"
         exit 1;
@@ -344,7 +344,7 @@ clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Install logstash" "Remove logstash" "Set removal in days for per host directory" "Laravel project development" "Remove/Install netflow" "Remove/Install Cisco filebeat" "Remove/Install Skedler" "Disable/Enable proxy" "Quit")
+options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Install logstash" "Remove logstash" "Set history removal of plain text logfiles" "Laravel project development" "Remove/Install netflow" "Remove/Install Cisco filebeat" "Remove/Install Skedler" "Disable/Enable proxy" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -432,7 +432,7 @@ do
             logstash_remove
             exit
     ;;
-        "Set removal in days for per host directory")
+        "Set history removal of plain text logfiles")
             clear
             banner
             rstextperhost
