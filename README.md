@@ -59,7 +59,7 @@ Filebeat netflow:              /etc/filebeat/modules.d/netflow.yml
 ```
 
 ## 4. RS version 2.0 open for BETA
-This version is based on Laravel and programmed by Ronald Gerits. This product is not completed and may have some bugs. Feel free to give it a try. To install, run the following options with the "rsinstaller" command:
+This version is based on Laravel and programmed by Ronald Gerits. This product is not yet completed and may have some bugs. Feel free to give it a try. To install, run the following options with the "rsinstaller" command:
 ```
 First option:
 1) Core installation
@@ -84,8 +84,6 @@ Question 2:
  > yes (yes should be answered)
 ```
 To supply feedback send an email to: info@remotesyslog.com or ronald.gerits@remotesyslog.com.
-
-Limitations: Only the search option works with a maximum of 1000 results
 
 Currently under development (not available within the beta):
 1) User management
