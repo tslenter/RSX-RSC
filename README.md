@@ -85,6 +85,13 @@ Question 2:
 ```
 To supply feedback send an email to: info@remotesyslog.com or ronald.gerits@remotesyslog.com.
 
+Limitations: Only the search option works with a maximum of 1000 results
+
+Currently under development (not available within the beta):
+1) User management
+2) Live logging
+3) Dashboard
+
 ## 5. Security
 All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add all the users that are allowed to login. 
 
