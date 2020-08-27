@@ -155,8 +155,7 @@ function install_rsv2_project_beta()
    sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
 
    runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
-
-   mysql --execute="use laravel; insert into users (name, email, username, email_verified_at, password, remember_token, updated_at, created_at) values ('rs', 'noreply@remotesyslog.com', 'rs', now(), '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',  'VnmLy0JJNG', now(), now())"
+   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan db:seed --class=UserSeeder"
 }
 
 function install_backup_project()
