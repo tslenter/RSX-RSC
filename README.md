@@ -67,7 +67,23 @@ Second option:
 14) Install elasticsearch
 Third option:
 20) Plugins/fixes (Experimental ...) ==> 16) Laravel project development ==> 2) RSV2 BETA by Ronald Gerits 
+Question 1:
+Application key set successfully.
+**************************************
+*     Application In Production!     *
+**************************************
+
+ Do you really wish to run this command? (yes/no) [no]:
+ > yes (yes should be answered)
+Question 2:
+**************************************
+*     Application In Production!     *
+**************************************
+
+ Do you really wish to run this command? (yes/no) [no]:
+ > yes (yes should be answered)
 ```
+To supply feedback send an email to: info@remotesyslog.com or ronald.gerits@remotesyslog.com.
 
 ## 5. Security
 All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add all the users that are allowed to login. 
