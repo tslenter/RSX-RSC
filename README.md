@@ -86,8 +86,15 @@ Question 2:
 
  Do you really wish to run this command? (yes/no) [no]:
  > yes (yes should be answered)
+
+Default user: rs
+Default password: password
 ```
 To supply feedback send an email to: info@remotesyslog.com or ronald.gerits@remotesyslog.com.
+
+Limitations: 
+1) Username and password cannot be changed.
+2) Only a text based string search
 
 Currently under development (not available within the beta):
 1) User management
