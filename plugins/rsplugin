@@ -340,11 +340,18 @@ function en_dis_proxy() {
     exit
 }
 
+function plaintextconfig() {
+    echo "Display plaintext configuration for filebeat ..."
+    chmod +x $RSDESTP/plaintext/instruction
+    $RSDESTP/plaintext/instruction
+    exit
+}
+
 clear
 banner
 #Menu
 PS3='Please enter your choice: '
-options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Install logstash" "Remove logstash" "Set history removal of plain text logfiles" "Laravel project development" "Remove/Install netflow" "Remove/Install Cisco filebeat" "Remove/Install Skedler" "Disable/Enable proxy" "Quit")
+options=("Manual Ubuntu ARM fix" "Manual undo Ubuntu ARM fix" "Install Geo2 location data" "Update Geo2 location database" "Check Geo2 database" "Install/view ubiquiti/unifi config with Geo2" "Display example configuration Cisco ACL" "Display example configuration CheckPoint" "Display example configuration F5" "Display example template Elasticsearch rollover" "Display example configuration Microsoft DHCP" "Display example configuration Squid" "Display example configuration plaintext files" "Install logstash" "Remove logstash" "Set history removal of plain text logfiles" "Laravel project development" "Remove/Install netflow" "Remove/Install Cisco filebeat" "Remove/Install Skedler" "Disable/Enable proxy" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -418,6 +425,12 @@ do
             clear
             banner
             squidconfig
+            exit
+    ;;
+        "Display example configuration plaintext files")
+            clear
+            banner
+            plaintextconfig
             exit
     ;;
         "Install logstash")
