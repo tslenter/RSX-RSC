@@ -1,0 +1,20 @@
+#!/bin/bash
+#Var
+LOGSTASH_VAR=/etc/logstash/conf.d
+RSDESTP_FTP=/opt/RS/plugins/ftp
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+echo "Created to read plain text files from a FTP location and transfer the data to elasticsearch"
+echo "Use filebeat.yml to setup filebeat"
+echo "Add 98-rsxftp.conf in $LOGSTASH_VAR/98-rsxplaintext.conf"
+echo "Change the following options within the filebeat.yml"
+echo "hosts: ['<hostname>:20002']"
+echo 'include_lines: ["<filter word 1>", "<filter word 2>"]'
+echo '- "d:\<path_to_ftp_directory>\*.log"'
+echo ""
+exit
