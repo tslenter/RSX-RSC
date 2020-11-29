@@ -78,9 +78,9 @@ function check_file() {
 
 #Check if database is corectly installed
 function geo_check() {
-    if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
+    if [ -f /var/lib/GeoIP/GeoLite2-City.mmdb ]; then
         echo "Check database for IP: 1.2.3.4 ..."
-        mmdblookup --file /usr/share/GeoIP/GeoLite2-City.mmdb --ip 1.2.3.4
+        mmdblookup --file /var/lib/GeoIP/GeoLite2-City.mmdb --ip 1.2.3.4
         echo "Check done ..."
     else
         echo "No database found ..."
@@ -127,7 +127,7 @@ function geo() {
 
 #Function for geo data update
 function geoupdate_rs() {
-    if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
+    if [ -f /var/lib/GeoIP/GeoLite2-City.mmdb ]; then
         echo "Update database... "
         geoipupdate
     else
@@ -186,7 +186,7 @@ function squidconfig() {
 
 #Install ubiquiti parser
 function ubiquiti_parser() {
-    if [ -f /usr/share/GeoIP/GeoLite2-City.mmdb ]; then
+    if [ -f /var/lib/GeoIP/GeoLite2-City.mmdb ]; then
         echo "Print config ..."
 	cat $RSDESTP/ubiquiti/99RSX-uni-ubi.conf
 	echo ""
