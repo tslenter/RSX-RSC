@@ -120,7 +120,7 @@ function install_rsv2_project()
 {
    rm -rf $APACHEDIR/* > /dev/null 2>&1
    rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   git clone --branch master https://jc.remotesyslog.com:9080/gitlab/tslenter/remotesyslog-rsv2.git $APACHEDIR/rsv2
+   git clone --branch develop https://github.com/tslenter/RSv2.git $APACHEDIR/rsv2
 
    useradd -m -s /bin/bash -p $PASS rs
 
@@ -141,7 +141,7 @@ function install_rsv2_project_beta()
 {
    rm -rf $APACHEDIR/* > /dev/null 2>&1
    rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   git clone --branch master https://jc.remotesyslog.com:9080/gitlab/tslenter/remotesyslog-rsv2-beta.git $APACHEDIR/rsv2
+   git clone --branch master https://github.com/tslenter/remotesyslog-rsv2-beta.git $APACHEDIR/rsv2
 
    useradd -m -s /bin/bash -p $PASS rs
 
