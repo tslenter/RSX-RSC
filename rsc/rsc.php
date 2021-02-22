@@ -55,6 +55,9 @@ if (isset($_SESSION['id']) && $_SESSION['un'] == true) {
      */
      $tail->generateGUI();
 } else {
-    echo "Please log in first to see this page.";
+    echo "<center>Please log in first to see this page.</center>";
+    echo "<br>";
+    echo '<center><a href="/rsc">Return to login</a></center>';
+    echo '<meta http-equiv="refresh" content="10.01;/rsc"/>';
 }
 ?>
