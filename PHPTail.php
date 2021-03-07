@@ -235,7 +235,7 @@ class PHPTail {
         $("#settings").dialog({
             modal : true,
             resizable : false,
-            draggable : true,
+            draggable : false,
             autoOpen : false,
             width : 590,
             height : 270,
