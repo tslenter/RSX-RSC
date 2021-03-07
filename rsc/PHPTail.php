@@ -181,6 +181,7 @@ class PHPTail {
     font-size: small;
     white-space: pre;
     background: #212729;
+    min-height: 1000px;
     color: lightgrey;
 }
 
@@ -238,12 +239,12 @@ class PHPTail {
             autoOpen : false,
             width : 590,
             height : 270,
+            position : { my: "center top", at: "center top+5%", of: $("body"),within: $("body") },
             buttons : {
                 Close : function() {
                     $(this).dialog("close");
                 }
             },
-            position : { my: "center top", at: "center top+5%", of: $("body"),within: $("body") },
             open : function(event, ui) {
                 //default is scroll down, but by fast logging this is not usefull as the screen scolls up
                 //scrollToBottom();
