@@ -235,11 +235,11 @@ class PHPTail {
         $("#settings").dialog({
             modal : true,
             resizable : false,
-            draggable : true,
+            draggable : false,
             autoOpen : false,
             width : 590,
             height : 270,
-            position : { my: "center top", at: "center top+5%", of: $("body"),within: $("body") },
+            position : { my: "center top", at: "center top+100px", of: $("body"),within: $("body") },
             buttons : {
                 Close : function() {
                     $(this).dialog("close");
