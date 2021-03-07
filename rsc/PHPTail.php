@@ -234,7 +234,7 @@ class PHPTail {
         $("#settings").dialog({
             modal : true,
             resizable : false,
-            draggable : false,
+            draggable : true,
             autoOpen : false,
             width : 590,
             height : 270,
@@ -243,8 +243,11 @@ class PHPTail {
                     $(this).dialog("close");
                 }
             },
+            position : { my: "center top", at: "center top+5%", of: $("body"),within: $("body") },
             open : function(event, ui) {
-                scrollToBottom();
+                //default is scroll down, but by fast logging this is not usefull as the screen scolls up
+                //scrollToBottom();
+                scrollToTop();
             },
             close : function(event, ui) {
                 grep = $("#grep").val();
