@@ -242,6 +242,7 @@ class PHPTail {
             position : { my: "center top", at: "center top+100px", of: $("body"),within: $("body") },
             buttons : {
                 Close : function() {
+                    scroll = true;
                     $(this).dialog("close");
                 }
             },
@@ -251,6 +252,7 @@ class PHPTail {
                 scrollToTop();
             },
             close : function(event, ui) {
+                scroll = true;
                 grep = $("#grep").val();
                 invert = $('#invert input:radio:checked').val();
                 $("#out").text("");
