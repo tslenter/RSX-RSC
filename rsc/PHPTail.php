@@ -181,6 +181,7 @@ class PHPTail {
     font-size: small;
     white-space: pre;
     background: #212729;
+    min-height: 1000px;
     color: lightgrey;
 }
 
@@ -238,15 +239,20 @@ class PHPTail {
             autoOpen : false,
             width : 590,
             height : 270,
+            position : { my: "center top", at: "center top+100px", of: $("body"),within: $("body") },
             buttons : {
                 Close : function() {
+                    scroll = true;
                     $(this).dialog("close");
                 }
             },
             open : function(event, ui) {
-                scrollToBottom();
+                //default is scroll down, but by fast logging this is not usefull as the screen scolls up
+                //scrollToBottom();
+                scrollToTop();
             },
             close : function(event, ui) {
+                scroll = true;
                 grep = $("#grep").val();
                 invert = $('#invert input:radio:checked').val();
                 $("#out").text("");
