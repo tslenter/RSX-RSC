@@ -442,6 +442,8 @@ function coreremove() {
     rm -rf $RSDEST
     echo "Remove installer ..."
     rm -rf $RSBIN/rsinstaller
+    echo "Remove REPO file ..."
+    rm -rf /etc/apt/sources.list.d/91-debian-unstable.list
     echo "Move log files ..."
     cp -rf $VLOG/remote_syslog $VLOG/remote_syslog_uninstall && rm -rf $VLOG/remote_syslog
     echo "Moved files to $VLOG/remote_syslog_uninstall .."
