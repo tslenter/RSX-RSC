@@ -1075,8 +1075,10 @@ function debvarcheck() {
     if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
         echo "Nothing to do ..."
     else
-        echo "Yes[y] will break the GUI of Raspberry Pi, in any other case you can select No[n]!"
-        read -p "Do you want to use Elasticsearch? y/n " -n 1 -r
+        echo "Original the installation is tested for CLI only without desktop GUI"
+        echo ""
+        echo "Yes[y] could break the desktop GUI of Raspberry Pi, in any other case you can select No[n]!"
+        read -p "Do you want to use Elasticsearch products? y/n " -n 1 -r
         echo ""
         if [[ $REPLY =~ ^[Yy]$ ]]
         then
