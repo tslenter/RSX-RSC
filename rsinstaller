@@ -1077,7 +1077,7 @@ function debvarcheck() {
     else
         echo "Original the installation is tested for CLI only without desktop GUI"
         echo ""
-        echo "Yes[y] could break the desktop GUI of Raspberry Pi, in any other case you can select No[n]!"
+        echo "Yes[y] could break the desktop GUI of Raspberry Pi!"
         read -p "Do you want to use Elasticsearch products? y/n " -n 1 -r
         echo ""
         if [[ $REPLY =~ ^[Yy]$ ]]
