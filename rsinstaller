@@ -1075,11 +1075,20 @@ function debvarcheck() {
     if [ -e "/etc/apt/sources.list.d/91-debian-unstable.list" ]; then
         echo "Nothing to do ..."
     else
-        apt install gnupg -y
-        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
-        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
-        echo "deb http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
-        echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
+        echo "Yes[y] will break the GUI of Raspberry Pi, in any other case you can select No[n]!"
+        read -p "Do you want to use Elasticsearch? y/n " -n 1 -r
+        echo ""
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            echo "Going for the unstable syslog-ng for Elasticsearch!"
+            apt install gnupg -y
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+            echo "deb http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
+            echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
+        else
+            echo "Going for the default syslog-ng installation! ..."
+        fi
     fi
 }
 
