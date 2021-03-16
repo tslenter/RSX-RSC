@@ -1090,6 +1090,7 @@ function debvarcheck() {
             echo "deb-src http://mirror.yandex.ru/debian/ unstable main" | tee -a /etc/apt/sources.list.d/91-debian-unstable.list
         else
             echo "Going for the default syslog-ng installation! ..."
+            touch /etc/apt/sources.list.d/91-debian-unstable.list
         fi
     fi
 }
