@@ -30,7 +30,12 @@ Forked from: http://code.google.com/p/php-tail/
 /**
  * Check loggedin
  */
-session_start();
+$status = session_status();
+if($status == PHP_SESSION_NONE){
+    //There is no active session
+    session_start();
+}
+
 if (isset($_SESSION['id']) && $_SESSION['un'] == true) {
 /**
  * Just continue if logged in
