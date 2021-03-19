@@ -363,8 +363,8 @@ class PHPTail {
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                            <li><a href="remote_syslog/">Archive</a></li>
-                           <li <?php if ($_GET['pg'] == "st") { exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); } ?>><a href="?pg=st">Test message</a></li>
-                           <li <?php if ($_GET['pg'] == "ar") { exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); } ?>><a href="?pg=ar">Clear live log archive</a></li>
+                           <li <?php exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); ?>><a href="">Test message</a></li>
+                           <li <?php exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); ?>><a href="">Clear live log archive</a></li>
                            <li><a href="https://github.com/tslenter/RSX-RSC/blob/master/LICENSE" target="_blank">License</a></li>
                         </ul>
                     </li>
