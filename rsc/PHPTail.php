@@ -44,6 +44,7 @@ if (isset($_SESSION['id']) && $_SESSION['un'] == true) {
     echo "Please log in first to see this page.";
     exit;
 }
+
 ?>
 
 <?php
@@ -363,8 +364,8 @@ class PHPTail {
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                            <li><a href="remote_syslog/">Archive</a></li>
-                           <li <?php exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); ?>><a href="">Test message</a></li>
-                           <li <?php exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); ?>><a href="">Clear live log archive</a></li>
+                           <li><a href="?check1=tes <?php if (isset($_GET['check1'])) { if ($_GET['check1'] == "tes") { exec('logger -n 127.0.0.1 -d "This is a UDP test message!"; logger -T -P 514 -n 127.0.0.1 "This is a TCP test message!"'); } } $check1=""; ?>">Test message</a></li>
+                           <li><a href="?check2=rml <?php if (isset($_GET['check2'])) { if ($_GET['check2'] == "rml") { exec('rm -rf /var/log/remote_syslog/remote_syslog.log.*'); } } $check2=""; ?>">Clear live log archive</a></li>
                            <li><a href="https://github.com/tslenter/RSX-RSC/blob/master/LICENSE" target="_blank">License</a></li>
                         </ul>
                     </li>
