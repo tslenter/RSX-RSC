@@ -7,7 +7,7 @@
 
 "Remote Syslog" is a free application that can be used to view syslog messages.
 
-Copyright (C) 2020 Tom Slenter
+Copyright (C) 2021 Tom Slenter
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -698,6 +698,9 @@ apt update
 apt install syslog-ng-mod-snmp syslog-ng-mod-freetds syslog-ng-mod-json syslog-ng-mod-mysql syslog-ng-mod-pacctformat syslog-ng-mod-pgsql syslog-ng-mod-snmptrapd-parser syslog-ng-mod-sqlite3
 sudo apt autoremove
 ```
+
+### 13.2 Ubuntu upgrade policy
+For Ubuntu we only test the latest LTS version. At the time of writing this is 20.04 LTS. The next release will be 22.04 LTS.
 
 ## 14. Information and external links
 
