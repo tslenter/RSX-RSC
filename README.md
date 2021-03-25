@@ -622,7 +622,7 @@ After the removal of Remote Syslog 1.x, install the new RSX or RSC. The old sysl
 
 More information over Remote Syslog 1.x: https://github.com/tslenter/Remote_Syslog
 
-### 13.3 Upgrade from Ubuntu 18.04 to 20.04
+### 13.2 Upgrade from Ubuntu 18.04 to 20.04
 First update rsinstaller:
 ```bash
 rsinstaller
@@ -699,7 +699,7 @@ apt install syslog-ng-mod-snmp syslog-ng-mod-freetds syslog-ng-mod-json syslog-n
 sudo apt autoremove
 ```
 
-### 13.2 Ubuntu upgrade policy
+### 13.3 Ubuntu upgrade policy
 For Ubuntu we only test the latest LTS version. At the time of writing this is 20.04 LTS. The next release will be 22.04 LTS.
 
 ## 14. Information and external links
