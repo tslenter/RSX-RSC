@@ -737,23 +737,28 @@ We have a reward system in place, Remote Syslog has it own token available calle
 Send usable code/patterns to info@remotesyslog.com or create a pull request. We will review the code or pattern, this may take some time.
 
 Expected payout RSCX:
- - Patterns: minimum of 10 RSCX
- - Code fixes: minimum of 10 RSCX
- - Security fixes: minimum of 20 RSCX
- - New functionality like a plugin: minimum of 20 RSCX
- - Rewards can be higher depending on the code quality
+ - Patterns: minimum of 20 RSCX
+ - Code fixes: minimum of 20 RSCX
+ - Security fixes: minimum of 40 RSCX
+ - New functionality like a plugin: minimum of 45 RSCX
+ - Setup a marketing campagne: minimum of 45 RSCX
+ - Advisor payout: minimum of 45 RSCX
+ - Test functionality: minimum of 5 RSCX
+ - Rewards can be higher depending on the quality of the delivered work
  - Bounty programs may be available in future
  
 Note 1: code that is useless will not have a reward.
 
 RSCX distribution:
 
-10 million RSCX tokens are created. 
+10 million RSCX tokens are created. Distribution:
 
- - 4 million RSCX is available for developers
- - 6 million is reserved for future use
-
-The only way to get RSCX tokens is to develop something usefull for this project.
+ - 4 million RSCX is available for developers (40%)
+ - 0.2 million RSCX is available for testers (2%)
+ - 2 million RSCX is available for marketing (20%)
+ - 0.2 million RSCX is available for advisors (2%)
+ - 1 million RSCX is available for investors (10%)
+ - 2.6 million RSCX is reserved for future use/insurance/burn (26%)
 
 Where to trade RSCX:
 
@@ -782,6 +787,8 @@ RSCX / EFYT
 RSCX / MRT
 RSCX / LIQUID
 ```
+
+A waves account is needed to recieve RSCX tokens.
 
 ### 15.5 Funds
 All donations and other funds will be used to cover cost of this project and to improve tests/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
