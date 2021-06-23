@@ -792,7 +792,7 @@ A waves account is needed to recieve RSCX tokens.
 ### 15.5 Funds
 All donations and other funds will be used to cover cost of this project and to improve tests/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
 
-### 16 Tips for RSX setup
+### 16 Tips for RSX
 
 1) Make a good lifecycle policy to prevent a full disk (Just monitor it for some time).
 2) By default text file storage is enabled. When using the elastic-based stack you can disable this by editing the syslog-ng config. (If this is disabled the "rsview" command gives no new output).
