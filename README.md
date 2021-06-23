@@ -791,3 +791,20 @@ A waves account is needed to recieve RSCX tokens.
 
 ### 15.5 Funds
 All donations and other funds will be used to cover cost of this project and to improve tests/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
+
+### 16 Tips for RSX
+
+1) Make a good lifecycle policy to prevent a full disk (Just monitor it for some time).
+2) By default text file storage is enabled. When using the elastic-based stack you can disable this by editing the syslog-ng config. (If this is disabled the "rsview" command gives no new output).
+2a) Text-based storage use can be lowered by the RSX installer.
+3) Everything is built in a block structure so you can disable default services and add your own.
+3a) This block structure allows you to disable the RSX concept and go an elastic stack setup, or something else.
+4) By default everything Syslog can be received at port 514 UDP/TCP, we do recommend 514/UDP and no 514/TCP (UDP is faster and we recommend that for all services).
+5) RSX is capable of running a cluster setup, we recommend a cluster of 3 for full redundancy.
+5a) When running a cluster make sure you create a good update plan.
+6) By default we use Syslog-ng as core, this parses all syslog data. If you like to create fields for smart searches within the Kibana interface this is required.
+7) Check out the active directory (AD) setup. The RSX authentication page works with Linux PAM. PAM can beconfigured to use a AD.
+7a) The default login name for RSX is the created with the Debian/Ubuntu installation. Do NOT use a root user!
+7b) If you only created a root user, create a noraml user account for the login.
+8) We do have some patterns preconfigured. (CheckPoint, Cisco, Microsoft, F5,  and more) You probably need to edit them to match the infrastructure.
+8a) Because we use open source software everything is free and patterns can be found with a good google search as well.
