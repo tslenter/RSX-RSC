@@ -793,9 +793,8 @@ A waves account is needed to recieve RSCX tokens.
 All donations and other funds will be used to cover cost of this project and to improve tests/plugins/core scripts. The roadmap will display new functions or products. Check https://www.remotesyslog.com for more information.
 
 ### 16 Tips for RSX
-
-1) Make a good lifecycle policy to prevent a full disk (Just monitor it for some time).
-2) By default text file storage is enabled. When using the elastic-based stack you can disable this by editing the syslog-ng config. (If this is disabled the "rsview" command gives no new output).
+- Make a good lifecycle policy to prevent a full disk (Just monitor it for some time).
+-- By default text file storage is enabled. When using the elastic-based stack you can disable this by editing the syslog-ng config. (If this is disabled the "rsview" command gives no new output).
 2a) Text-based storage use can be lowered by the RSX installer.
 3) Everything is built in a block structure so you can disable default services and add your own.
 3a) This block structure allows you to disable the RSX concept and go an elastic stack setup, or something else.
