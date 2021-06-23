@@ -804,5 +804,7 @@ All donations and other funds will be used to cover cost of this project and to 
 5a) When running a cluster make sure you create a good update plan.
 6) By default we use Syslog-ng as core, this parses all syslog data. If you like to create fields for smart searches within the Kibana interface this is required.
 7) Check out the active directory (AD) setup. The RSX authentication page works with Linux PAM. PAM can beconfigured to use a AD.
+7a) The default login name for RSX is the created with the Debian/Ubuntu installation. Do NOT use a root user!
+7b) If you only created a root user, create a noraml user account for the login.
 8) We do have some patterns preconfigured. (CheckPoint, Cisco, Microsoft, F5,  and more) You probably need to edit them to match the infrastructure.
 8a) Because we use open source software everything is free and patterns can be found with a good google search as well.
