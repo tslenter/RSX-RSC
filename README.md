@@ -131,7 +131,7 @@ Choose option 12 to install the RSX version
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
 ### 6.2 Local user management
-rsuser is the command to add or remove users for Remote Syslog X/C.
+The "rsuser" command is used to add or remove users from Remote Syslog X/C.
 
 Add a user without cli access:
 ```bash

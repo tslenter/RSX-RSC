@@ -55,7 +55,7 @@ elif [ "$1" != '' ] && [ "$2" == 'rm' ]; then
         echo "Removing user: $1"
         sudo userdel $1
         while true; do
-                read -p "Do you wish to remove home directory, answer: y or n? " yn
+                read -p "Do you wish to remove the home directory, answer: y or n? " yn
                 case $yn in
                         [Yy]* ) rm -r /home/$1; break;;
                         [Nn]* ) exit;;
