@@ -2,7 +2,7 @@
 
 #License:
 #"Remote Syslog" is a free application what can be used to view syslog messages.
-#Copyright (C) 2020 Tom Slenter
+#Copyright (C) 2021 Tom Slenter
 #
 #This program is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000066
+bid=00000068
 
 #Banner
 function banner() {
@@ -346,6 +346,8 @@ function debpackage() {
 function checkinstallationcore() {
     echo "Check CLI application 1X ..."
     check_file $RSBIN/rsview
+    echo "Check user management 1X ..."
+    check_file $RSBIN/rsuser
     echo "Check installer 1X ..."
     check_file $RSBIN/rsinstaller
     echo "Check logrotate 1X ..."
@@ -403,6 +405,10 @@ function coreinstall() {
     chmod +x $RSBIN/rsview
     echo "Deploying installer ..."
     cp -rf $RSDEST/rsinstaller $RSBIN/rsinstaller
+    echo "User Management ..."
+    cp -rf $RSDEST/rsuser $RSBIN/rsuser
+    echo "Set permissions user Management ..."
+    chmod +x $RSBIN/rsuser
     echo "Deploy config to $RSCONF/ ..."
     mkdir $RSCONF/
     cp -rf $RSDEST/core/syslog-ng $RSCONF/
@@ -442,6 +448,8 @@ function coreremove() {
     rm -rf $RSDEST
     echo "Remove installer ..."
     rm -rf $RSBIN/rsinstaller
+    echo "Remove user management ..."
+    rm -rf $RSBIN/rsuser
     echo "Remove REPO file ..."
     rm -rf /etc/apt/sources.list.d/91-debian-unstable.list
     echo "Move log files ..."
@@ -601,6 +609,10 @@ function upgrade() {
     cp -rf $RSDEST/rsview $RSBIN/rsview
     echo "Set permissions for CLI application ..."
     chmod +x $RSBIN/rsview
+    echo "Deploying user management ..."
+    cp -rf $RSDEST/rsuser $RSBIN/rsuser
+    echo "Set permissions for user management ..."
+    chmod +x $RSBIN/rsuser
     echo "Deploying installer ..."
     cp -rf $RSDEST/rsinstaller $RSBIN/rsinstaller
     echo "Set permissions for installer ..."
