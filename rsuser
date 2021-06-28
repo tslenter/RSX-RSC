@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#License:
+#"Remote Syslog" is a free application what can be used to view syslog messages.
+#Copyright (C) 2021 Tom Slenter
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#For more information contact the author:
+#Name author: Tom Slenter
+#E-mail: info@remotesyslog.com
+
+#Banner
+function banner() {
+    echo ""
+    echo "##################################################"
+    echo "#Remote Syslog X/C                               #"
+    echo "#More information: https://www.remotesyslog.com  #"
+    echo "#Remote Syslog user management                   #"
+    echo "#Version: RSX 0.1                                #"
+    echo "#Donations: https://github.com/tslenter/RSX-RSC  #"
+    echo "##################################################"
+    echo ""
+}
+
+#Check if user is root
+if ! [ $(id -u) = 0 ]; then
+    clear
+    banner
+    echo "This installation must be run as root!"
+    echo ""
+    exit 1
+fi
+
+#User management
+if [ "$1" != '' ] && [ "$2" == 'add' ]; then
+        echo "Adding user: $1"
+	if [ "$3" == 'web-only' ]; then
+		useradd -s /bin/false -m -d /home/$1 $1
+	else
+                useradd -s /bin/bash -m -d /home/$1 $1
+        fi
+        sudo passwd $1
+elif [ "$1" != '' ] && [ "$2" == 'rm' ]; then
+        echo "Removing user: $1"
+        sudo userdel $1
+        while true; do
+                read -p "Do you wish to remove home directory, answer: y or n? " yn
+                case $yn in
+                        [Yy]* ) rm -r /home/$1; break;;
+                        [Nn]* ) exit;;
+                        * ) echo "Please answer y or n.";;
+                esac
+        done
+else
+        echo "Please use the command as: ns_user <username> <rm or add> <web-only>"
+fi

@@ -115,7 +115,7 @@ After you installed the new certificates, update the apache2 configuration. File
 
 ## 6. Installation
 ### 6.1 Quick start
-a. Install a clean debian 9.x or Ubuntu 18.04.2 LTS distro, Ubuntu 20.04 LTS is released for testing.
+a. Install a clean debian 9.x or Ubuntu 20.04.2 LTS distro.
 
 b. Run the following commands:
 
@@ -130,7 +130,25 @@ Choose option 12 to install the RSX version
 ```
 c.  RSX is only supported on Ubuntu 18.04.2 or higher and Debian 10.x or higher
 
-### 6.2 RSX Cluster
+### 6.2 Local user management
+rsuser is the command to add or remove users for Remote Syslog X/C.
+
+Add a user without cli access:
+```bash
+rsuser <username> add web-only 
+```
+
+Add a user with cli access:
+```bash
+rsuser <username> add
+```
+
+Remove a user:
+```bash
+rsuser <username> rm
+```
+
+### 6.3 RSX Cluster
 With build 52 of RSX 0.1 clustering is supported. RSX will load the default configuration. Feel free to add some best practice option, found here:
 ```
 https://logz.io/blog/elasticsearch-cluster-tutorial/
@@ -159,6 +177,7 @@ Expected output:
   "active_shards_percent_as_number" : 100.0
 }
 ```
+
 ## 7. Optional configuration
 ### 7.1 Integrate Active Directory LDAP authentication for Apache 2
 
