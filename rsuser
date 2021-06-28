@@ -33,6 +33,8 @@ function banner() {
     echo ""
 }
 
+banner
+
 #Check if user is root
 if ! [ $(id -u) = 0 ]; then
     clear
@@ -63,5 +65,5 @@ elif [ "$1" != '' ] && [ "$2" == 'rm' ]; then
                 esac
         done
 else
-        echo "Please use the command as: ns_user <username> <rm or add> <web-only>"
+        echo "Please use the command as: rsuser <username> <rm or add> <web-only>"
 fi
