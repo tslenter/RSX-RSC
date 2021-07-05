@@ -6,7 +6,7 @@
 
 05-07-2021: Chinese webpage on-line: https://www.remotesyslog.com/ch/ / English can be found here: https://www.remotesyslog.com/en/
 
-For more news check our linkedin page: https://www.linkedin.com/company/76469292/admin/
+For more news check our linkedin page: https://www.linkedin.com/company/remote-syslog/
 
 ## 1. License
 
