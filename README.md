@@ -2,6 +2,12 @@
 [![Website remotesyslog.com](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.remotesyslog.com/)
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+## News:
+
+05-07-2021: Chinese webpage on-line: https://www.remotesyslog.com/ch/ / English can be found here: https://www.remotesyslog.com/en/
+
+For more news check our linkedin page: https://www.linkedin.com/company/76469292/admin/
+
 ## 1. License
 
 "Remote Syslog" is a free application that can be used to view syslog messages.
