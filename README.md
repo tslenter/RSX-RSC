@@ -3,7 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 ## News:
-29-07-2021: New CLI syslog viewer: More information: https://github.com/tslenter/rseview. Usable with elasticsearch and the Remote Syslog concept.
+29-07-2021: New CLI syslog viewer: More information: https://github.com/tslenter/rseview. Usable with elasticsearch and the Remote Syslog concept. Currently in BETA.
 
 05-07-2021: Chinese webpage on-line: https://www.remotesyslog.com/ch/ / English can be found here: https://www.remotesyslog.com/en/
 
