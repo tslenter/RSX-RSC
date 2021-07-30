@@ -1139,7 +1139,7 @@ function kibdef() {
         {
             "attributes": {
             "title": "rsx-syslog-ng*",
-            "timeFieldName": "ISODATE"
+            "timeFieldName": "R_ISODATE"
             }
         }
         '
