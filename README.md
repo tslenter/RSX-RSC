@@ -3,6 +3,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 ## News:
+28-12-2021: 4logj instruction for mitigation: https://github.com/tslenter/RS4LOGJ-CVE-2021-44228/
+
 11-08-2021: New version RSE in testing phase. More information: https://github.com/tslenter/RS or https://www.remotesyslog.com/en/
 
 29-07-2021: New CLI syslog viewer: More information: https://github.com/tslenter/rseview. Usable with elasticsearch and the Remote Syslog concept. Currently in BETA.
