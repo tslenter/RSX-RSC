@@ -2,7 +2,7 @@
 
 #License:
 #"Remote Syslog" is a free application what can be used to view syslog messages.
-#Copyright (C) 2020 Tom Slenter
+#Copyright (C) 2022 Tom Slenter
 #
 #This program is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -116,47 +116,47 @@ function install_mysql()
 }
 
 # Installs the master version of the rsv2 Laravel project
-function install_rsv2_project()
-{
-   rm -rf $APACHEDIR/* > /dev/null 2>&1
-   rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   git clone --branch develop https://github.com/tslenter/RSv2.git $APACHEDIR/rsv2
+#function install_rsv2_project()
+#{
+#   rm -rf $APACHEDIR/* > /dev/null 2>&1
+#   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+#   git clone --branch develop https://github.com/tslenter/RSv2.git $APACHEDIR/rsv2
 
-   useradd -m -s /bin/bash -p $PASS rs
+#   useradd -m -s /bin/bash -p $PASS rs
 
-   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsv2/
-   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsv2/
+#   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsv2/
+#   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsv2/
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && composer update --lock && composer install"
-   runuser -l rs -c "cp $APACHEDIR/rsv2/.env.example $APACHEDIR/rsv2/.env"
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan key:generate"
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && composer update --lock && composer install"
+#   runuser -l rs -c "cp $APACHEDIR/rsv2/.env.example $APACHEDIR/rsv2/.env"
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan key:generate"
 
-   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
+#   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
-}
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
+#}
 
 # Installs the master version of the rsv2 Laravel project beta
-function install_rsv2_project_beta()
-{
-   rm -rf $APACHEDIR/* > /dev/null 2>&1
-   rm -rf $APACHEDIR/.* > /dev/null 2>&1
-   git clone --branch master https://github.com/tslenter/remotesyslog-rsv2-beta.git $APACHEDIR/rsv2
+#function install_rsv2_project_beta()
+#{
+#   rm -rf $APACHEDIR/* > /dev/null 2>&1
+#   rm -rf $APACHEDIR/.* > /dev/null 2>&1
+#   git clone --branch master https://github.com/tslenter/remotesyslog-rsv2-beta.git $APACHEDIR/rsv2
 
-   useradd -m -s /bin/bash -p $PASS rs
+#   useradd -m -s /bin/bash -p $PASS rs
 
-   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsv2/
-   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsv2/
+#   setfacl -Rm "g:www-data:rwx" $APACHEDIR/rsv2/
+#   setfacl -Rm "u:rs:rwx" $APACHEDIR/rsv2/
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && composer update --lock && composer install"
-   runuser -l rs -c "cp $APACHEDIR/rsv2/.env.example $APACHEDIR/rsv2/.env"
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan key:generate"
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && composer update --lock && composer install"
+#   runuser -l rs -c "cp $APACHEDIR/rsv2/.env.example $APACHEDIR/rsv2/.env"
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan key:generate"
 
-   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
+#   sed -i "s|\dummy|${PASS}|" $APACHEDIR/rsv2/.env >/dev/null 2>&1
 
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
-   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan db:seed --class=UserSeeder"
-}
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan migrate"
+#   runuser -l rs -c "cd $APACHEDIR/rsv2 && php artisan db:seed --class=UserSeeder"
+#}
 
 function install_backup_project()
 {
@@ -236,34 +236,34 @@ clear
 display_banner
 #Menu
 PS3='Please enter your choice: '
-options=("RSV2 by Ronald Gerits" "RSV2 BETA by Ronald Gerits" "Clean Laravel project" "Deploy github laravel backup" "Remove Laravel project" "Quit")
+options=("Clean Laravel project" "Deploy github laravel backup" "Remove Laravel project" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "RSV2 by Ronald Gerits")
-            clear
-            display_banner
-            check_root
-            set_parameters
-            install_php_modules
-            create_rsv2_apache_site
-            install_mysql
-            install_rsv2_project
-            display_values
-            exit
-    ;;
-        "RSV2 BETA by Ronald Gerits")
-            clear
-            display_banner
-            check_root
-            set_parameters
-            install_php_modules
-            create_rsv2_apache_site
-            install_mysql
-            install_rsv2_project_beta
-            display_values
-            exit
-    ;;
+#        "RSV2")
+#            clear
+#            display_banner
+#            check_root
+#            set_parameters
+#            install_php_modules
+#            create_rsv2_apache_site
+#            install_mysql
+#            install_rsv2_project
+#            display_values
+#            exit
+#    ;;
+#        "RSV2 BETA")
+#            clear
+#            display_banner
+#            check_root
+#            set_parameters
+#            install_php_modules
+#            create_rsv2_apache_site
+#            install_mysql
+#            install_rsv2_project_beta
+#            display_values
+#            exit
+#    ;;
         "Clean Laravel project")
             clear
             display_banner
