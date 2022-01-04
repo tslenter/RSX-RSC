@@ -236,11 +236,11 @@ clear
 display_banner
 #Menu
 PS3='Please enter your choice: '
-options=("RSV2 by Ronald Gerits" "RSV2 BETA by Ronald Gerits" "Clean Laravel project" "Deploy github laravel backup" "Remove Laravel project" "Quit")
+options=("Clean Laravel project" "Deploy github laravel backup" "Remove Laravel project" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-#        "RSV2 by Ronald Gerits")
+#        "RSV2")
 #            clear
 #            display_banner
 #            check_root
@@ -252,7 +252,7 @@ do
 #            display_values
 #            exit
 #    ;;
-#        "RSV2 BETA by Ronald Gerits")
+#        "RSV2 BETA")
 #            clear
 #            display_banner
 #            check_root
