@@ -68,48 +68,38 @@ Filebeat Cisco:                /etc/filebeat/modules.d/cisco.yml
 Filebeat netflow:              /etc/filebeat/modules.d/netflow.yml
 ```
 
-## 4. RS version 2.0 open for BETA
-This version is based on Laravel and programmed by Ronald Gerits. This product is not yet completed and may have some bugs. Feel free to give it a try. To install, run the following options with the "rsinstaller" command:
+## 4. RSE Development version
+RSE is a new version of Remote Syslog which has the same functionality of RSC but the backend is running Elasticsearch. It can be tested within the following setup:
+
+Confirmed setups:
 ```
-First option (rsinstaller):
-1) Core installation
-
-Second option (rsinstaller):
-14) Install elasticsearch
-
-Third option (rsinstaller):
-20) Plugins/fixes (Experimental ...) ==> 16) Laravel project development ==> 2) RSV2 BETA by Ronald Gerits 
-
-Question 1:
-Application key set successfully.
-**************************************
-*     Application In Production!     *
-**************************************
-
- Do you really wish to run this command? (yes/no) [no]:
- > yes (yes should be answered)
-
-Question 2:
-**************************************
-*     Application In Production!     *
-**************************************
-
- Do you really wish to run this command? (yes/no) [no]:
- > yes (yes should be answered)
-
-Default user: rs
-Default password: password
+Tested for Ubuntu 20.04 LTS virtual machine.
+Tested for Ubuntu 21.04 Raspberry Pi 4 (4GB RAM)
 ```
-To supply feedback send an email to: info@remotesyslog.com or ronald.gerits@remotesyslog.com.
 
-Limitations: 
-1) Username and password cannot be changed.
-2) Only a text based string search
+Quick installation:
+```
+git clone https://www.github.com/tslenter/RS
+cd RS
+chmod +x rseinstaller
+sudo ./rseinstaller
+Option 1 => RSE Core installation
+Option 1 => Core installation
 
-Currently under development (not available within the beta):
-1) User management
-2) Live logging
-3) Dashboard
+sudo ./rseinstaller
+Optional webinsterface:
+Option 2 => RSE webinterface installation
+Option 2 => Install RSE WEB
+```
+
+Use SSH to run the CLI commands. Updated commands:
+```
+rseview
+rseinstaller
+rseuser
+```
+
+Webinterface is running @ port 443 (SSL)
 
 ## 5. Security
 All external connections are encrypted with TLS/SSL, this includes the API on port 8080, SSH and HTTP for user login. Authentication is run by the PAM modules, so all users with a account can login. To restrict user login use the apache2 configuration and add all the users that are allowed to login. 
