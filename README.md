@@ -5,9 +5,10 @@
 ## News:
 06-01-2022: Repository has been updated. If you use the old repository then update the /etc/apt/sources.list.d/syslog-ng.list with:
 ```
-For Ybuntu 20.04: deb https://cloud.remotesyslog.com/xUbuntu_20.04 ./
+For Ubuntu 20.04: deb https://cloud.remotesyslog.com/xUbuntu_20.04 ./
 For ubuntu 18.04: deb https://cloud.remotesyslog.com/xUbuntu_18.04 ./
 ```
+
 28-12-2021: 4logj instruction for mitigation: https://github.com/tslenter/RS4LOGJ-CVE-2021-44228/
 
 11-08-2021: New version RSE in testing phase. More information: https://github.com/tslenter/RS or https://www.remotesyslog.com/en/
