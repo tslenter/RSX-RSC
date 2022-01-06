@@ -3,7 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 ## News:
-06-01-2022: Repository has been updated. If you use the old repository then update the /etc/apt/sources.list.d/syslog-ng.list with:
+06-01-2022: Repository has been updated. If run in any trouble of running updates then update the /etc/apt/sources.list.d/syslog-ng.list with:
 ```
 For Ubuntu 20.04: deb https://cloud.remotesyslog.com/xUbuntu_20.04 ./
 And run: wget -qO - https://cloud.remotesyslog.com/xUbuntu_20.04/Release.key | /usr/bin/apt-key add -
