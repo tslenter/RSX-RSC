@@ -286,15 +286,7 @@ function rstextperhost() {
 
 function rsl_install() {
     echo "Started rsl installation ..."
-    chmod +x $RSDESTP/rsl/rsl_in
-    $RSDESTP/rsl/rsl_in
-    exit
-}
-
-function rsl_install() {
-    echo "Started rsl installation ..."
-    chmod +x $RSDESTP/rsl/rsl_in
-    $RSDESTP/rsl/rsl_in
+    echo "RSL is available through https://www.github.com/tslenter/RS ..."
     exit
 }
 
