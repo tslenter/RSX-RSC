@@ -1022,8 +1022,8 @@ function ubntrepofix() {
         echo "Nothing to do ..."
     elif [[ $drel =~ "bionic" ]]; then
         touch /etc/apt/sources.list.d/syslog-ng.list
-        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
-        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+        wget -qO - https://cloud.remotesyslog.com/xUbuntu_18.04/Release.key | /usr/bin/apt-key add -
+        echo deb https://cloud.remotesyslog.com/xUbuntu_18.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
         apt update
         apt auto-remove -y
 #If upgrade is triggered
@@ -1031,8 +1031,8 @@ function ubntrepofix() {
         check_package "syslog-ng"
     elif [[ $drel =~ "focal" ]]; then
         touch /etc/apt/sources.list.d/syslog-ng.list
-        wget -qO - https://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_20.04/Release.key | /usr/bin/apt-key add -
-        echo deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_20.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
+        wget -qO - https://cloud.remotesyslog.com/xUbuntu_20.04/Release.key | /usr/bin/apt-key add -
+        echo deb https://cloud.remotesyslog.com/xUbuntu_20.04 ./ > /etc/apt/sources.list.d/syslog-ng.list
         apt update
         apt auto-remove -y
 #If upgrade is triggered
