@@ -3,6 +3,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 ## News:
+08-01-2022: https://www.github.com/tslenter/RS has RSX for the RSE core ready for test download.
+
 06-01-2022: Repository has been updated. If run in any trouble of running updates then update the /etc/apt/sources.list.d/syslog-ng.list with:
 ```
 For Ubuntu 20.04: deb https://cloud.remotesyslog.com/xUbuntu_20.04 ./
