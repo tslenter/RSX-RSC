@@ -1316,6 +1316,8 @@ do
         "Install RSC")
             clear
             banner
+	    echo "RSC 0.1 is deprecated. To download the latest use https://www.github.com/tslenter/RS."
+	    exit
             distocheck
             pre_install
             rscinstall
@@ -1324,6 +1326,8 @@ do
         "Remove RSC")
             clear
             banner
+	    echo "RSC 0.1 is deprecated. To download the latest use https://www.github.com/tslenter/RS."
+	    exit
             distocheck
             rscremove
             exit
