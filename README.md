@@ -2,9 +2,7 @@
 [![Website remotesyslog.com](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.remotesyslog.com/)
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
-## New repo:
 
-Currently we are migrating from the RSX-RSC repository. Documention could be off. Documention can befound here:
 ```
 https://www.remotesyslog.com/
 https://www.github.com/tslenter/RSX-RSC/
