@@ -4,9 +4,12 @@
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 ## New repo and updates
 
-Currently we are migrating from the RSX-RSC repository. Documention could be off. Documention can befound here:
-
+Currently we are migrating from the RSX-RSC repository. Documention could be off. Documention can be found here:
 ```
+Use this: 
+https://remote-syslog.readthedocs.io/
+
+Otherwise:
 https://www.remotesyslog.com/
 https://www.github.com/tslenter/RSX-RSC/
 ```
