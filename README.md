@@ -6,6 +6,7 @@
 # This repository has been replaced by: 
 # https://www.github.com/tslenter/RS. 
 # Please use the new repository for installation.
+# New links:
 ```
 New repository:
 https://www.github.com/tslenter/RS
