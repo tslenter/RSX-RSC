@@ -3,7 +3,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
-# This repository has been replaced by: https://www,github.com/tslenter/RS. Please use the new repository for installation.
+# This repository has been replaced by: 
+# https://www,github.com/tslenter/RS. 
+# Please use the new repository for installation.
 ```
 New repository:
 https://www.github.com/tslenter/RS
@@ -15,7 +17,7 @@ Webpage:
 https://www.remotesyslog.com/
 ```
 
-# INFORMATION BELOW IS OUTDATED
+# !!INFORMATION BELOW IS OUTDATED!!
 
 RSC is only downloadable via the new repository.
 
