@@ -4,7 +4,7 @@
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 # This repository has been replaced by: 
-# https://www,github.com/tslenter/RS. 
+# https://www.github.com/tslenter/RS. 
 # Please use the new repository for installation.
 ```
 New repository:
