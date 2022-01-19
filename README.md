@@ -2,22 +2,19 @@
 [![Website remotesyslog.com](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.remotesyslog.com/)
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://github.com/tslenter/RSX-RSC/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
-## New repo and updates
-
-Currently we are migrating from the RSX-RSC repository. Documention could be off. Documention can be found here:
+#This repository has been replaced by: https://www,github.com/tslenter/RS. Please use the new repository for installation.
 ```
-Use this: 
+New repository:
+https://www.github.com/tslenter/RS
+
+New documentation:
 https://remote-syslog.readthedocs.io/
 
-Otherwise:
+Webpage:
 https://www.remotesyslog.com/
-https://www.github.com/tslenter/RSX-RSC/
 ```
 
-The new repo with new fixes can be found here:
-```
-https://www.github.com/tslenter/RS
-```
+#INFORMATION BELOW IS OUTDATED
 
 RSC is only downloadable via the new repository.
 
