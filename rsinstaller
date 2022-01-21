@@ -31,13 +31,13 @@ VLOG=/var/log
 RSBIN=/usr/bin
 RSTMP=/tmp
 APACHPHP=/etc/php/7.[0-9]/apache2
-bid=00000068
+bid=00000070
 
 #Banner
 function banner() {
     echo ""
     echo "##################################################"
-    echo "#Remote Syslog X/C                               #"
+    echo "#Remote Syslog (redirect enabled)                #"
     echo "#More information: https://www.remotesyslog.com  #"
     echo "#Remote Syslog installation                      #"
     echo "#Version: RSX 0.1                                #"
@@ -1340,8 +1340,6 @@ do
         "Install RSC")
             clear
             banner
-	    echo "RSC 0.1 is deprecated. To download the latest use https://www.github.com/tslenter/RS."
-	    exit
             distocheck
             pre_install
             rscinstall
@@ -1350,8 +1348,6 @@ do
         "Remove RSC")
             clear
             banner
-	    echo "RSC 0.1 is deprecated. To download the latest use https://www.github.com/tslenter/RS."
-	    exit
             distocheck
             rscremove
             exit
