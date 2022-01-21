@@ -1236,9 +1236,33 @@ elif [ -e $RSBIN/rsinstaller ]; then
 else
     echo "Did you run the installer from the right directory? ..."
 fi
+echo "Check 2 ..."
+echo "Remove unclean exit files ..."
+rm -rf /tmp/RS*_GIT > /dev/null 2>&1
+
+function reporedirect() {
+#Auto redirect to new repository
+    echo "Download installation ..."
+    git clone --branch main https://github.com/tslenter/RS $RSTMP/RS_GIT
+    echo "Check if download is successfull ..."
+    if [ -d "$RSTMP/RS_GIT" ]; then
+         echo "Continue installation ..."
+    else
+         echo "Clone not successfull ..."
+         exit
+    fi
+    cd $RSTMP/RS_GIT/
+    chmod +x $RSTMP/RS_GIT/rseinstaller
+    $RSTMP/RS_GIT/rseinstaller
+    cd $RSPATH
+    rm -rf $RSTMP/RS_GIT
+}
 
 clear
 banner
+reporedirect
+exit
+
 #Menu
 PS3='Please enter your choice: '
 options=("Core installation" "Core removal" "Upgrade RSX/RSC" "Reconfigure core services" "Restore default core configuration" "Add local syslog to Remote Syslog core" "Remove local syslog to Remote Syslog core" "Set new memory PHP limit of 512M" "Set default PHP memory limit of 128M" "Install RSC" "Remove RSC" "Install RSX" "Remove RSX" "Install elasticsearch" "Remove elasticsearch" "RSX Cluster setup" "Enable firewall" "Disable firewall" "OS Upgrade" "Plugins/fixes (Experimental ...)" "Status RS" "Quit")
