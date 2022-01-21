@@ -19,8 +19,7 @@ https://www.remotesyslog.com/
 ```
 
 # !!INFORMATION BELOW IS OUTDATED!!
-
-RSC is only downloadable via the new repository.
+# !!SCRIPT AUTO REDIRECTS TO NEW REPO!!
 
 ## News:
 10-01-2022: https://www.github.com/tslenter/RS has Remote Syslog Classic webinterface for the Remote Syslog Core ready for a test download.
