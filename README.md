@@ -19,7 +19,7 @@ https://www.remotesyslog.com/
 ```
 
 # !!INFORMATION BELOW IS OUTDATED!!
-# !!SCRIPT AUTO REDIRECT TO NEW REPO!!
+# !!SCRIPT AUTO REDIRECTS TO NEW REPO!!
 
 RSC is only downloadable via the new repository.
 
